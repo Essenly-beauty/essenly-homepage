@@ -1,0 +1,409 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Your K-Beauty Guide in Seoul">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="hero-tag">Free K-Beauty Hair Kit</p>
+      <h1>Your Personal<br />K-Beauty Guide<br />in Seoul</h1>
+      <p class="hero-sub">
+        Curated product recommendations, salon bookings without the language barrier,
+        and a free Essenly hair kit delivered to you in Seoul.
+      </p>
+      <div class="hero-cta">
+        <a href="#kit" class="btn btn-primary">Get Your Free Kit</a>
+        <a href="/blog" class="btn btn-secondary">Read the Blog</a>
+      </div>
+      <p class="hero-note">For the first 2,000 visitors to Seoul</p>
+    </div>
+  </section>
+
+  <!-- Problem -->
+  <section class="problem">
+    <div class="container">
+      <h2>You've seen it on YouTube.<br />Now you're in Myeongdong, confused.</h2>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-icon">?!</div>
+          <h3>Language Barrier</h3>
+          <p>Korean salon menus, product labels, and staff who don't speak English. You end up pointing at photos on your phone.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">&#x1f4cd;</div>
+          <h3>Unreliable Maps</h3>
+          <p>Google Maps is inaccurate in Korea. You need the Korean address for taxis, and Naver Map is all in Korean.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">&#x1f4c5;</div>
+          <h3>Booking Nightmares</h3>
+          <p>Instagram DMs that never get answered. Klook packages that cost twice the local price. Walk-ins with hour-long waits.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works -->
+  <section class="how">
+    <div class="container">
+      <h2>How Essenly Works</h2>
+      <p class="section-sub">Three steps to your best K-beauty experience</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Tell us about you</h3>
+          <p>Your hair type, skin concerns, and what you want to experience in Seoul. Takes 2 minutes.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Get curated picks</h3>
+          <p>Personalized product recommendations, top-rated salons in your area, and insider tips from locals.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Pick up your free kit</h3>
+          <p>Grab your complimentary Essenly hair kit at a partner cafe near you. On us.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kit -->
+  <section class="kit" id="kit">
+    <div class="container kit-inner">
+      <div class="kit-content">
+        <p class="kit-tag">Limited to 2,000</p>
+        <h2>Get a Free Essenly Hair Kit</h2>
+        <p>Our signature hair treatment pack, curated for travelers who want salon-quality care on the go. Answer a quick survey about your hair, and pick it up at a partner cafe in Seoul.</p>
+        <ul class="kit-features">
+          <li>Premium hair treatment pack</li>
+          <li>Personalized to your hair type</li>
+          <li>Pick up at a cafe in Seoul</li>
+          <li>100% free, no strings attached</li>
+        </ul>
+        <a href="#signup" class="btn btn-primary">Claim Your Kit</a>
+      </div>
+      <div class="kit-visual">
+        <div class="kit-placeholder">
+          <span>Hair Kit</span>
+          <span class="kit-placeholder-sub">Product photo coming soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="proof">
+    <div class="container">
+      <h2>What Travelers Say</h2>
+      <div class="testimonials">
+        <div class="testimonial">
+          <p>"I had no idea where to start with K-beauty. Essenly made it so easy to find products that actually work for my hair type."</p>
+          <span class="testimonial-author">-- Sarah, 28, from California</span>
+        </div>
+        <div class="testimonial">
+          <p>"The salon booking feature saved me hours of DMing salons on Instagram. I just filled out a form and got a confirmed appointment."</p>
+          <span class="testimonial-author">-- Emma, 32, from London</span>
+        </div>
+        <div class="testimonial">
+          <p>"The Korean address copy button is genius. My taxi driver knew exactly where to go."</p>
+          <span class="testimonial-author">-- Mia, 25, from Sydney</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Preview -->
+  <section class="blog-preview">
+    <div class="container">
+      <h2>From the Blog</h2>
+      <p class="section-sub">K-beauty tips, Seoul guides, and insider knowledge</p>
+      <div class="blog-cta">
+        <a href="/blog" class="btn btn-secondary">Read All Articles</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Email Signup -->
+  <section class="signup" id="signup">
+    <div class="container signup-inner">
+      <h2>Coming to Seoul?</h2>
+      <p>Get notified when we launch + reserve your free hair kit.</p>
+      <form class="signup-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" />
+        <button type="submit" class="btn btn-primary">Notify Me</button>
+      </form>
+      <p class="signup-note">No spam. Only launch updates and K-beauty tips.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    padding: var(--space-3xl) 0;
+    text-align: center;
+  }
+  .hero-inner {
+    max-width: 720px;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-lg);
+  }
+  .hero h1 {
+    font-size: 3.25rem;
+    margin-bottom: var(--space-lg);
+  }
+  .hero-sub {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 560px;
+    margin: 0 auto var(--space-xl);
+  }
+  .hero-cta {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hero-note {
+    margin-top: var(--space-md);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  /* Problem */
+  .problem {
+    padding: var(--space-3xl) 0;
+  }
+  .problem h2 {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+  }
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+  .problem-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+  }
+  .problem-icon {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-md);
+  }
+  .problem-card h3 {
+    margin-bottom: var(--space-sm);
+  }
+  .problem-card p {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  /* How */
+  .how {
+    padding: var(--space-3xl) 0;
+    text-align: center;
+  }
+  .section-sub {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-2xl);
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+    text-align: left;
+  }
+  .step-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--accent);
+    color: white;
+    font-family: var(--font-display);
+    font-weight: 700;
+    border-radius: 50%;
+    margin-bottom: var(--space-md);
+  }
+  .step h3 {
+    margin-bottom: var(--space-sm);
+  }
+  .step p {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  /* Kit */
+  .kit {
+    padding: var(--space-3xl) 0;
+  }
+  .kit-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+  .kit-tag {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-md);
+  }
+  .kit-content h2 {
+    margin-bottom: var(--space-md);
+  }
+  .kit-content > p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+  .kit-features {
+    list-style: none;
+    margin-bottom: var(--space-xl);
+  }
+  .kit-features li {
+    padding: var(--space-sm) 0;
+    padding-left: var(--space-lg);
+    position: relative;
+    color: var(--text-secondary);
+  }
+  .kit-features li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    color: var(--success);
+    font-weight: 700;
+  }
+  .kit-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .kit-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 400px;
+    background: var(--surface);
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    color: var(--text-secondary);
+  }
+  .kit-placeholder span:first-child {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .kit-placeholder-sub {
+    font-size: 0.8125rem;
+  }
+
+  /* Proof */
+  .proof {
+    padding: var(--space-3xl) 0;
+    text-align: center;
+  }
+  .proof h2 {
+    margin-bottom: var(--space-2xl);
+  }
+  .testimonials {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    text-align: left;
+  }
+  .testimonial {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+  }
+  .testimonial p {
+    font-style: italic;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+  }
+  .testimonial-author {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Blog Preview */
+  .blog-preview {
+    padding: var(--space-3xl) 0;
+    text-align: center;
+  }
+  .blog-cta {
+    margin-top: var(--space-lg);
+  }
+
+  /* Signup */
+  .signup {
+    padding: var(--space-3xl) 0;
+    text-align: center;
+  }
+  .signup-inner {
+    max-width: 520px;
+  }
+  .signup h2 {
+    margin-bottom: var(--space-sm);
+  }
+  .signup-inner > p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+  .signup-form {
+    display: flex;
+    gap: var(--space-sm);
+  }
+  .signup-form input {
+    flex: 1;
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    background: var(--surface);
+    outline: none;
+  }
+  .signup-form input:focus {
+    border-color: var(--accent);
+  }
+  .signup-note {
+    margin-top: var(--space-sm);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 2.25rem; }
+    .problem-grid,
+    .steps,
+    .testimonials { grid-template-columns: 1fr; }
+    .kit-inner { grid-template-columns: 1fr; }
+    .signup-form { flex-direction: column; }
+  }
+</style>

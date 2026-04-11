@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<Base title="Blog" description="K-beauty tips, Seoul salon guides, and insider knowledge for travelers.">
+  <section class="blog-list">
+    <div class="container">
+      <header class="blog-header">
+        <h1>Blog</h1>
+        <p>K-beauty tips, Seoul guides, and insider knowledge</p>
+      </header>
+
+      <div class="posts">
+        {posts.map((post) => {
+          const formattedDate = new Date(post.data.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          });
+          return (
+            <a href={`/blog/${post.id}`} class="post-card">
+              <div class="post-card-body">
+                <time datetime={post.data.date}>{formattedDate}</time>
+                <h2>{post.data.title}</h2>
+                <p>{post.data.description}</p>
+                <div class="post-card-tags">
+                  {post.data.tags.map((tag) => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      {posts.length === 0 && (
+        <div class="empty">
+          <p>No articles yet. Check back soon!</p>
+        </div>
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .blog-list {
+    padding: var(--space-2xl) 0;
+  }
+  .blog-header {
+    margin-bottom: var(--space-2xl);
+  }
+  .blog-header h1 {
+    margin-bottom: var(--space-sm);
+  }
+  .blog-header p {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+  }
+
+  .posts {
+    display: grid;
+    gap: var(--space-lg);
+  }
+  .post-card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    transition: all 0.2s ease;
+    color: inherit;
+  }
+  .post-card:hover {
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .post-card time {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+  .post-card h2 {
+    font-size: 1.375rem;
+    margin: var(--space-sm) 0;
+  }
+  .post-card p {
+    color: var(--text-secondary);
+  }
+  .post-card-tags {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+  .tag {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+  }
+  .empty {
+    text-align: center;
+    padding: var(--space-3xl);
+    color: var(--text-secondary);
+  }
+</style>
