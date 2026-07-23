@@ -30,9 +30,9 @@ export const siteConfig = {
     fulfillmentOrigin: "To be confirmed",
   },
   amazonProof: {
-    rating: "TBD",
-    reviewCount: "TBD",
-    verifiedDate: "TBD",
+    rating: "4.7",
+    reviewCount: "33",
+    verifiedDate: "To be updated before launch",
   },
 } as const;
 

@@ -16,7 +16,7 @@ import { siteConfig } from "../data/siteConfig";
         <h1>Korean hair care for selected U.S. partners.</h1>
         <p class="lead">
           Essenly is available for selected retailers, hair salons, spas and online beauty
-          stores in the United States.
+          stores looking for a Korean hair mask with early Amazon customer appeal.
         </p>
         <a class="btn btn-primary" href="#inquiry">Request Wholesale Information</a>
       </div>
@@ -35,22 +35,49 @@ import { siteConfig } from "../data/siteConfig";
     <div class="container">
       <div class="section-title">
         <p class="eyebrow">Why Essenly</p>
-        <h2>A focused opening for beauty businesses.</h2>
+        <h2>Customer-loved reasons to stock Essenly.</h2>
       </div>
       <div class="benefit-grid">
         <article class="info-card">
-          <h3>Korean made</h3>
-          <p class="muted">A hair-care product created in Korea with a modern beauty point of view.</p>
+          <h3>Lightweight conditioning</h3>
+          <p class="muted">Customers describe soft, moisturized hair without a greasy or heavy finish.</p>
         </article>
         <article class="info-card">
-          <h3>Accessible premium</h3>
-          <p class="muted">A polished sensory product that can sit naturally in salons, spas and retail shelves.</p>
+          <h3>Frizz-smoothing finish</h3>
+          <p class="muted">Reviewers mention a more polished look after blow-drying or air-drying.</p>
         </article>
         <article class="info-card">
-          <h3>U.S. validation</h3>
-          <p class="muted">Currently available through Amazon U.S. for lightweight market validation.</p>
+          <h3>Signature scent</h3>
+          <p class="muted">Amber Vanilla is repeatedly called soft, elevated and memorable.</p>
         </article>
       </div>
+    </div>
+  </section>
+
+  <section class="section review-band">
+    <div class="container wholesale-proof">
+      <div>
+        <p class="eyebrow">Amazon validation</p>
+        <h2>4.7 stars from early U.S. customers.</h2>
+      </div>
+      <div class="proof-grid">
+        <article>
+          <strong>33</strong>
+          <span>Amazon ratings</span>
+        </article>
+        <article>
+          <strong>79%</strong>
+          <span>5-star ratings</span>
+        </article>
+        <article>
+          <strong>0%</strong>
+          <span>1-2 star ratings</span>
+        </article>
+      </div>
+      <p class="lead">
+        Feedback points to the same retail story: lightweight softness, visible shine,
+        frizz control, a warm scent and packaging with bathroom-shelf appeal.
+      </p>
     </div>
   </section>
 
@@ -86,6 +113,7 @@ import { siteConfig } from "../data/siteConfig";
         <p>Spas, head spas and wellness stores</p>
         <p>Selected online beauty stores</p>
         <p>Small distributors with a clear retail plan</p>
+        <p>Giftable beauty edits and shelf-led assortments</p>
       </div>
     </div>
   </section>
@@ -190,11 +218,56 @@ import { siteConfig } from "../data/siteConfig";
 
   .line-sheet,
   .wholesale-columns,
-  .inquiry-grid {
+  .inquiry-grid,
+  .wholesale-proof {
     display: grid;
     grid-template-columns: 0.85fr 1.15fr;
     gap: var(--space-7);
     align-items: start;
+  }
+
+  .review-band {
+    background: var(--color-surface);
+    border-block: 1px solid rgba(31, 25, 21, 0.12);
+  }
+
+  .wholesale-proof {
+    grid-template-columns: 0.8fr 1.2fr;
+  }
+
+  .wholesale-proof > .lead {
+    grid-column: 2;
+    max-width: 720px;
+  }
+
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid rgba(31, 25, 21, 0.16);
+    border-bottom: 1px solid rgba(31, 25, 21, 0.16);
+  }
+
+  .proof-grid article {
+    display: grid;
+    gap: var(--space-2);
+    padding: clamp(1rem, 2vw, 1.5rem);
+    border-right: 1px solid rgba(31, 25, 21, 0.16);
+  }
+
+  .proof-grid article:last-child {
+    border-right: 0;
+  }
+
+  .proof-grid strong {
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    line-height: 0.95;
+  }
+
+  .proof-grid span {
+    color: var(--color-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 
   .details-list {
@@ -264,9 +337,24 @@ import { siteConfig } from "../data/siteConfig";
     .line-sheet,
     .wholesale-columns,
     .inquiry-grid,
+    .wholesale-proof,
     .details-list div,
-    .partner-list {
+    .partner-list,
+    .proof-grid {
       grid-template-columns: 1fr;
+    }
+
+    .wholesale-proof > .lead {
+      grid-column: auto;
+    }
+
+    .proof-grid article {
+      border-right: 0;
+      border-bottom: 1px solid rgba(31, 25, 21, 0.16);
+    }
+
+    .proof-grid article:last-child {
+      border-bottom: 0;
     }
 
     .details-list div {

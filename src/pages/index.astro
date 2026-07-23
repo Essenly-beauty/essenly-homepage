@@ -11,7 +11,7 @@ import { siteConfig } from "../data/siteConfig";
         <p class="eyebrow">Korean hair care</p>
         <h1>Hair care that stays with you.</h1>
         <p class="lead">
-          A rich Korean hair mask for softer, smoother, beautifully scented hair.
+          A rich Korean hair mask loved for lightweight softness, glossy movement and a warm Amber Vanilla finish.
         </p>
         <div class="button-row">
           <a class="btn btn-primary" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">
@@ -42,10 +42,10 @@ import { siteConfig } from "../data/siteConfig";
         <p class="eyebrow">Hero product</p>
         <h2>One treatment. A softer ritual.</h2>
         <p class="lead">
-          {siteConfig.product.name} is a lightweight yet deeply conditioning Korean hair treatment
-          designed to help dry, frizzy and color-treated hair feel softer, smoother and more manageable.
+          {siteConfig.product.name} is a rich but lightweight Korean hair treatment
+          customers describe as softening, smoothing and glossy without a heavy finish.
         </p>
-        <p class="muted">Finished with our signature {siteConfig.product.fragrance} scent.</p>
+        <p class="muted">Finished with our signature {siteConfig.product.fragrance} scent, one of the product details customers mention most.</p>
         <div class="product-facts">
           <span>{siteConfig.product.countryOfOrigin}</span>
           <span>{siteConfig.product.fragrance}</span>
@@ -72,17 +72,39 @@ import { siteConfig } from "../data/siteConfig";
       </div>
       <div class="benefit-grid">
         <article class="info-card">
-          <h3>Smooth</h3>
-          <p class="muted">Helps tame the look of frizz and leaves hair feeling polished and manageable.</p>
+          <h3>Lightweight softness</h3>
+          <p class="muted">Customers mention hair that feels soft and moisturized without a greasy or weighed-down finish.</p>
         </article>
         <article class="info-card">
-          <h3>Shine</h3>
-          <p class="muted">Enhances the appearance of healthy, glossy hair without a heavy finish.</p>
+          <h3>Frizz-smoothing shine</h3>
+          <p class="muted">Reviewers describe a more polished look after blow-drying or air-drying, with visible shine.</p>
         </article>
         <article class="info-card">
-          <h3>Scent</h3>
-          <p class="muted">A warm Amber Vanilla fragrance that lingers softly after rinsing.</p>
+          <h3>Amber Vanilla finish</h3>
+          <p class="muted">A warm, soft fragrance that customers call elevated, memorable and not overpowering.</p>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section review-band">
+    <div class="container review-layout">
+      <div class="review-score">
+        <span>{siteConfig.amazonProof.rating}</span>
+        <p>out of 5 on Amazon</p>
+      </div>
+      <div class="stack">
+        <p class="eyebrow">Customer loved</p>
+        <h2>Rich texture. Lightweight finish. Amber Vanilla everything.</h2>
+        <p class="lead">
+          Based on Amazon customer feedback, Essenly is most often appreciated for
+          soft, glossy hair feel, frizz control, a concentrated creamy texture and premium packaging.
+        </p>
+        <div class="review-points">
+          <span>{siteConfig.amazonProof.reviewCount} ratings</span>
+          <span>96% four or five stars</span>
+          <span>0% one or two stars</span>
+        </div>
       </div>
     </div>
   </section>
@@ -105,7 +127,7 @@ import { siteConfig } from "../data/siteConfig";
           Leave on for 5-7 minutes, then rinse thoroughly.
         </p>
         <p class="muted">
-          A simple step for smoother texture, softer movement and a warm trace of Amber Vanilla.
+          Customers often describe the routine as easy to add to a shower ritual, with a soft hair feel after rinsing.
           Final directions should be confirmed against the current U.S. product label.
         </p>
       </div>
@@ -143,11 +165,11 @@ import { siteConfig } from "../data/siteConfig";
       <div class="stack">
         <p class="eyebrow">Amazon U.S.</p>
         <h2>Available in the U.S. on Amazon</h2>
-        <p class="lead">Discover Essenly through our official U.S. Amazon listing.</p>
+        <p class="lead">Discover Essenly through our official U.S. Amazon listing, where customers are already responding to the mask's lightweight finish, scent and shelf appeal.</p>
         <div class="review-summary">
-          <span>Amazon rating to verify</span>
-          <span>Review count to verify</span>
-          <span>Last checked: TBD</span>
+          <span>{siteConfig.amazonProof.rating} out of 5</span>
+          <span>{siteConfig.amazonProof.reviewCount} ratings</span>
+          <span>5-star majority</span>
         </div>
         <a class="btn btn-light" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">
           Shop on Amazon
@@ -265,14 +287,16 @@ import { siteConfig } from "../data/siteConfig";
   }
 
   .product-facts,
-  .review-summary {
+  .review-summary,
+  .review-points {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
   }
 
   .product-facts span,
-  .review-summary span {
+  .review-summary span,
+  .review-points span {
     padding: 0.5rem 0.72rem;
     border: 1px solid rgba(31, 25, 21, 0.14);
     border-radius: 999px;
@@ -280,6 +304,44 @@ import { siteConfig } from "../data/siteConfig";
     color: var(--color-muted);
     font-size: 0.7rem;
     font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .review-band {
+    background: var(--color-surface);
+    border-block: 1px solid rgba(31, 25, 21, 0.12);
+  }
+
+  .review-layout {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.45fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 7vw, 6rem);
+    align-items: center;
+  }
+
+  .review-score {
+    display: grid;
+    min-height: 260px;
+    place-items: center;
+    border: 1px solid rgba(31, 25, 21, 0.16);
+    border-radius: 999px;
+    background: linear-gradient(180deg, #f6d6cb, #f1b6a8);
+    text-align: center;
+  }
+
+  .review-score span {
+    display: block;
+    font-size: clamp(4.5rem, 12vw, 9rem);
+    font-weight: 800;
+    line-height: 0.88;
+  }
+
+  .review-score p {
+    max-width: 10ch;
+    color: rgba(31, 25, 21, 0.68);
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.25;
     text-transform: uppercase;
   }
 
@@ -322,8 +384,15 @@ import { siteConfig } from "../data/siteConfig";
 
   @media (max-width: 900px) {
     .hero-grid,
-    .amazon-band {
+    .amazon-band,
+    .review-layout {
       grid-template-columns: 1fr;
+    }
+
+    .review-score {
+      width: min(100%, 340px);
+      min-height: 220px;
+      margin-inline: auto;
     }
   }
 </style>
