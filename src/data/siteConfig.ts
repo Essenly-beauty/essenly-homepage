@@ -1,5 +1,6 @@
 export const siteConfig = {
-  amazonUrl: "https://a.co/d/0be8ancf",
+  amazonUrl:
+    "https://www.amazon.com/essenly-Keratin-Hair-Mask-Lightweight/dp/B0FT27QPGP/ref=sr_1_1?crid=18ST7UA6A4XO4&dib=eyJ2IjoiMSJ9.-HeeOWq9tmqbii1pFiFmNP289JuOkXdkBc9f-hncKk4.Pyhha1JW6tDfDGsfQGMQGj2qgRQuStfCqVjETRotkI4&dib_tag=se&keywords=essenly&qid=1784806072&sprefix=essenly%2Caps%2C280&sr=8-1",
   emails: {
     general: "To be confirmed",
     wholesale: "wholesale@essenly.beauty",
