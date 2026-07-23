@@ -1,145 +1,116 @@
 ---
+import BrandLogo from "../components/BrandLogo.astro";
+import { navItems, siteConfig } from "../data/siteConfig";
+
 interface Props {
   title: string;
   description?: string;
+  canonicalPath?: string;
   ogImage?: string;
 }
 
 const {
   title,
-  description = 'Your personal K-beauty guide in Seoul. Get curated recommendations, salon bookings, and a free Essenly hair kit.',
-  ogImage = '/og-default.png',
+  description = "Discover Essenly, a Seoul-based beauty company and the maker of a conditioning Korean hair mask available in the United States.",
+  canonicalPath = Astro.url.pathname,
+  ogImage,
 } = Astro.props;
+
+const fullTitle = title.includes("Essenly") ? title : `${title} | Essenly`;
+const canonicalUrl = new URL(canonicalPath, Astro.site ?? "https://essenly.beauty").toString();
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.company.legalName,
+  url: "https://essenly.beauty",
+  sameAs: [siteConfig.social.instagram],
+};
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title} | Essenly</title>
-  <meta name="description" content={description} />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
 
-  <!-- Open Graph -->
-  <meta property="og:title" content={`${title} | Essenly`} />
-  <meta property="og:description" content={description} />
-  <meta property="og:image" content={ogImage} />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Essenly" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Essenly" />
+    <meta property="og:url" content={canonicalUrl} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={`${title} | Essenly`} />
-  <meta name="twitter:description" content={description} />
+    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-  <style is:global>
-    @import '../styles/global.css';
-  </style>
-</head>
-<body>
-  <header class="header">
-    <div class="container header-inner">
-      <a href="/" class="logo">Essenly</a>
-      <nav class="nav">
-        <a href="/blog">Blog</a>
-        <a href="#kit" class="btn btn-primary btn-sm">Get Free Kit</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <slot />
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="logo">Essenly</span>
-        <p>Your K-beauty guide in Seoul</p>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <style is:global>
+      @import "../styles/global.css";
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="/" class="wordmark" aria-label="Essenly home"><BrandLogo /></a>
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+          <a href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">Amazon</a>
+        </nav>
+        <a class="header-cta" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">
+          Shop Amazon
+        </a>
+        <details class="mobile-menu">
+          <summary aria-label="Open menu"><span></span><span></span><span></span></summary>
+          <nav aria-label="Mobile navigation">
+            {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
+            <a href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
+          </nav>
+        </details>
       </div>
-      <div class="footer-links">
-        <a href="/blog">Blog</a>
-        <a href="https://instagram.com/essenly.beauty" target="_blank" rel="noopener">Instagram</a>
-        <a href="mailto:hello@essenly.beauty">Contact</a>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <a href="/" class="wordmark"><BrandLogo /></a>
+          <p>{siteConfig.company.legalName}</p>
+          <p>{siteConfig.company.description}</p>
+        </div>
+        <div>
+          <h2>Explore</h2>
+          <a href="/product">Product</a>
+          <a href="/wholesale">Wholesale</a>
+          <a href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">Amazon U.S.</a>
+          <a href="/contact">Contact</a>
+        </div>
+        <div>
+          <h2>Contact</h2>
+          <p>General inquiry: to be confirmed</p>
+          <a href="mailto:wholesale@essenly.beauty">wholesale@essenly.beauty</a>
+          <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+        </div>
+        <div>
+          <h2>Legal</h2>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+          <p>&copy; {new Date().getFullYear()} Essenly. All rights reserved.</p>
+        </div>
       </div>
-      <p class="footer-copy">&copy; {new Date().getFullYear()} Essenly. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <style>
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255, 250, 245, 0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      height: var(--header-height);
-    }
-    .header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 100%;
-    }
-    .logo {
-      font-family: var(--font-display);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .logo:hover { color: var(--accent); }
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: var(--space-lg);
-    }
-    .nav a { color: var(--text-secondary); font-weight: 500; }
-    .nav a:hover { color: var(--accent); }
-    .btn-sm {
-      padding: var(--space-sm) var(--space-md);
-      font-size: 0.875rem;
-    }
-
-    .footer {
-      margin-top: var(--space-3xl);
-      padding: var(--space-2xl) 0;
-      border-top: 1px solid var(--border);
-    }
-    .footer-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-md);
-      text-align: center;
-    }
-    .footer-brand p {
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-    }
-    .footer-links {
-      display: flex;
-      gap: var(--space-lg);
-    }
-    .footer-links a {
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-    }
-    .footer-copy {
-      color: var(--text-secondary);
-      font-size: 0.75rem;
-    }
-  </style>
-</body>
+    </footer>
+  </body>
 </html>

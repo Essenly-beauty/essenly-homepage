@@ -1,0 +1,15 @@
+---
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
+const logoSrc = "/images/essenly/essenly-logo-wordmark.svg";
+const hasLogo = existsSync(join(process.cwd(), "public", logoSrc.slice(1)));
+---
+
+<span class="brand-logo">
+  {hasLogo ? (
+    <img src={logoSrc} alt="Essenly" loading="eager" decoding="async" />
+  ) : (
+    <span>Essenly</span>
+  )}
+</span>

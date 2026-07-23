@@ -1,0 +1,50 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base
+  title="Terms of Use"
+  description="Terms of use placeholder for Essenly Co., Ltd."
+  canonicalPath="/terms"
+>
+  <section class="section">
+    <div class="narrow legal stack">
+      <p class="eyebrow">Legal</p>
+      <h1>Terms of Use</h1>
+      <p class="lead">
+        This page is a publication placeholder and should be reviewed by qualified legal counsel
+        before the site goes live.
+      </p>
+      <h2>Website content</h2>
+      <p>
+        Product and company information on this website is provided for general information and
+        may be updated as verified details become available.
+      </p>
+      <h2>Wholesale inquiries</h2>
+      <p>
+        Wholesale information submitted through this website does not create a binding agreement.
+        Orders, pricing, payment and shipment are handled through direct quotation and invoice.
+      </p>
+      <h2>External links</h2>
+      <p>
+        Amazon and social media links may direct visitors to third-party websites with separate
+        terms and policies.
+      </p>
+      <h2>Contact</h2>
+      <p>Official legal contact details are to be confirmed before launch.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal h2 {
+    margin-top: var(--space-5);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .legal p:not(.eyebrow):not(.lead) {
+    color: var(--color-muted);
+  }
+</style>

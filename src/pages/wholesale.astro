@@ -1,0 +1,276 @@
+---
+import ImageAsset from "../components/ImageAsset.astro";
+import Base from "../layouts/Base.astro";
+import { siteConfig } from "../data/siteConfig";
+---
+
+<Base
+  title="Essenly Wholesale U.S. | Korean Hair Care"
+  description="Wholesale opportunities for U.S. beauty retailers, salons, head spas, wellness stores and selected distributors."
+  canonicalPath="/wholesale"
+>
+  <section class="section wholesale-hero">
+    <div class="container split">
+      <div class="stack">
+        <p class="eyebrow">Wholesale U.S.</p>
+        <h1>Korean hair care for selected U.S. partners.</h1>
+        <p class="lead">
+          Essenly is available for selected retailers, hair salons, spas and online beauty
+          stores in the United States.
+        </p>
+        <a class="btn btn-primary" href="#inquiry">Request Wholesale Information</a>
+      </div>
+      <ImageAsset
+        src="/images/essenly/essenly-product-box.png"
+        name="Wholesale Hero Image"
+        ratio="16:10"
+        description="Hero product image with a premium retail and wholesale feel."
+        notes="Multiple units, shelf-ready styling or refined carton context."
+        alt="Essenly Hair Mask prepared for retail and wholesale partners"
+      />
+    </div>
+  </section>
+
+  <section class="section sage-band">
+    <div class="container">
+      <div class="section-title">
+        <p class="eyebrow">Why Essenly</p>
+        <h2>A focused opening for beauty businesses.</h2>
+      </div>
+      <div class="benefit-grid">
+        <article class="info-card">
+          <h3>Korean made</h3>
+          <p class="muted">A hair-care product created in Korea with a modern beauty point of view.</p>
+        </article>
+        <article class="info-card">
+          <h3>Accessible premium</h3>
+          <p class="muted">A polished sensory product that can sit naturally in salons, spas and retail shelves.</p>
+        </article>
+        <article class="info-card">
+          <h3>U.S. validation</h3>
+          <p class="muted">Currently available through Amazon U.S. for lightweight market validation.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container line-sheet">
+      <div class="stack">
+        <p class="eyebrow">Line sheet</p>
+        <h2>Product and pricing overview.</h2>
+        <p class="lead">Commercial terms are intentionally held until confirmed through direct inquiry.</p>
+      </div>
+      <dl class="details-list">
+        <div><dt>Product</dt><dd>{siteConfig.product.name}</dd></div>
+        <div><dt>MSRP</dt><dd>To be confirmed</dd></div>
+        <div><dt>Opening order</dt><dd>To be confirmed</dd></div>
+        <div><dt>Standard MOQ</dt><dd>To be confirmed</dd></div>
+        <div><dt>Wholesale price</dt><dd>Available by inquiry</dd></div>
+        <div><dt>Case pack</dt><dd>To be confirmed</dd></div>
+        <div><dt>Lead time</dt><dd>To be confirmed</dd></div>
+        <div><dt>Fulfillment origin</dt><dd>To be confirmed</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section rose-band">
+    <div class="container wholesale-columns">
+      <div class="stack">
+        <p class="eyebrow">Partners</p>
+        <h2>Who we work with.</h2>
+      </div>
+      <div class="partner-list">
+        <p>Independent beauty retailers</p>
+        <p>Hair salons and professional stylists</p>
+        <p>Spas, head spas and wellness stores</p>
+        <p>Selected online beauty stores</p>
+        <p>Small distributors with a clear retail plan</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split reverse">
+      <ImageAsset
+        src="/images/essenly/essenly-product-box.png"
+        name="Case Pack Image"
+        ratio="4:3"
+        description="Multiple-unit wholesale image or shipping carton scene."
+        notes="Useful for buyers evaluating shelf, carton and opening-order presentation."
+        alt="Essenly Hair Mask wholesale units and case pack"
+      />
+      <div class="stack">
+        <p class="eyebrow">Terms and support</p>
+        <h2>Clear enough to start a conversation.</h2>
+        <p class="lead">
+          Wholesale transactions are handled through direct inquiry, quotation, invoice,
+          payment and shipment rather than website checkout.
+        </p>
+        <ul class="simple-list">
+          <li>Wholesale price tiers: to be confirmed</li>
+          <li>Shipping terms: to be confirmed</li>
+          <li>Return policy: to be confirmed</li>
+          <li>Sample policy: available by inquiry</li>
+          <li>Retail support assets: product images and copy available after approval</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark-band" id="inquiry">
+    <div class="container inquiry-grid">
+      <div class="stack">
+        <p class="eyebrow">Wholesale inquiry</p>
+        <h2>Start a wholesale conversation.</h2>
+        <p class="lead">
+          Tell us about your business, channel and estimated opening order. This form is ready
+          to connect to a replaceable form endpoint.
+        </p>
+        <p class="muted">Direct contact: wholesale@essenly.beauty</p>
+      </div>
+      <form class="inquiry-form" action="#" method="post">
+        <div class="form-grid">
+          <div class="field">
+            <label for="business-name">Business name</label>
+            <input id="business-name" name="business_name" autocomplete="organization" required />
+          </div>
+          <div class="field">
+            <label for="contact-name">Contact name</label>
+            <input id="contact-name" name="contact_name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="business-type">Business type</label>
+            <select id="business-type" name="business_type" required>
+              <option value="">Select one</option>
+              <option>Retail store</option>
+              <option>Salon</option>
+              <option>Spa or head spa</option>
+              <option>Online beauty store</option>
+              <option>Distributor</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="order-size">Estimated opening order</label>
+            <select id="order-size" name="estimated_order">
+              <option value="">Select one</option>
+              <option>Sample request</option>
+              <option>Small opening order</option>
+              <option>Standard wholesale order</option>
+              <option>Distributor inquiry</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="website">Website or social</label>
+            <input id="website" name="website" autocomplete="url" />
+          </div>
+          <div class="field full">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+        </div>
+        <button class="btn btn-light" type="submit">Start a wholesale conversation</button>
+        <p class="fine-print">Form endpoint and response handling to be configured before launch.</p>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section-title {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 760px;
+    margin-bottom: var(--space-7);
+  }
+
+  .line-sheet,
+  .wholesale-columns,
+  .inquiry-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  .details-list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .details-list div {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid rgba(36, 30, 25, 0.18);
+  }
+
+  .details-list dt {
+    font-weight: 700;
+  }
+
+  .details-list dd {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .partner-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .partner-list p,
+  .simple-list li {
+    padding: var(--space-4);
+    border: 1px solid rgba(36, 30, 25, 0.16);
+    border-radius: var(--radius);
+    background: rgba(255, 253, 248, 0.6);
+    font-weight: 700;
+  }
+
+  .simple-list {
+    display: grid;
+    gap: var(--space-3);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .inquiry-form {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    border: 1px solid rgba(255, 253, 248, 0.18);
+    border-radius: var(--radius);
+    background: rgba(255, 253, 248, 0.08);
+  }
+
+  .inquiry-form label {
+    color: var(--color-surface);
+  }
+
+  .inquiry-form .fine-print {
+    color: rgba(255, 253, 248, 0.68);
+  }
+
+  @media (max-width: 900px) {
+    .line-sheet,
+    .wholesale-columns,
+    .inquiry-grid,
+    .details-list div,
+    .partner-list {
+      grid-template-columns: 1fr;
+    }
+
+    .details-list div {
+      gap: var(--space-1);
+    }
+  }
+</style>

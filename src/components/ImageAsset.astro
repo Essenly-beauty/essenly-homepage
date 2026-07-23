@@ -1,0 +1,44 @@
+---
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import PlaceholderAsset from "./PlaceholderAsset.astro";
+
+interface Props {
+  src: string;
+  alt: string;
+  class?: string;
+  name: string;
+  ratio: string;
+  description: string;
+  notes: string;
+}
+
+const {
+  src,
+  alt,
+  class: className = "",
+  name,
+  ratio,
+  description,
+  notes,
+} = Astro.props;
+
+const publicPath = src.startsWith("/") ? src.slice(1) : src;
+const hasImage = existsSync(join(process.cwd(), "public", publicPath));
+---
+
+{
+  hasImage ? (
+    <figure class:list={["image-asset", className]}>
+      <img src={src} alt={alt} loading="lazy" decoding="async" />
+    </figure>
+  ) : (
+    <PlaceholderAsset
+      name={name}
+      ratio={ratio}
+      description={description}
+      notes={`${notes} Expected file: public/${publicPath}`}
+      altSuggestion={alt}
+    />
+  )
+}

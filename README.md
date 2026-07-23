@@ -1,43 +1,35 @@
-# Astro Starter Kit: Minimal
+# Essenly Beauty Website
+
+Astro site for `essenly.beauty`, focused on Essenly Keratin Hair Mask, Amazon U.S. purchase flow and U.S. wholesale inquiry.
+
+## Routes
+
+- `/`
+- `/product`
+- `/wholesale`
+- `/contact`
+- `/privacy`
+- `/terms`
+
+## Commands
 
 ```sh
-npm create astro@latest -- --template minimal
+npm ci
+npm run dev
+npm run build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Launch Notes
 
-## 🚀 Project Structure
+Before production launch, confirm product facts, company contact details, legal text, wholesale terms, Amazon rating data and final product imagery.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Image Assets
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+Place final image files in `public/images/essenly/`.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- `essenly-logo-wordmark.svg`
+- `essenly-product-hero.png`
+- `essenly-product-front.png`
+- `essenly-product-texture.png`
+- `essenly-product-box.png`
+- `essenly-product-ritual.png`

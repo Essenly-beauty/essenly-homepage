@@ -1,0 +1,130 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base
+  title="Contact Essenly"
+  description="For product, wholesale, press and partnership inquiries, contact the Essenly team."
+  canonicalPath="/contact"
+>
+  <section class="section contact-hero">
+    <div class="narrow stack">
+      <p class="eyebrow">Contact</p>
+      <h1>Speak with the Essenly team.</h1>
+      <p class="lead">
+        For product, wholesale, press and partnership inquiries, contact the Essenly team.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container contact-grid">
+      <article class="info-card">
+        <h2>General</h2>
+        <p class="muted">General inquiry email to be confirmed before launch.</p>
+      </article>
+      <article class="info-card">
+        <h2>Wholesale U.S.</h2>
+        <a href="mailto:wholesale@essenly.beauty">wholesale@essenly.beauty</a>
+      </article>
+      <article class="info-card">
+        <h2>Press and partnerships</h2>
+        <p class="muted">Press contact to be confirmed before launch.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section rose-band">
+    <div class="container form-layout">
+      <div class="stack">
+        <p class="eyebrow">Inquiry form</p>
+        <h2>Tell us what you are looking for.</h2>
+        <p class="lead">
+          The form is ready for a replaceable endpoint. Use the category field to route
+          wholesale, product, press and partnership messages.
+        </p>
+      </div>
+      <form class="contact-form" action="#" method="post">
+        <div class="form-grid">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+              <option value="">Select one</option>
+              <option>Product</option>
+              <option>Wholesale</option>
+              <option>Press</option>
+              <option>Partnership</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="company">Company</label>
+            <input id="company" name="company" autocomplete="organization" />
+          </div>
+          <div class="field full">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Send inquiry</button>
+        <p class="fine-print">Form endpoint, spam protection and success state to be configured before launch.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="narrow stack">
+      <p class="eyebrow">Company</p>
+      <h2>Essenly Co., Ltd.</h2>
+      <p class="muted">Official business address and company registration details to be confirmed.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact-hero {
+    text-align: center;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+
+  .contact-grid h2 {
+    margin-bottom: var(--space-3);
+    font-size: 2rem;
+  }
+
+  .contact-grid a {
+    color: var(--color-accent-dark);
+    font-weight: 700;
+  }
+
+  .form-layout {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--space-7);
+  }
+
+  .contact-form {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 900px) {
+    .contact-grid,
+    .form-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,180 @@
+---
+import ImageAsset from "../components/ImageAsset.astro";
+import Base from "../layouts/Base.astro";
+import { siteConfig } from "../data/siteConfig";
+---
+
+<Base
+  title="Essenly Keratin Hair Mask"
+  description="Meet Essenly Keratin Hair Mask, a conditioning Korean hair mask with a warm Amber Vanilla scent, available in the United States on Amazon."
+  canonicalPath="/product"
+>
+  <section class="section">
+    <div class="container split">
+      <div class="stack">
+        <p class="eyebrow">Product</p>
+        <h1>{siteConfig.product.name}</h1>
+        <p class="lead">
+          A rich Korean hair mask designed to help dry, frizzy and color-treated hair
+          feel softer, smoother and more manageable.
+        </p>
+        <div class="button-row">
+          <a class="btn btn-primary" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">
+            Shop on Amazon
+          </a>
+          <a class="btn btn-secondary" href="/wholesale">Wholesale</a>
+        </div>
+      </div>
+      <ImageAsset
+        src="/images/essenly/essenly-product-front.png"
+        name="Product Front Image"
+        ratio="4:5"
+        description="Front view of the Essenly Keratin Hair Mask."
+        notes="Clean premium product image with readable packaging."
+        alt="Front view of the Essenly Keratin Hair Mask"
+      />
+    </div>
+  </section>
+
+  <section class="section sage-band">
+    <div class="container">
+      <div class="section-title">
+        <p class="eyebrow">Overview</p>
+        <h2>A conditioning mask with a sensory finish.</h2>
+      </div>
+      <div class="three-grid">
+        <article class="info-card">
+          <h3>Hair feel</h3>
+          <p class="muted">Helps hair feel smoother, softer and easier to manage after rinsing.</p>
+        </article>
+        <article class="info-card">
+          <h3>Texture</h3>
+          <p class="muted">A rich treatment texture intended for mid-lengths and ends.</p>
+        </article>
+        <article class="info-card">
+          <h3>Fragrance</h3>
+          <p class="muted">A warm Amber Vanilla scent that stays soft and polished.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split reverse">
+      <ImageAsset
+        src="/images/essenly/essenly-product-texture.png"
+        name="Texture Close-up"
+        ratio="1:1"
+        description="Close crop showing the hair mask texture."
+        notes="Show tactile cream texture without clinical props."
+        alt="Close-up of Essenly Hair Mask texture"
+      />
+      <div class="stack">
+        <p class="eyebrow">How to use</p>
+        <h2>A simple five-minute step.</h2>
+        <p class="lead">
+          After shampooing, apply to damp hair with attention to the mid-lengths and ends.
+          Leave on for 5-7 minutes, then rinse thoroughly.
+        </p>
+        <p class="fine-print">Final usage directions and warnings should be confirmed from the current U.S. product label.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section rose-band">
+    <div class="container product-info">
+      <div class="stack">
+        <p class="eyebrow">Product information</p>
+        <h2>Details to verify before launch.</h2>
+        <p class="lead">The site is structured for verified product data without inventing claims or specifications.</p>
+      </div>
+      <dl class="details-list">
+        <div><dt>Display name</dt><dd>{siteConfig.product.name}</dd></div>
+        <div><dt>Net weight</dt><dd>To be confirmed</dd></div>
+        <div><dt>Country of origin</dt><dd>{siteConfig.product.countryOfOrigin}</dd></div>
+        <div><dt>Fragrance</dt><dd>{siteConfig.product.fragrance}</dd></div>
+        <div><dt>Ingredient highlights</dt><dd>Keratin, Collagen, Shea Butter; exact INCI to be confirmed</dd></div>
+        <div><dt>U.S. purchase</dt><dd><a href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">Official Amazon listing</a></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section dark-band">
+    <div class="narrow stack cta-center">
+      <p class="eyebrow">Available in the U.S.</p>
+      <h2>Discover Essenly on Amazon.</h2>
+      <p class="lead">Wholesale partners can also request product and pricing information directly.</p>
+      <div class="button-row">
+        <a class="btn btn-light" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
+        <a class="btn btn-secondary dark-outline" href="/wholesale">Wholesale</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section-title {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 760px;
+    margin-bottom: var(--space-7);
+  }
+
+  .product-info {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--space-7);
+  }
+
+  .details-list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .details-list div {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid rgba(36, 30, 25, 0.18);
+  }
+
+  .details-list dt {
+    font-weight: 700;
+  }
+
+  .details-list dd {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  .details-list a {
+    color: var(--color-accent-dark);
+    font-weight: 700;
+  }
+
+  .cta-center {
+    text-align: center;
+  }
+
+  .cta-center .button-row {
+    justify-content: center;
+  }
+
+  .dark-outline {
+    border-color: rgba(255, 253, 248, 0.5);
+    color: var(--color-surface);
+  }
+
+  @media (max-width: 900px) {
+    .product-info,
+    .details-list div {
+      grid-template-columns: 1fr;
+    }
+
+    .details-list div {
+      gap: var(--space-1);
+    }
+  }
+</style>
