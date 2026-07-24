@@ -1,64 +1,69 @@
 ---
 import ImageAsset from "../components/ImageAsset.astro";
 import Base from "../layouts/Base.astro";
-import { siteConfig } from "../data/siteConfig";
+import { amazonUrl, siteConfig } from "../data/siteConfig";
+
+const amazon = siteConfig.amazon;
+const product = siteConfig.product;
+const homeReviews = siteConfig.reviews.filter((review) => review.verified && review.purpose === "home");
+const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
 ---
 
-<Base title="Essenly | Korean Hair Care">
+<Base
+  title="Essenly | Sensorial Korean Hair Care"
+  description="Discover Essenly Keratin Hair Mask, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair."
+>
   <section class="home-hero">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow">Korean hair care</p>
+        <p class="eyebrow">Sensorial Korean hair care</p>
         <h1>Hair care that stays with you.</h1>
         <p class="lead">
-          A rich Korean hair mask loved for lightweight softness, glossy movement and a warm Amber Vanilla finish.
+          A sensorial Korean hair mask for softer, smoother, beautifully scented hair.
         </p>
         <div class="button-row">
-          <a class="btn btn-primary" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">
-            Shop on Amazon
-          </a>
-          <a class="btn btn-secondary" href="/wholesale">Wholesale</a>
-        </div>
-        <div class="hero-meta" aria-label="Product highlights">
-          <span>Made in Korea</span>
-          <span>Amber Vanilla</span>
-          <span>Amazon U.S.</span>
+          <a class="btn btn-primary" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
+          <a class="btn btn-secondary" href="/wholesale">Explore Wholesale</a>
         </div>
       </div>
       <ImageAsset
         src="/images/essenly/essenly-product-hero.png"
-        name="Homepage Hero Image"
+        name="Home hero"
         ratio="16:10 desktop, 4:5 mobile"
-        description="Essenly Hair Mask photographed in warm natural light with the product clearly visible."
-        notes="Use ivory, amber, sand or muted brown. Avoid text, badges and catalog-style cutouts."
-        alt="Essenly Keratin Hair Mask photographed in warm natural light"
+        description="Editorial hero image of Essenly Hair Mask in warm ivory, cream or amber light."
+        notes="Use a crop with clear negative space and an undistorted product label."
+        alt="Essenly Keratin Hair Mask in warm editorial light"
       />
     </div>
   </section>
 
-  <section class="section">
+  <section class="section product-intro">
     <div class="container split">
       <div class="stack">
-        <p class="eyebrow">Hero product</p>
+        <p class="eyebrow">{product.name}</p>
         <h2>One treatment. A softer ritual.</h2>
         <p class="lead">
-          {siteConfig.product.name} is a rich but lightweight Korean hair treatment
-          customers describe as softening, smoothing and glossy without a heavy finish.
+          Essenly Keratin Hair Mask is a rich rinse-out treatment created for dry,
+          frizzy and color-treated hair.
         </p>
-        <p class="muted">Finished with our signature {siteConfig.product.fragrance} scent, one of the product details customers mention most.</p>
-        <div class="product-facts">
-          <span>{siteConfig.product.countryOfOrigin}</span>
-          <span>{siteConfig.product.fragrance}</span>
-          <span>Limited U.S. wholesale</span>
+        <p class="muted">
+          It conditions the hair without leaving it feeling greasy or weighed down,
+          helping it feel softer, look smoother and move more naturally.
+        </p>
+        <div class="product-facts" aria-label="Product facts">
+          <span>{product.countryOfOrigin}</span>
+          <span>{product.useTime} treatment</span>
+          <span>{product.fragrance} scent</span>
         </div>
+        <a class="btn btn-secondary" href="/product">Discover the Hair Mask</a>
       </div>
       <ImageAsset
-        src="/images/essenly/essenly-product-texture.png"
-        name="Open Product Image"
+        src="/images/essenly/essenly-product-primary.png"
+        name="Product primary"
         ratio="4:5"
-        description="Open jar or container with the conditioning texture clearly visible."
-        notes="Warm neutral background. Optional hand interaction. High-resolution crop."
-        alt="Open Essenly Hair Mask showing its rich conditioning texture"
+        description="Front product image or open jar with texture."
+        notes="Use a warm crop distinct from the home hero."
+        alt="Essenly Keratin Hair Mask product and texture"
       />
     </div>
   </section>
@@ -66,69 +71,45 @@ import { siteConfig } from "../data/siteConfig";
   <section class="section sage-band">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">Benefits</p>
-        <h2>Softness, shine and scent.</h2>
-        <p class="lead">Three reasons the mask belongs on a bathroom shelf, salon backbar or beauty retail edit.</p>
+        <p class="eyebrow">The difference</p>
+        <h2>Rich care, without the heavy finish.</h2>
       </div>
       <div class="benefit-grid">
         <article class="info-card">
-          <h3>Lightweight softness</h3>
-          <p class="muted">Customers mention hair that feels soft and moisturized without a greasy or weighed-down finish.</p>
+          <h3>Softness you can feel</h3>
+          <p class="muted">A conditioning treatment that helps dry hair feel softer, smoother and easier to manage.</p>
         </article>
         <article class="info-card">
-          <h3>Frizz-smoothing shine</h3>
-          <p class="muted">Reviewers describe a more polished look after blow-drying or air-drying, with visible shine.</p>
+          <h3>A polished, lightweight finish</h3>
+          <p class="muted">Designed to improve the appearance of frizz and leave hair looking glossy without a greasy feel.</p>
         </article>
         <article class="info-card">
-          <h3>Amber Vanilla finish</h3>
-          <p class="muted">A warm, soft fragrance that customers call elevated, memorable and not overpowering.</p>
+          <h3>A scent worth remembering</h3>
+          <p class="muted">Amber Vanilla brings warmth and softness to the experience, leaving a subtle fragrance after rinsing.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="section review-band">
-    <div class="container review-layout">
-      <div class="review-score">
-        <span>{siteConfig.amazonProof.rating}</span>
-        <p>out of 5 on Amazon</p>
-      </div>
-      <div class="stack">
-        <p class="eyebrow">Customer loved</p>
-        <h2>Rich texture. Lightweight finish. Amber Vanilla everything.</h2>
-        <p class="lead">
-          Based on Amazon customer feedback, Essenly is most often appreciated for
-          soft, glossy hair feel, frizz control, a concentrated creamy texture and premium packaging.
-        </p>
-        <div class="review-points">
-          <span>{siteConfig.amazonProof.reviewCount} ratings</span>
-          <span>96% four or five stars</span>
-          <span>0% one or two stars</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
+  <section class="section ritual-section">
     <div class="container split reverse">
       <ImageAsset
-        src="/images/essenly/essenly-product-ritual.png"
-        name="Ritual Image"
+        src="/images/essenly/essenly-hair-ritual.png"
+        name="Hair ritual"
         ratio="4:5"
-        description="Hair care ritual with damp hair, towel, shower environment or hand applying product."
-        notes="Editorial rather than instructional. Avoid medical before-and-after visuals."
-        alt="Hair care ritual featuring the Essenly Hair Mask"
+        description="Damp hair, towel, product in hand or close sensory application scene."
+        notes="Avoid medical before-and-after imagery and generic stock styling."
+        alt="A simple hair-care ritual with Essenly Keratin Hair Mask"
       />
       <div class="stack">
-        <p class="eyebrow">Texture and ritual</p>
-        <h2>Five minutes, then softer hair.</h2>
+        <p class="eyebrow">The ritual</p>
+        <h2>Five minutes can change how your hair feels.</h2>
         <p class="lead">
-          Apply to damp hair after shampooing, focusing on the mid-lengths and ends.
-          Leave on for 5-7 minutes, then rinse thoroughly.
+          After shampooing, apply the mask to damp hair, focusing on the mid-lengths and ends.
         </p>
         <p class="muted">
-          Customers often describe the routine as easy to add to a shower ritual, with a soft hair feel after rinsing.
-          Final directions should be confirmed against the current U.S. product label.
+          Leave it on for 5-7 minutes, rinse thoroughly and continue with your usual styling routine.
+          No complicated routine. Just a richer conditioning step when your hair needs more.
         </p>
       </div>
     </div>
@@ -137,77 +118,88 @@ import { siteConfig } from "../data/siteConfig";
   <section class="section rose-band">
     <div class="container split">
       <div class="stack">
-        <p class="eyebrow">Ingredients</p>
-        <h2>Conditioning care, made in Korea.</h2>
+        <p class="eyebrow">Texture</p>
+        <h2>Made to feel as good as the result.</h2>
         <p class="lead">
-          Current ingredient highlights include Keratin, Collagen and Shea Butter.
-          The exact INCI list should be verified before publication.
+          The creamy texture coats the hair with conditioning care, while the finish stays soft,
+          touchable and light.
         </p>
-        <ul class="ingredient-list">
-          <li>Keratin</li>
-          <li>Collagen</li>
-          <li>Shea Butter</li>
-        </ul>
+        <p class="muted">A treatment for the days when regular conditioner does not feel like enough.</p>
       </div>
       <ImageAsset
         src="/images/essenly/essenly-product-texture.png"
-        name="Ingredient Still Life"
+        name="Product texture"
         ratio="1:1"
-        description="Conditioning texture or refined ingredient still life."
-        notes="Do not use misleading raw ingredient imagery until the full INCI list is verified."
-        alt="Conditioning texture and ingredients associated with the Essenly Hair Mask"
+        description="Macro image of the product texture on a cream or white background."
+        notes="Texture color and density should match the actual product."
+        alt="Creamy texture of Essenly Keratin Hair Mask"
       />
     </div>
   </section>
 
-  <section class="section dark-band">
-    <div class="container amazon-band">
-      <div class="stack">
-        <p class="eyebrow">Amazon U.S.</p>
-        <h2>Available in the U.S. on Amazon</h2>
-        <p class="lead">Discover Essenly through our official U.S. Amazon listing, where customers are already responding to the mask's lightweight finish, scent and shelf appeal.</p>
-        <div class="review-summary">
-          <span>{siteConfig.amazonProof.rating} out of 5</span>
-          <span>{siteConfig.amazonProof.reviewCount} ratings</span>
-          <span>5-star majority</span>
-        </div>
-        <a class="btn btn-light" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">
-          Shop on Amazon
-        </a>
+  <section class="section review-band">
+    <div class="container review-layout">
+      <div class="review-score">
+        {hasAmazonRating ? (
+          <>
+            <span>{amazon.rating}</span>
+            <p>out of 5 on Amazon</p>
+          </>
+        ) : (
+          <p>Available on Amazon U.S.</p>
+        )}
       </div>
-      <ImageAsset
-        src="/images/essenly/essenly-product-box.png"
-        name="Amazon CTA Product Image"
-        ratio="4:5"
-        description="Clean product-only scene suitable for a direct purchase call-to-action."
-        notes="No Amazon logo embedded into the image."
-        alt="Essenly Keratin Hair Mask product image for Amazon U.S. purchase"
-      />
+      <div class="stack">
+        <p class="eyebrow">Amazon proof</p>
+        <h2>Loved by early U.S. customers.</h2>
+        {hasAmazonRating ? (
+          <p class="lead">
+            {amazon.rating} out of 5 on Amazon, based on {amazon.ratingCount} customer ratings.
+          </p>
+        ) : (
+          <p class="lead">Essenly is currently available through Amazon U.S.</p>
+        )}
+        {homeReviews.length > 0 && (
+          <div class="quote-grid">
+            {homeReviews.map((review) => <blockquote>"{review.quote}"</blockquote>)}
+          </div>
+        )}
+        <a class="btn btn-secondary" href={amazonUrl} target="_blank" rel="noopener noreferrer">View on Amazon</a>
+      </div>
     </div>
   </section>
 
-  <section class="section wholesale-preview">
+  <section class="section consumer-cta">
+    <div class="narrow stack">
+      <p class="eyebrow">For your routine</p>
+      <h2>Bring softness back to your routine.</h2>
+      <p class="lead">Essenly Keratin Hair Mask is available to U.S. customers through Amazon.</p>
+      <a class="btn btn-primary" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
+    </div>
+  </section>
+
+  <section class="section dark-band wholesale-cta">
     <div class="narrow stack">
       <p class="eyebrow">Wholesale</p>
-      <h2>For retailers, salons and spas</h2>
+      <h2>A distinctive Korean hair-care addition for your customers.</h2>
       <p class="lead">
-        Essenly is available to selected wholesale partners in the United States.
+        Essenly works with selected U.S. beauty retailers, salons, head spas and online stores.
       </p>
-      <a class="btn btn-primary" href="/wholesale">Explore Wholesale</a>
+      <a class="btn btn-light" href="/wholesale">Explore U.S. Wholesale</a>
     </div>
   </section>
 
   <section class="section-tight" id="our-story">
     <div class="narrow stack">
       <p class="eyebrow">About Essenly</p>
-      <h2>Beauty experiences from Seoul, made for global customers.</h2>
+      <h2>About Essenly</h2>
       <p class="lead">
-        Essenly Co., Ltd. is a Seoul-based beauty company developing Korean beauty products and
-        experiences for global customers.
+        Essenly Co., Ltd. is a Seoul-based beauty company creating Korean beauty products and
+        sensorial experiences for global customers.
       </p>
       <p class="muted">
-        Our first release is an intensive hair mask created in Korea, combining effective
-        conditioning care with a distinctive sensory experience.
+        Our first release brings together effective conditioning care, a memorable fragrance
+        and the simplicity of an at-home ritual.
       </p>
     </div>
   </section>
@@ -228,18 +220,11 @@ import { siteConfig } from "../data/siteConfig";
     text-align: center;
   }
 
-  .amazon-band {
-    display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
-    gap: clamp(2rem, 6vw, 5rem);
-    align-items: center;
-  }
-
   .hero-copy {
     display: grid;
     gap: var(--space-4);
     justify-items: center;
-    max-width: 980px;
+    max-width: 920px;
     margin-inline: auto;
   }
 
@@ -251,25 +236,6 @@ import { siteConfig } from "../data/siteConfig";
     max-width: 520px;
   }
 
-  .hero-meta {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.45rem;
-    margin-top: var(--space-2);
-  }
-
-  .hero-meta span {
-    padding: 0.45rem 0.7rem;
-    border: 1px solid rgba(31, 25, 21, 0.16);
-    border-radius: 999px;
-    background: rgba(255, 250, 244, 0.4);
-    color: rgba(31, 25, 21, 0.7);
-    font-size: 0.68rem;
-    font-weight: 800;
-    text-transform: uppercase;
-  }
-
   .home-hero .image-asset,
   .home-hero .placeholder-asset {
     width: min(100%, 1060px);
@@ -277,26 +243,26 @@ import { siteConfig } from "../data/siteConfig";
     margin-inline: auto;
   }
 
+  .section-head,
+  .consumer-cta,
+  .wholesale-cta {
+    text-align: center;
+  }
+
   .section-head {
     display: grid;
     gap: var(--space-4);
     max-width: 760px;
-    margin-bottom: var(--space-7);
-    margin-inline: auto;
-    text-align: center;
+    margin: 0 auto var(--space-7);
   }
 
-  .product-facts,
-  .review-summary,
-  .review-points {
+  .product-facts {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
   }
 
-  .product-facts span,
-  .review-summary span,
-  .review-points span {
+  .product-facts span {
     padding: 0.5rem 0.72rem;
     border: 1px solid rgba(31, 25, 21, 0.14);
     border-radius: 999px;
@@ -337,7 +303,7 @@ import { siteConfig } from "../data/siteConfig";
   }
 
   .review-score p {
-    max-width: 10ch;
+    max-width: 12ch;
     color: rgba(31, 25, 21, 0.68);
     font-size: 0.72rem;
     font-weight: 800;
@@ -345,46 +311,24 @@ import { siteConfig } from "../data/siteConfig";
     text-transform: uppercase;
   }
 
-  .ingredient-list {
-    display: flex;
-    flex-wrap: wrap;
+  .quote-grid {
+    display: grid;
     gap: var(--space-3);
-    padding: 0;
+  }
+
+  .quote-grid blockquote {
     margin: 0;
-    list-style: none;
+    padding: var(--space-4);
+    border-left: 1px solid rgba(31, 25, 21, 0.2);
+    color: var(--color-muted);
   }
 
-  .ingredient-list li {
-    padding: 0.72rem 0.95rem;
-    border: 1px solid rgba(36, 30, 25, 0.22);
-    border-radius: 999px;
-    background: rgba(255, 253, 248, 0.56);
-    font-size: 0.78rem;
-    font-weight: 800;
-    text-transform: uppercase;
-  }
-
-  .dark-band .placeholder-asset {
-    color: var(--color-text);
-  }
-
-  .dark-band .review-summary span {
-    border-color: rgba(255, 253, 248, 0.22);
-    background: rgba(255, 253, 248, 0.08);
-    color: rgba(255, 253, 248, 0.78);
-  }
-
-  .wholesale-preview {
-    text-align: center;
-  }
-
-  .wholesale-preview .btn {
+  .consumer-cta .btn,
+  .wholesale-cta .btn {
     justify-self: center;
   }
 
   @media (max-width: 900px) {
-    .hero-grid,
-    .amazon-band,
     .review-layout {
       grid-template-columns: 1fr;
     }

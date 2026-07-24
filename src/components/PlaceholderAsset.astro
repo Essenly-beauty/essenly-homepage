@@ -8,6 +8,10 @@ interface Props {
 }
 
 const { name, ratio, description, notes, altSuggestion } = Astro.props;
+void name;
+void ratio;
+void description;
+void notes;
 ---
 
 <figure class="placeholder-asset" aria-label={altSuggestion}>
@@ -16,29 +20,4 @@ const { name, ratio, description, notes, altSuggestion } = Astro.props;
     <span class="placeholder-box"></span>
     <span class="placeholder-gloss"></span>
   </div>
-  <figcaption class="placeholder-caption">
-    <p class="placeholder-kicker">Image pending</p>
-    <h3>{name}</h3>
-    <details>
-      <summary>Asset notes</summary>
-      <dl>
-        <div>
-          <dt>Ratio</dt>
-          <dd>{ratio}</dd>
-        </div>
-        <div>
-          <dt>Visual</dt>
-          <dd>{description}</dd>
-        </div>
-        <div>
-          <dt>Notes</dt>
-          <dd>{notes}</dd>
-        </div>
-        <div>
-          <dt>Alt</dt>
-          <dd>{altSuggestion}</dd>
-        </div>
-      </dl>
-    </details>
-  </figcaption>
 </figure>

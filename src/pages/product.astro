@@ -1,129 +1,271 @@
 ---
 import ImageAsset from "../components/ImageAsset.astro";
 import Base from "../layouts/Base.astro";
-import { siteConfig } from "../data/siteConfig";
+import { amazonUrl, siteConfig } from "../data/siteConfig";
+
+const product = siteConfig.product;
+const productFacts = [product.netWeight, product.countryOfOrigin, product.fragrance].filter(Boolean);
+const productDetails = [
+  ["Product name", product.name],
+  ["Product type", product.type],
+  ["Net weight", product.netWeight],
+  ["Country of origin", product.countryOfOrigin],
+  ["Fragrance", product.fragrance],
+  ["Recommended use", `${product.useTime} after shampooing`],
+  ["Full ingredients", product.inci],
+  ["Cautions", product.cautions],
+].filter((detail): detail is [string, string] => Boolean(detail[1]));
 ---
 
 <Base
-  title="Essenly Keratin Hair Mask"
-  description="Meet Essenly Keratin Hair Mask, a conditioning Korean hair mask with a warm Amber Vanilla scent, available in the United States on Amazon."
+  title="Essenly Keratin Hair Mask | Made in Korea"
+  description="A rich 5-7 minute Korean hair treatment for dry, frizzy and color-treated hair, finished with a warm Amber Vanilla scent."
   canonicalPath="/product"
 >
-  <section class="section">
+  <section class="section product-hero">
     <div class="container split">
       <div class="stack">
         <p class="eyebrow">Product</p>
-        <h1>{siteConfig.product.name}</h1>
-        <p class="lead">
-          A rich Korean hair mask designed to help dry, frizzy and color-treated hair
-          feel softer, smoother and more manageable.
-        </p>
-        <div class="button-row">
-          <a class="btn btn-primary" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">
-            Shop on Amazon
-          </a>
-          <a class="btn btn-secondary" href="/wholesale">Wholesale</a>
-        </div>
+        <h1>{product.name}</h1>
+        <p class="lead">A rich Korean rinse-out treatment for softer, smoother and more manageable hair.</p>
+        {productFacts.length > 0 && (
+          <div class="fact-row" aria-label="Product facts">
+            {productFacts.map((fact) => <span>{fact}</span>)}
+          </div>
+        )}
+        <a class="btn btn-primary" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
       </div>
       <ImageAsset
-        src="/images/essenly/essenly-product-front.png"
-        name="Product Front Image"
+        src="/images/essenly/essenly-product-detail.png"
+        name="Product detail"
         ratio="4:5"
-        description="Front view of the Essenly Keratin Hair Mask."
-        notes="Clean premium product image with readable packaging."
-        alt="Front view of the Essenly Keratin Hair Mask"
+        description="High-resolution front product image with accurate label visibility."
+        notes="Avoid decorative elements that cover the front label."
+        alt="Front view of Essenly Keratin Hair Mask"
       />
     </div>
   </section>
 
   <section class="section sage-band">
-    <div class="container">
-      <div class="section-title">
-        <p class="eyebrow">Overview</p>
-        <h2>A conditioning mask with a sensory finish.</h2>
+    <div class="container product-grid">
+      <div class="stack">
+        <p class="eyebrow">Who it is for</p>
+        <h2>For hair that needs more than everyday conditioner.</h2>
+        <p class="lead">Designed for hair that feels dry, rough, frizzy, difficult to manage, dull or stressed by coloring and heat styling.</p>
       </div>
-      <div class="three-grid">
-        <article class="info-card">
-          <h3>Hair feel</h3>
-          <p class="muted">Helps hair feel smoother, softer and easier to manage after rinsing.</p>
-        </article>
-        <article class="info-card">
-          <h3>Texture</h3>
-          <p class="muted">A rich treatment texture intended for mid-lengths and ends.</p>
-        </article>
-        <article class="info-card">
-          <h3>Fragrance</h3>
-          <p class="muted">A warm Amber Vanilla scent that stays soft and polished.</p>
-        </article>
+      <div class="check-list">
+        <p>Dry or rough</p>
+        <p>Frizzy or difficult to manage</p>
+        <p>Dull or lacking visible shine</p>
+        <p>Stressed by coloring or heat styling</p>
       </div>
+      <p class="closing-note">
+        Suitable for a wide range of hair types, especially when the lengths and ends need richer conditioning care.
+      </p>
     </div>
   </section>
 
   <section class="section">
     <div class="container split reverse">
       <ImageAsset
-        src="/images/essenly/essenly-product-texture.png"
-        name="Texture Close-up"
+        src="/images/essenly/essenly-texture-macro.png"
+        name="Texture macro"
         ratio="1:1"
-        description="Close crop showing the hair mask texture."
-        notes="Show tactile cream texture without clinical props."
-        alt="Close-up of Essenly Hair Mask texture"
+        description="Macro image of the actual creamy product texture."
+        notes="Use a white or cream background and true-to-product texture color."
+        alt="Creamy texture of Essenly Keratin Hair Mask"
       />
       <div class="stack">
-        <p class="eyebrow">How to use</p>
-        <h2>A simple five-minute step.</h2>
+        <p class="eyebrow">What to expect</p>
+        <h2>Softer feel. Smoother finish. Easier styling.</h2>
         <p class="lead">
-          After shampooing, apply to damp hair with attention to the mid-lengths and ends.
-          Leave on for 5-7 minutes, then rinse thoroughly.
+          Essenly Keratin Hair Mask helps condition dry-looking hair and improve its overall
+          appearance and manageability.
         </p>
-        <p class="fine-print">Final usage directions and warnings should be confirmed from the current U.S. product label.</p>
+        <p class="muted">
+          After rinsing, hair feels softer and more touchable, with a smoother-looking finish
+          that does not feel excessively heavy.
+        </p>
       </div>
     </div>
   </section>
 
   <section class="section rose-band">
+    <div class="container two-column-copy">
+      <article class="stack">
+        <p class="eyebrow">Texture</p>
+        <h2>Rich when applied. Light after rinsing.</h2>
+        <p class="lead">
+          The creamy texture spreads easily through damp hair and gives the experience of a more
+          intensive treatment.
+        </p>
+        <p class="muted">It is designed to deliver conditioning care without leaving hair feeling coated, greasy or stiff.</p>
+      </article>
+      <article class="stack">
+        <p class="eyebrow">Scent</p>
+        <h2>Amber Vanilla</h2>
+        <p class="lead">Warm, soft and subtly sweet.</p>
+        <p class="muted">
+          The fragrance turns a practical hair-care step into a more memorable ritual and leaves
+          a gentle trace after rinsing.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container usage-layout">
+      <div class="stack">
+        <p class="eyebrow">How to use</p>
+        <h2>A five-minute conditioning ritual.</h2>
+        <p class="lead">Use whenever the hair needs richer conditioning than a regular daily conditioner provides.</p>
+      </div>
+      <ol class="step-list">
+        <li>Shampoo and rinse the hair.</li>
+        <li>Apply the mask to damp hair, focusing on the mid-lengths and ends.</li>
+        <li>Leave on for 5-7 minutes.</li>
+        <li>Rinse thoroughly.</li>
+        <li>Style as usual.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section sage-band">
+    <div class="container">
+      <div class="section-title">
+        <p class="eyebrow">Key ingredients</p>
+        <h2>Conditioning ingredients selected for softness and manageability.</h2>
+      </div>
+      <div class="ingredient-row" aria-label="Ingredient names">
+        <span>Keratin</span>
+        <span>Collagen</span>
+        <span>Shea Butter</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section product-details-section">
     <div class="container product-info">
       <div class="stack">
-        <p class="eyebrow">Product information</p>
-        <h2>Details to verify before launch.</h2>
-        <p class="lead">The site is structured for verified product data without inventing claims or specifications.</p>
+        <p class="eyebrow">Product details</p>
+        <h2>Clear product information.</h2>
       </div>
       <dl class="details-list">
-        <div><dt>Display name</dt><dd>{siteConfig.product.name}</dd></div>
-        <div><dt>Net weight</dt><dd>To be confirmed</dd></div>
-        <div><dt>Country of origin</dt><dd>{siteConfig.product.countryOfOrigin}</dd></div>
-        <div><dt>Fragrance</dt><dd>{siteConfig.product.fragrance}</dd></div>
-        <div><dt>Ingredient highlights</dt><dd>Keratin, Collagen, Shea Butter; exact INCI to be confirmed</dd></div>
-        <div><dt>U.S. purchase</dt><dd><a href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">Official Amazon listing</a></dd></div>
+        {productDetails.map(([label, value]) => (
+          <div>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
       </dl>
     </div>
   </section>
 
-  <section class="section dark-band">
-    <div class="narrow stack cta-center">
-      <p class="eyebrow">Available in the U.S.</p>
-      <h2>Discover Essenly on Amazon.</h2>
-      <p class="lead">Wholesale partners can also request product and pricing information directly.</p>
-      <div class="button-row">
-        <a class="btn btn-light" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
-        <a class="btn btn-secondary dark-outline" href="/wholesale">Wholesale</a>
+  <section class="section dark-band product-cta">
+    <div class="container cta-grid">
+      <div class="stack">
+        <p class="eyebrow">Available in the United States</p>
+        <h2>Purchase Essenly Keratin Hair Mask through our U.S. Amazon listing.</h2>
+        <a class="btn btn-light" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
+      </div>
+      <div class="stack">
+        <p class="eyebrow">Wholesale</p>
+        <h2>Interested in stocking Essenly?</h2>
+        <p class="lead">Wholesale opportunities are available for selected U.S. retailers, salons, head spas and online beauty stores.</p>
+        <a class="btn btn-secondary dark-outline" href="/wholesale">View Wholesale Information</a>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
+  .fact-row,
+  .ingredient-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .fact-row span,
+  .ingredient-row span {
+    padding: 0.5rem 0.72rem;
+    border: 1px solid rgba(31, 25, 21, 0.14);
+    border-radius: 999px;
+    background: rgba(255, 250, 244, 0.42);
+    color: var(--color-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .product-grid,
+  .usage-layout,
+  .product-info,
+  .cta-grid,
+  .two-column-copy {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  .check-list {
+    display: grid;
+    border-top: 1px solid rgba(31, 25, 21, 0.16);
+    border-bottom: 1px solid rgba(31, 25, 21, 0.16);
+  }
+
+  .check-list p {
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid rgba(31, 25, 21, 0.12);
+    font-weight: 800;
+  }
+
+  .check-list p:last-child {
+    border-bottom: 0;
+  }
+
+  .closing-note {
+    grid-column: 2;
+    color: var(--color-muted);
+  }
+
+  .step-list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .step-list li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid rgba(31, 25, 21, 0.14);
+  }
+
+  .step-list li::before {
+    content: counter(step);
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid rgba(31, 25, 21, 0.18);
+    border-radius: 50%;
+    color: var(--color-clay);
+    font-weight: 800;
+  }
+
   .section-title {
     display: grid;
     gap: var(--space-4);
-    max-width: 760px;
+    max-width: 780px;
     margin-bottom: var(--space-7);
-  }
-
-  .product-info {
-    display: grid;
-    grid-template-columns: 0.85fr 1.15fr;
-    gap: var(--space-7);
   }
 
   .details-list {
@@ -134,14 +276,14 @@ import { siteConfig } from "../data/siteConfig";
 
   .details-list div {
     display: grid;
-    grid-template-columns: 170px 1fr;
+    grid-template-columns: 180px 1fr;
     gap: var(--space-4);
     padding-block: var(--space-3);
     border-bottom: 1px solid rgba(36, 30, 25, 0.18);
   }
 
   .details-list dt {
-    font-weight: 700;
+    font-weight: 800;
   }
 
   .details-list dd {
@@ -149,17 +291,8 @@ import { siteConfig } from "../data/siteConfig";
     color: var(--color-muted);
   }
 
-  .details-list a {
-    color: var(--color-accent-dark);
-    font-weight: 700;
-  }
-
-  .cta-center {
-    text-align: center;
-  }
-
-  .cta-center .button-row {
-    justify-content: center;
+  .product-cta .btn {
+    justify-self: start;
   }
 
   .dark-outline {
@@ -168,13 +301,17 @@ import { siteConfig } from "../data/siteConfig";
   }
 
   @media (max-width: 900px) {
+    .product-grid,
+    .usage-layout,
     .product-info,
+    .cta-grid,
+    .two-column-copy,
     .details-list div {
       grid-template-columns: 1fr;
     }
 
-    .details-list div {
-      gap: var(--space-1);
+    .closing-note {
+      grid-column: auto;
     }
   }
 </style>

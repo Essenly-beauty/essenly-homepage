@@ -1,6 +1,6 @@
 ---
 import BrandLogo from "../components/BrandLogo.astro";
-import { navItems, siteConfig } from "../data/siteConfig";
+import { amazonUrl, getContactEmail, navItems, siteConfig } from "../data/siteConfig";
 
 interface Props {
   title: string;
@@ -11,7 +11,7 @@ interface Props {
 
 const {
   title,
-  description = "Discover Essenly, a Seoul-based beauty company and the maker of a conditioning Korean hair mask available in the United States.",
+  description = "Discover Essenly Keratin Hair Mask, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair.",
   canonicalPath = Astro.url.pathname,
   ogImage,
 } = Astro.props;
@@ -23,8 +23,10 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: siteConfig.company.legalName,
   url: "https://essenly.beauty",
-  sameAs: [siteConfig.social.instagram],
+  sameAs: [siteConfig.links.instagram],
 };
+
+const contactEmail = getContactEmail();
 ---
 
 <!DOCTYPE html>
@@ -70,14 +72,14 @@ const organizationJsonLd = {
         <nav class="desktop-nav" aria-label="Primary navigation">
           {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
         </nav>
-        <a class="header-cta" href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">
+        <a class="header-cta" href={amazonUrl} target="_blank" rel="noopener noreferrer">
           Shop Amazon
         </a>
         <details class="mobile-menu">
           <summary aria-label="Open menu"><span></span><span></span><span></span></summary>
           <nav aria-label="Mobile navigation">
             {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
-            <a href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
+            <a href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
           </nav>
         </details>
       </div>
@@ -98,14 +100,14 @@ const organizationJsonLd = {
           <h2>Explore</h2>
           <a href="/product">Product</a>
           <a href="/wholesale">Wholesale</a>
-          <a href={siteConfig.amazonUrl} target="_blank" rel="noopener noreferrer">Amazon U.S.</a>
+          <a href={amazonUrl} target="_blank" rel="noopener noreferrer">Amazon U.S.</a>
           <a href="/contact">Contact</a>
         </div>
         <div>
           <h2>Contact</h2>
-          <p>General inquiry: to be confirmed</p>
-          <a href="mailto:wholesale@essenly.beauty">wholesale@essenly.beauty</a>
-          <a href={siteConfig.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+          {contactEmail && <a href={`mailto:${contactEmail}`}>{contactEmail}</a>}
+          <p>{siteConfig.company.city}, {siteConfig.company.country}</p>
+          <a href={siteConfig.links.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
         </div>
         <div>
           <h2>Legal</h2>

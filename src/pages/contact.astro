@@ -1,90 +1,105 @@
 ---
 import Base from "../layouts/Base.astro";
+import { getContactEmail, siteConfig } from "../data/siteConfig";
+
+const endpoint = import.meta.env.CONTACT_FORM_ENDPOINT as string | undefined;
+const showForm = Boolean(endpoint);
+const contactMethods = [
+  ["General inquiries", siteConfig.contact.generalEmail],
+  ["U.S. wholesale", siteConfig.contact.wholesaleEmail],
+  ["Press and partnerships", siteConfig.contact.pressEmail],
+].filter((method): method is [string, string] => Boolean(method[1]));
+const fallbackEmail = getContactEmail();
 ---
 
 <Base
   title="Contact Essenly"
-  description="For product, wholesale, press and partnership inquiries, contact the Essenly team."
+  description="Contact Essenly Co., Ltd. for product, U.S. wholesale, press and partnership inquiries."
   canonicalPath="/contact"
 >
   <section class="section contact-hero">
     <div class="narrow stack">
       <p class="eyebrow">Contact</p>
-      <h1>Speak with the Essenly team.</h1>
+      <h1>Let's talk.</h1>
       <p class="lead">
         For product, wholesale, press and partnership inquiries, contact the Essenly team.
       </p>
     </div>
   </section>
 
-  <section class="section-tight">
-    <div class="container contact-grid">
-      <article class="info-card">
-        <h2>General</h2>
-        <p class="muted">General inquiry email to be confirmed before launch.</p>
-      </article>
-      <article class="info-card">
-        <h2>Wholesale U.S.</h2>
-        <a href="mailto:wholesale@essenly.beauty">wholesale@essenly.beauty</a>
-      </article>
-      <article class="info-card">
-        <h2>Press and partnerships</h2>
-        <p class="muted">Press contact to be confirmed before launch.</p>
-      </article>
-    </div>
-  </section>
+  {contactMethods.length > 0 && (
+    <section class="section-tight">
+      <div class="container contact-grid">
+        {contactMethods.map(([label, email]) => (
+          <article class="info-card">
+            <h2>{label}</h2>
+            <a href={`mailto:${email}`}>{email}</a>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
 
   <section class="section rose-band">
     <div class="container form-layout">
       <div class="stack">
-        <p class="eyebrow">Inquiry form</p>
-        <h2>Tell us what you are looking for.</h2>
-        <p class="lead">
-          The form is ready for a replaceable endpoint. Use the category field to route
-          wholesale, product, press and partnership messages.
-        </p>
+        <p class="eyebrow">Inquiry</p>
+        <h2>Send the right note to the right place.</h2>
+        <p class="lead">Choose the inquiry type and tell us what you are looking for.</p>
       </div>
-      <form class="contact-form" action="#" method="post">
-        <div class="form-grid">
-          <div class="field">
-            <label for="name">Name</label>
-            <input id="name" name="name" autocomplete="name" required />
+      {showForm ? (
+        <form class="contact-form" action={endpoint} method="post">
+          <input type="text" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot" />
+          <div class="form-grid">
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="company">Company</label>
+              <input id="company" name="company" autocomplete="organization" />
+            </div>
+            <div class="field">
+              <label for="category">Inquiry type</label>
+              <select id="category" name="category" required>
+                <option value="">Select one</option>
+                <option>Product question</option>
+                <option>Wholesale</option>
+                <option>Press</option>
+                <option>Partnership</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
           </div>
-          <div class="field">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" autocomplete="email" required />
+          <button class="btn btn-primary" type="submit">Send Inquiry</button>
+          <p class="fine-print">By submitting, you agree that Essenly may use your information to respond to your inquiry.</p>
+        </form>
+      ) : (
+        fallbackEmail && (
+          <div class="email-panel">
+            <p>For current inquiries, email the Essenly team directly.</p>
+            <a class="btn btn-primary" href={`mailto:${fallbackEmail}`}>Send Inquiry</a>
+            <a class="btn btn-secondary" href="/wholesale#inquiry">Wholesale Information</a>
           </div>
-          <div class="field">
-            <label for="category">Category</label>
-            <select id="category" name="category" required>
-              <option value="">Select one</option>
-              <option>Product</option>
-              <option>Wholesale</option>
-              <option>Press</option>
-              <option>Partnership</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="company">Company</label>
-            <input id="company" name="company" autocomplete="organization" />
-          </div>
-          <div class="field full">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" required></textarea>
-          </div>
-        </div>
-        <button class="btn btn-primary" type="submit">Send inquiry</button>
-        <p class="fine-print">Form endpoint, spam protection and success state to be configured before launch.</p>
-      </form>
+        )
+      )}
     </div>
   </section>
 
   <section class="section-tight">
     <div class="narrow stack">
       <p class="eyebrow">Company</p>
-      <h2>Essenly Co., Ltd.</h2>
-      <p class="muted">Official business address and company registration details to be confirmed.</p>
+      <h2>{siteConfig.company.legalName}</h2>
+      <p class="lead">{siteConfig.company.city}, {siteConfig.company.country}</p>
+      {siteConfig.company.businessAddress && <p class="muted">{siteConfig.company.businessAddress}</p>}
     </div>
   </section>
 </Base>
@@ -96,18 +111,21 @@ import Base from "../layouts/Base.astro";
 
   .contact-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: var(--space-5);
   }
 
   .contact-grid h2 {
     margin-bottom: var(--space-3);
-    font-size: 2rem;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    text-transform: uppercase;
   }
 
   .contact-grid a {
     color: var(--color-accent-dark);
-    font-weight: 700;
+    font-weight: 800;
+    overflow-wrap: anywhere;
   }
 
   .form-layout {
@@ -116,13 +134,30 @@ import Base from "../layouts/Base.astro";
     gap: var(--space-7);
   }
 
-  .contact-form {
+  .contact-form,
+  .email-panel {
     display: grid;
     gap: var(--space-5);
   }
 
+  .email-panel {
+    align-content: start;
+    padding: var(--space-5);
+    border: 1px solid rgba(31, 25, 21, 0.14);
+    border-radius: var(--radius);
+    background: rgba(255, 250, 244, 0.42);
+  }
+
+  .email-panel .btn {
+    justify-self: start;
+  }
+
+  .honeypot {
+    position: absolute;
+    left: -100vw;
+  }
+
   @media (max-width: 900px) {
-    .contact-grid,
     .form-layout {
       grid-template-columns: 1fr;
     }

@@ -29,7 +29,9 @@ Place final image files in `public/images/essenly/`.
 
 - `essenly-logo-wordmark.svg`
 - `essenly-product-hero.png`
-- `essenly-product-front.png`
+- `essenly-product-primary.png`
+- `essenly-product-detail.png`
 - `essenly-product-texture.png`
-- `essenly-product-box.png`
-- `essenly-product-ritual.png`
+- `essenly-texture-macro.png`
+- `essenly-hair-ritual.png`
+- `essenly-wholesale-hero.png`
