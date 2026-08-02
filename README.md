@@ -1,6 +1,6 @@
 # Essenly Beauty Website
 
-Astro site for `essenly.beauty`, focused on Essenly Keratin Hair Mask, Amazon U.S. purchase flow and U.S. wholesale inquiry.
+Astro site for `essenly.beauty`, focused on the Essenly RenewShell™ Intense Hydrating Hair Mask, Amazon U.S. purchase flow and U.S. wholesale inquiry.
 
 ## Routes
 
@@ -46,4 +46,4 @@ Place final image files in `public/images/essenly/`.
 - `essenly-product-texture.png`
 - `essenly-texture-macro.png`
 - `essenly-hair-ritual.png`
-- `essenly-wholesale-hero.png`
+- `essenly-wholesale-hero.jpg`
