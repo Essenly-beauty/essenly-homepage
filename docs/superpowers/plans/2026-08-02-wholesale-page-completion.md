@@ -840,6 +840,139 @@ to the figure's 420px min-height and cut off the model and the jar."
 
 ---
 
+### Task 6: Product name consistency
+
+Added after Task 1's review. Task 1 changed `siteConfig.product.name` to the jar's real
+name, but three files hardcode the old `"Essenly Keratin Hair Mask"` instead of reading the
+field. `/product` currently renders the new name in its `<h1>` and spec table and the old
+name in its `<title>` and body copy — one page, two product names. No original task covered
+this.
+
+**Files:**
+- Modify: `src/data/siteConfig.ts` (add `product.shortName`)
+- Modify: `src/layouts/Base.astro:14`
+- Modify: `src/pages/index.astro:14,35,46,66,102,135,176`
+- Modify: `src/pages/product.astro:21,44,76,82,168`
+- Test: `scripts/check-build.sh`
+
+**Interfaces:**
+- Consumes: `siteConfig.product.name` = `"Essenly RenewShell™ Intense Hydrating Hair Mask"` (set in Task 1).
+- Produces: `siteConfig.product.shortName` = `"Essenly Hair Mask"`.
+
+#### Which name goes where
+
+The canonical name is 46 characters. Dropped into seven `alt` attributes and body
+sentences it reads like a spec sheet, so this task introduces a short form. `"Essenly Hair
+Mask"` is what the company's own shipping paperwork calls the product, so it is not an
+invention.
+
+- **`product.name`** (canonical) — page `<title>`, `<h1>`, spec tables, meta descriptions.
+  Anything a buyer or a search engine treats as the product's identity.
+- **`product.shortName`** — flowing prose and `alt` text, where the full SKU would be noise.
+
+Neither is hardcoded anywhere after this task. The old string must not survive.
+
+- [ ] **Step 1: Write the failing test**
+
+Append to `scripts/check-build.sh` before the final `exit $FAILED`:
+
+```bash
+echo "Task 6 — product name consistency"
+for page in dist/index.html dist/product/index.html dist/wholesale/index.html dist/contact/index.html; do
+  assert_absent "$page" "Keratin Hair Mask" "old product name absent from $page"
+done
+assert_contains "dist/product/index.html" "Essenly RenewShell" "product page carries the canonical name"
+assert_contains "dist/product/index.html" "Essenly Hair Mask" "product page uses the short name in prose"
+assert_contains "dist/index.html" "Essenly Hair Mask" "home page uses the short name in prose"
+```
+
+- [ ] **Step 2: Run test to verify it fails**
+
+Run: `npm run build && ./scripts/check-build.sh`
+Expected: the four `assert_absent` checks FAIL — `Keratin Hair Mask` is still hardcoded in
+`Base.astro` (whose default description reaches every page that does not pass its own) and
+in `index.astro` and `product.astro`. The `Essenly Hair Mask` assertions also FAIL, since
+the short name does not exist yet.
+
+- [ ] **Step 3: Add the short name**
+
+In `src/data/siteConfig.ts`, add `shortName` directly beneath `name` in the `product` block:
+
+```ts
+    name: "Essenly RenewShell™ Intense Hydrating Hair Mask",
+    shortName: "Essenly Hair Mask",
+```
+
+- [ ] **Step 4: Fix the layout default**
+
+`src/layouts/Base.astro:14` hardcodes the old name in the fallback meta description. It
+already imports `siteConfig`. Replace the default with a template literal using the
+canonical name:
+
+```ts
+  description = `Discover ${siteConfig.product.name}, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair.`,
+```
+
+Destructuring defaults are evaluated per call, so referencing the imported `siteConfig`
+here is fine.
+
+- [ ] **Step 5: Fix the home page**
+
+`src/pages/index.astro` already has `const product = siteConfig.product;` at line 7. Replace
+each hardcoded occurrence:
+
+| Line | Now | Becomes |
+|---|---|---|
+| 14 | `description="Discover Essenly Keratin Hair Mask, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair."` | `description={`Discover ${product.name}, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair.`}` |
+| 35 | `alt="Essenly Keratin Hair Mask in warm editorial light"` | `alt={`${product.shortName} in warm editorial light`}` |
+| 46 | `Essenly Keratin Hair Mask is a rich rinse-out treatment created for dry,` | `{product.shortName} is a rich rinse-out treatment created for dry,` |
+| 66 | `alt="Essenly Keratin Hair Mask product and texture"` | `alt={`${product.shortName} product and texture`}` |
+| 102 | `alt="A simple hair-care ritual with Essenly Keratin Hair Mask"` | `alt={`A simple hair-care ritual with ${product.shortName}`}` |
+| 135 | `alt="Creamy texture of Essenly Keratin Hair Mask"` | `alt={`Creamy texture of ${product.shortName}`}` |
+| 176 | `<p class="lead">Essenly Keratin Hair Mask is available to U.S. customers through Amazon.</p>` | `<p class="lead">{product.shortName} is available to U.S. customers through Amazon.</p>` |
+
+- [ ] **Step 6: Fix the product page**
+
+`src/pages/product.astro` already has `const product = siteConfig.product;` at line 6.
+
+| Line | Now | Becomes |
+|---|---|---|
+| 21 | `title="Essenly Keratin Hair Mask \| Made in Korea"` | `title={`${product.name} \| Made in Korea`}` |
+| 44 | `alt="Front view of Essenly Keratin Hair Mask"` | `alt={`Front view of ${product.shortName}`}` |
+| 76 | `alt="Creamy texture of Essenly Keratin Hair Mask"` | `alt={`Creamy texture of ${product.shortName}`}` |
+| 82 | `Essenly Keratin Hair Mask helps condition dry-looking hair and improve its overall` | `{product.shortName} helps condition dry-looking hair and improve its overall` |
+| 168 | `<h2>Purchase Essenly Keratin Hair Mask through our U.S. Amazon listing.</h2>` | `<h2>Purchase {product.shortName} through our U.S. Amazon listing.</h2>` |
+
+`Base.astro` appends `" | Essenly"` only when the title does not already contain
+`"Essenly"`. The canonical name does, so line 21's title stays as written.
+
+- [ ] **Step 7: Run test to verify it passes**
+
+Run: `npm run build && ./scripts/check-build.sh`
+Expected: every assertion across Tasks 1-6 passes.
+
+Then confirm nothing was missed — the build will not catch a leftover:
+
+Run: `grep -rn "Keratin Hair Mask" src/`
+Expected: no output.
+
+- [ ] **Step 8: Commit**
+
+```bash
+git add src/data/siteConfig.ts src/layouts/Base.astro src/pages/index.astro src/pages/product.astro scripts/check-build.sh
+git commit -m "fix(content): one product name across the site
+
+Task 1 renamed the product to match the jar label, but three files
+hardcoded the old name, so /product rendered the new name in its h1 and
+the old one in its title and body copy.
+
+Adds product.shortName for prose and alt text — the canonical name is 46
+characters and reads like a spec sheet mid-sentence. Canonical name keeps
+titles, headings and spec tables."
+```
+
+---
+
 ## Done criteria
 
 - [ ] `PUBLIC_WEB3FORMS_KEY=test-key-000 npm run build && ./scripts/check-build.sh` — every assertion passes.
