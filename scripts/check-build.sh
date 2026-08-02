@@ -88,8 +88,8 @@ else
   echo "  FAIL  hero asset copied to dist"
   FAILED=1
 fi
-grep -q "hero-portrait" dist/_astro/*.css 2>/dev/null \
-  && echo "  PASS  hero-portrait rule shipped in CSS" \
-  || { echo "  FAIL  hero-portrait rule shipped in CSS"; FAILED=1; }
+grep -qE "hero-portrait\{[^}]*aspect-ratio:[ ]*1200[ ]*/[ ]*1373" dist/_astro/*.css 2>/dev/null \
+  && echo "  PASS  hero-portrait aspect-ratio shipped in CSS" \
+  || { echo "  FAIL  hero-portrait aspect-ratio shipped in CSS"; FAILED=1; }
 
 exit $FAILED
