@@ -11,7 +11,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
 
 <Base
   title="Essenly | Sensorial Korean Hair Care"
-  description="Discover Essenly Keratin Hair Mask, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair."
+  description={`Discover ${product.name}, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair.`}
 >
   <section class="home-hero">
     <div class="container hero-grid">
@@ -32,7 +32,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
         ratio="16:10 desktop, 4:5 mobile"
         description="Editorial hero image of Essenly Hair Mask in warm ivory, cream or amber light."
         notes="Use a crop with clear negative space and an undistorted product label."
-        alt="Essenly Keratin Hair Mask in warm editorial light"
+        alt={`${product.shortName} in warm editorial light`}
       />
     </div>
   </section>
@@ -43,7 +43,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
         <p class="eyebrow">{product.name}</p>
         <h2>One treatment. A softer ritual.</h2>
         <p class="lead">
-          Essenly Keratin Hair Mask is a rich rinse-out treatment created for dry,
+          {product.shortName} is a rich rinse-out treatment created for dry,
           frizzy and color-treated hair.
         </p>
         <p class="muted">
@@ -63,7 +63,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
         ratio="4:5"
         description="Front product image or open jar with texture."
         notes="Use a warm crop distinct from the home hero."
-        alt="Essenly Keratin Hair Mask product and texture"
+        alt={`${product.shortName} product and texture`}
       />
     </div>
   </section>
@@ -99,7 +99,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
         ratio="4:5"
         description="Damp hair, towel, product in hand or close sensory application scene."
         notes="Avoid medical before-and-after imagery and generic stock styling."
-        alt="A simple hair-care ritual with Essenly Keratin Hair Mask"
+        alt={`A simple hair-care ritual with ${product.shortName}`}
       />
       <div class="stack">
         <p class="eyebrow">The ritual</p>
@@ -132,7 +132,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
         ratio="1:1"
         description="Macro image of the product texture on a cream or white background."
         notes="Texture color and density should match the actual product."
-        alt="Creamy texture of Essenly Keratin Hair Mask"
+        alt={`Creamy texture of ${product.shortName}`}
       />
     </div>
   </section>
@@ -173,7 +173,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
     <div class="narrow stack">
       <p class="eyebrow">For your routine</p>
       <h2>Bring softness back to your routine.</h2>
-      <p class="lead">Essenly Keratin Hair Mask is available to U.S. customers through Amazon.</p>
+      <p class="lead">{product.shortName} is available to U.S. customers through Amazon.</p>
       <a class="btn btn-primary" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
     </div>
   </section>

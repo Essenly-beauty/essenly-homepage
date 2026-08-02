@@ -37,6 +37,7 @@ export const siteConfig = {
   },
   product: {
     name: "Essenly RenewShell™ Intense Hydrating Hair Mask",
+    shortName: "Essenly Hair Mask",
     type: "Rinse-out conditioning hair treatment",
     netWeight: "190ml",
     countryOfOrigin: "Made in Korea",

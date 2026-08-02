@@ -92,4 +92,12 @@ grep -qE "hero-portrait\{[^}]*aspect-ratio:[ ]*1200[ ]*/[ ]*1373" dist/_astro/*.
   && echo "  PASS  hero-portrait aspect-ratio shipped in CSS" \
   || { echo "  FAIL  hero-portrait aspect-ratio shipped in CSS"; FAILED=1; }
 
+echo "Task 6 — product name consistency"
+for page in dist/index.html dist/product/index.html dist/wholesale/index.html dist/contact/index.html; do
+  assert_absent "$page" "Keratin Hair Mask" "old product name absent from $page"
+done
+assert_contains "dist/product/index.html" "Essenly RenewShell" "product page carries the canonical name"
+assert_contains "dist/product/index.html" "Essenly Hair Mask" "product page uses the short name in prose"
+assert_contains "dist/index.html" "Essenly Hair Mask" "home page uses the short name in prose"
+
 exit $FAILED
