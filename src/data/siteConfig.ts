@@ -69,7 +69,12 @@ export const siteConfig = {
     sampleTerms:
       "Available to qualified buyers at cost, credited against your first order. Ships from U.S. stock, typically 2-3 business days.",
   },
-  supportAssets: [] as WholesaleSupportAsset[],
+  supportAssets: [
+    { label: "Product photography and marketing creatives", available: true },
+    { label: "Joint promotions and in-store events", available: true },
+    { label: "Gift-with-purchase stock for campaigns", available: true },
+    { label: "Product copy and ingredient detail for listings", available: true },
+  ] as WholesaleSupportAsset[],
 } as const;
 
 export const navItems = [
