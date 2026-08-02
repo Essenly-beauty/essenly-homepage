@@ -2,12 +2,18 @@
 # Build-output assertions. Run after `npm run build`.
 set -uo pipefail
 
+# Always run relative to the repo root, regardless of the caller's cwd.
+cd "$(dirname "$0")/.."
+
 FAILED=0
 WHOLESALE="dist/wholesale/index.html"
 
 assert_contains() {
   local file="$1" needle="$2" label="$3"
-  if grep -qF -- "$needle" "$file"; then
+  if [ ! -f "$file" ]; then
+    echo "  FAIL  $label — file missing: $file"
+    FAILED=1
+  elif grep -qF -- "$needle" "$file"; then
     echo "  PASS  $label"
   else
     echo "  FAIL  $label — expected to find: $needle"
@@ -43,8 +49,19 @@ assert_contains "$WHOLESALE" "30 units (one case)" "opening quantity renders"
 assert_contains "$WHOLESALE" "credited against your first order" "sample terms render"
 assert_contains "$WHOLESALE" "Key account" "fourth tier renders"
 assert_contains "$WHOLESALE" "10 cases" "largest tier renders"
-assert_absent "$WHOLESALE" "\$21.00" "opening tier price stays private"
-assert_absent "$WHOLESALE" "\$15.60" "key account price stays private"
+
+# The rule is "$39.00 is the only dollar figure on the page" — not a fixed
+# blocklist of the tier prices we happen to know about today. Enumerate every
+# dollar-looking token instead of naming individual figures, so a future
+# repricing (or a stray $17.50/$19.50 from the rate card) fails loudly instead
+# of shipping silently.
+STRAY=$(grep -oE '\$[0-9][0-9,.]*' "$WHOLESALE" | sort -u | grep -vFx '$39.00')
+if [ -z "$STRAY" ]; then
+  echo "  PASS  MSRP is the only dollar figure"
+else
+  echo "  FAIL  MSRP is the only dollar figure — also found: $STRAY"
+  FAILED=1
+fi
 assert_absent "$WHOLESALE" "200ml" "wrong net weight absent"
 
 echo "Task 2 — thank-you page"
@@ -53,6 +70,7 @@ if [ -f "$THANKYOU" ]; then
   echo "  PASS  /thank-you is built"
   assert_contains "$THANKYOU" "Thank you" "thank-you heading renders"
   assert_contains "$THANKYOU" "wholesale@essenly.beauty" "fallback email renders"
+  assert_contains "$THANKYOU" 'name="robots" content="noindex, follow"' "thank-you page is noindex"
 else
   echo "  FAIL  /thank-you is built — dist/thank-you/index.html missing"
   FAILED=1
@@ -66,7 +84,9 @@ assert_contains "$WHOLESALE" 'name="redirect"' "redirect field present"
 assert_contains "$WHOLESALE" "https://essenly.beauty/thank-you" "redirect points at thank-you"
 assert_contains "$WHOLESALE" 'name="botcheck"' "Web3Forms honeypot present"
 assert_contains "$WHOLESALE" 'name="inquiry_type"' "inquiry type radio present"
+assert_contains "$WHOLESALE" 'name="inquiry_type" value="Wholesale pricing" required' "inquiry type radio has required attribute"
 assert_contains "$WHOLESALE" 'data-inquiry-type="Sample"' "sample button tagged for preselect"
+assert_contains "$WHOLESALE" 'querySelectorAll("a[data-inquiry-type]")' "preselect script present"
 assert_absent "$WHOLESALE" 'name="company_website"' "old honeypot removed"
 assert_absent "$WHOLESALE" 'name="sample_request"' "old sample checkbox removed"
 
@@ -81,6 +101,16 @@ assert_absent "$CONTACT" 'name="company_website"' "old contact honeypot removed"
 echo "Task 5 — hero image"
 assert_contains "$WHOLESALE" "/images/essenly/essenly-wholesale-hero.jpg" "hero src points at the jpg"
 assert_contains "$WHOLESALE" "hero-portrait" "portrait class applied"
+assert_contains "$WHOLESALE" 'loading="eager"' "hero is eager-loaded, not lazy"
+assert_contains "$WHOLESALE" 'fetchpriority="high"' "hero has fetchpriority high"
+# The next two assertions assume global.css stays an external stylesheet
+# (as it is today, imported via @import into a <style is:global> tag in
+# Base.astro). If Astro's CSS-inlining threshold ever grows enough to swallow
+# global.css into an inline <style> tag or a different chunk name, both the
+# "placeholder-stage" absence check and the dist/_astro/*.css glob below would
+# need to be revisited — the former would still work (it inspects the page
+# HTML, not the CSS location) but the latter would start failing to find any
+# matching file even though the CSS shipped correctly.
 assert_absent "$WHOLESALE" "placeholder-stage" "hero renders an img, not a placeholder"
 if [ -f "dist/images/essenly/essenly-wholesale-hero.jpg" ]; then
   echo "  PASS  hero asset copied to dist"
@@ -99,5 +129,13 @@ done
 assert_contains "dist/product/index.html" "Essenly RenewShell" "product page carries the canonical name"
 assert_contains "dist/product/index.html" "Essenly Hair Mask" "product page uses the short name in prose"
 assert_contains "dist/index.html" "Essenly Hair Mask" "home page uses the short name in prose"
+
+echo "Fix wave — tier table markup and copy"
+# Astro injects a data-astro-cid-* attribute into every scoped-styled element,
+# so it lands between the class attribute and the closing ">" — match on the
+# opening tag prefix and the scope="col" attribute rather than a full tag.
+assert_contains "$WHOLESALE" '<table class="tier-table"' "tier ladder is a real table"
+assert_contains "$WHOLESALE" 'scope="col"' "tier table headers use scope=col"
+assert_contains "$WHOLESALE" "90, 150 and 300 units" "volume pricing copy uses the spec's conjunction"
 
 exit $FAILED
