@@ -29,6 +29,22 @@ Set it in the Vercel project settings for production and previews, and in a loca
 `.env` for development. The `PUBLIC_` prefix is deliberate — this is a static build, so
 the value is inlined into the HTML, and Web3Forms access keys are designed to be public.
 
+### Where inquiries go
+
+Two different addresses, on purpose:
+
+| | Address | Set where |
+| --- | --- | --- |
+| Submissions are delivered to | `hq@essenly.beauty` | The Web3Forms account — not this repo |
+| The page invites buyers to email | `wholesale@essenly.beauty` | `siteConfig.contact.wholesaleEmail` |
+
+Web3Forms only delivers to its own account's verified address, so the delivery target
+follows whichever address owns the key. Changing it means changing the Web3Forms account,
+not the code. The address shown to buyers is independent and lives in `siteConfig`.
+
+Keep `wholesale@` a live mailbox or an alias onto `hq@` — the site advertises it on
+`/wholesale`, `/contact` and `/thank-you`, so mail sent there must land somewhere.
+
 ## Launch Notes
 
 Before production launch, confirm company contact details, legal text, the customs

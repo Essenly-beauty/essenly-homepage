@@ -347,6 +347,10 @@ const termRows = [
           </div>
           <button class="btn btn-light" type="submit">Start a Wholesale Conversation</button>
           <p class="fine-print">By submitting, you agree that Essenly may use your information to respond to your inquiry.</p>
+          <p class="direct-email">
+            Prefer to write to us directly? Email
+            <a href={`mailto:${wholesaleEmail}`}>{wholesaleEmail}</a>.
+          </p>
         </form>
       ) : (
         <div class="email-fallback">
@@ -549,6 +553,20 @@ const termRows = [
   .inquiry-form label,
   .email-fallback {
     color: var(--color-surface);
+  }
+
+  /* The inquiry section sits on .dark-band, so this needs light text and an
+     accent link — .direct-email is not in global.css's dark-band override. */
+  .direct-email {
+    margin: 0;
+    color: rgba(255, 253, 248, 0.72);
+    font-size: 0.86rem;
+  }
+
+  .direct-email a {
+    color: var(--color-accent);
+    font-weight: 800;
+    overflow-wrap: anywhere;
   }
 
   .inquiry-type {

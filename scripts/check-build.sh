@@ -138,4 +138,12 @@ assert_contains "$WHOLESALE" '<table class="tier-table"' "tier ladder is a real 
 assert_contains "$WHOLESALE" 'scope="col"' "tier table headers use scope=col"
 assert_contains "$WHOLESALE" "90, 150 and 300 units" "volume pricing copy uses the spec's conjunction"
 
+echo "Direct-email line"
+# Web3Forms can only deliver to its own account's verified address, so submissions
+# land at hq@. wholesale@ is the address a buyer is told to write to, and it must be
+# visible while the form is on — not only in the no-key mailto fallback.
+assert_contains "$WHOLESALE" "wholesale@essenly.beauty" "direct email address shown alongside the form"
+assert_contains "$WHOLESALE" "Prefer to write to us directly" "direct-email invitation renders"
+assert_absent "$WHOLESALE" "hq@essenly.beauty" "delivery address is not exposed on the page"
+
 exit $FAILED

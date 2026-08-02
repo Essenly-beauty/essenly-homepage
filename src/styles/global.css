@@ -401,7 +401,8 @@ p {
 
 .dark-band .lead,
 .dark-band .muted,
-.dark-band .eyebrow {
+.dark-band .eyebrow,
+.dark-band .fine-print {
   color: rgba(255, 253, 248, 0.72);
 }
 
