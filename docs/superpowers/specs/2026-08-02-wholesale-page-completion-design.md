@@ -181,35 +181,73 @@ then.
 
 ### 5. Images
 
-Six English assets exist at `~/Downloads/880032497001.PT0*.png`, all 2000×2000 except PT05
-at 1562×1562. In scope for this work is one of them:
+The hero is the model shot: `메인1.png` cropped to the photo card only, installed as
+`public/images/essenly/essenly-wholesale-hero.jpg` (1200×1373, 405KB).
 
-| Source | Content | Destination |
+A hero's job on this page is to make a retailer believe their customers will want the
+brand. A model holding the jar does that; PT06 — jar, splash, and a list of free-from
+claims — reads as a spec panel and is better placed on the home or product page.
+
+Crop and encoding, both already applied:
+
+- `sips --cropOffset 500 0 -c 1373 1200` removes the Korean headline band at the top and
+  the baked-in "RenewShell™ Intense Hydrating Hair Mask / Deep hydration. Frizz control.
+  Silky shine." lockup at the bottom. That lockup matters: left in, it would sit beside the
+  page's own H1 and give the hero two competing headlines.
+- Re-encoded to JPEG q90. The cropped PNG was 2.4MB, which is not a defensible payload for
+  an above-the-fold hero; the JPEG is 405KB for photographic content with no visible loss.
+  The `src` in `wholesale.astro` therefore changes extension to `.jpg`.
+
+#### The `ratio` prop does not do what the slot implies
+
+`ImageAsset` passes `ratio` only to `PlaceholderAsset`. Once a real file exists the prop is
+inert, and layout is governed by `global.css`: `.image-asset` has `min-height: 420px` and
+`.image-asset img` is `width/height: 100%` with `object-fit: cover`.
+
+So a 1200×1373 portrait dropped into a wide grid column will be center-cropped to the
+figure's box — cutting the top of the model's head and the bottom of the jar. The fix is an
+explicit aspect ratio on this one figure:
+
+```css
+/* global.css, beside .image-asset */
+.image-asset.hero-portrait { aspect-ratio: 1200 / 1373; min-height: 0; }
+```
+
+passed through the component's existing `class` prop: `<ImageAsset class="hero-portrait" …>`.
+It must live in `global.css`, not in `wholesale.astro`'s scoped block — the `figure` is
+rendered inside `ImageAsset`, so a scoped selector in the page would not match it.
+
+The `ratio` prop is still updated to `7:8` for accuracy, so the placeholder matches the real
+image if the file is ever missing.
+
+#### Korean assets — reviewed, mostly redundant
+
+Text baked into a raster image cannot be translated in place; there is no layered source and
+repainting typography over a photograph is not reliable. What is possible is cropping, when
+the Korean sits in its own band, and retyping data as HTML.
+
+| Asset | Content | Verdict |
 |---|---|---|
-| PT06 | Clean claims + jar splash | `essenly-wholesale-hero.png` |
+| `메인1` | Model + jar | Cropped — now the wholesale hero |
+| `상세2` | Jar + vanilla on marble | Croppable; Korean is confined to the top band |
+| `상세3` | Before/after | Redundant — PT03 is the English version |
+| `상세4` | RenewShell™ complex | Redundant — PT04 |
+| `상세5` | Fragrance notes | Korean sits between English title and English note columns; not croppable. Belongs in HTML anyway |
+| `상세6` | Reviews | Unusable — quotes are reconstructed, not verbatim |
+| `상세7` | How to use | Redundant — PT05 |
+| `상세8` | INCI + cautions | Data, not imagery — retype into `siteConfig` |
 
-PT06 is the wholesale hero: it shows the product in a premium setting, which is what the
-slot's `notes` ask for, and its Paraben/Sulfate/Phthalate/Mineral-Oil-Free claims are
-direct B2B selling points.
-
-The asset is square but the slot declares `ratio="16:10"`. The slot ratio changes to `1:1`
-rather than cropping, which would cut the jar.
-
-The Korean assets (`상세2~8.png`, `메인1.png`) are not used — this is an English-language
-US wholesale page.
+The short version: PT01-PT06 already *are* the English editions of most of this content, so
+there is little to convert. The two genuinely useful leftovers — the fragrance note pyramid
+and the INCI list — should become text in `siteConfig`, not images.
 
 #### Adjacent, not in scope
 
-`index.astro` and `product.astro` reference five further slots that are also rendering
-placeholders today: `essenly-product-hero`, `essenly-product-primary`, `essenly-hair-ritual`
-and `essenly-product-texture` (home), plus `essenly-product-detail` and
-`essenly-texture-macro` (product). Four of the remaining five assets map cleanly —
-PT01→`product-texture`, PT02→`texture-macro`, PT03→`hair-ritual`, PT04→`product-detail`.
-
-That leaves seven slots against six assets, and the two home slots that most need a plain
-product shot (`product-hero`, `product-primary`) have no good candidate: PT05 is a
-"How to use" instructional panel, not a hero image. Filling the home and product pages
-therefore needs at least one asset that does not exist yet, and is a separate piece of work.
+`index.astro` and `product.astro` reference six further slots, all rendering placeholders
+today. PT01→`product-texture`, PT02→`texture-macro`, PT03→`hair-ritual`, PT04→`product-detail`
+map cleanly, and cropped `상세2` fills `product-hero` or `product-primary` — the gap that had
+no candidate before, since PT05 is an instructional panel rather than a hero. Only one slot
+would remain unfilled. This is a separate piece of work on separate pages.
 
 ## Data model change
 
@@ -235,10 +273,11 @@ there is no second copy of the numbers to drift out of sync.
 | File | Change |
 |---|---|
 | `src/data/siteConfig.ts` | Product name, net weight, MSRP, terms; replace three MOQ fields with `tiers` |
-| `src/pages/wholesale.astro` | Web3Forms fields; tier table; glance/terms rows from `tiers`; hero ratio `1:1` |
-| `src/pages/contact.astro` | Web3Forms fields (same treatment) |
+| `src/pages/wholesale.astro` | Web3Forms fields; `inquiry_type` radio; tier table; glance/terms rows from `tiers`; hero `src` → `.jpg`, `class="hero-portrait"`, `ratio="7:8"` |
+| `src/pages/contact.astro` | Web3Forms fields (same treatment, no `inquiry_type`) |
 | `src/pages/thank-you.astro` | New — shared post-submit page |
-| `public/images/essenly/` | `essenly-wholesale-hero.png` from PT06 |
+| `src/styles/global.css` | `.image-asset.hero-portrait` aspect-ratio rule |
+| `public/images/essenly/` | `essenly-wholesale-hero.jpg` — done |
 | `README.md` | Image list and `PUBLIC_WEB3FORMS_KEY` |
 
 ## Verification
@@ -251,7 +290,9 @@ there is no second copy of the numbers to drift out of sync.
    page — the only dollar figure on `/wholesale` is the $39.00 MSRP.
 4. With `PUBLIC_WEB3FORMS_KEY` set, both pages render the form; unset, both fall back to
    `mailto:` as they do today.
-5. The hero renders `<img>`, not `PlaceholderAsset`.
+5. The hero renders `<img>`, not `PlaceholderAsset`, and the model's head and the jar are
+   both fully visible at desktop, tablet and mobile widths — `object-fit: cover` crops a
+   portrait aggressively if the `hero-portrait` rule is missed.
 6. A live submission arrives by email and the browser lands on `/thank-you`.
 7. `inquiry_type` is required and its value appears in the notification email, so wholesale
    and sample requests can be told apart without opening the message.
