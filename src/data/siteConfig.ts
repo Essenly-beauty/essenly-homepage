@@ -66,7 +66,6 @@ export const siteConfig = {
     paymentTerms: "100% prepayment on all orders (wire transfer or card)",
     leadTime: "6-10 business days from payment — 3-5 business days to dispatch, 3-5 business days in transit",
     returnTerms: "Damaged or defective units only, reported with photos within 7 days of delivery",
-    samplesAvailable: true,
     sampleTerms:
       "Available to qualified buyers at cost, credited against your first order. Ships from U.S. stock, typically 2-3 business days.",
   },
@@ -84,3 +83,11 @@ export const getContactEmail = () =>
   siteConfig.contact.generalEmail ?? siteConfig.contact.wholesaleEmail ?? siteConfig.contact.pressEmail;
 
 export const amazonUrl = siteConfig.links.amazonUs;
+
+// Single source of truth for the production origin. astro.config.mjs sets the
+// same value as its `site` option; Astro.site is preferred where available
+// (each .astro page falls back to this constant), but the Web3Forms redirect
+// target does not vary per page, so it is derived here once instead of being
+// rebuilt inline at every call site.
+export const siteUrl = "https://essenly.beauty";
+export const thankYouUrl = new URL("/thank-you", siteUrl).toString();

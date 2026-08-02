@@ -1,10 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
-import { getContactEmail, siteConfig } from "../data/siteConfig";
+import { getContactEmail, siteConfig, thankYouUrl } from "../data/siteConfig";
 
 const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
 const showForm = Boolean(web3formsKey);
-const thankYouUrl = new URL("/thank-you", Astro.site ?? "https://essenly.beauty").toString();
 const contactMethods = [
   ["General inquiries", siteConfig.contact.generalEmail],
   ["U.S. wholesale", siteConfig.contact.wholesaleEmail],

@@ -1,7 +1,7 @@
 ---
 import ImageAsset from "../components/ImageAsset.astro";
 import Base from "../layouts/Base.astro";
-import { amazonUrl, siteConfig } from "../data/siteConfig";
+import { amazonUrl, siteConfig, thankYouUrl } from "../data/siteConfig";
 
 const product = siteConfig.product;
 const amazon = siteConfig.amazon;
@@ -9,12 +9,20 @@ const wholesale = siteConfig.wholesale;
 const wholesaleEmail = siteConfig.contact.wholesaleEmail;
 const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
 const showForm = Boolean(web3formsKey);
-const thankYouUrl = new URL("/thank-you", Astro.site ?? "https://essenly.beauty").toString();
 const wholesaleReviews = siteConfig.reviews.filter((review) => review.verified && review.purpose === "wholesale");
 const supportAssets = siteConfig.supportAssets.filter((asset) => asset.available);
 
 const tiers = wholesale.tiers;
 const openingTier = tiers[0];
+
+// Oxford-comma-free "a, b and c" join for the volume-pricing sentence — reads
+// correctly for any tier count, not just today's three.
+const joinWithAnd = (items: Array<string | number>): string => {
+  if (items.length === 0) return "";
+  if (items.length === 1) return `${items[0]}`;
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+};
 
 const glanceRows = [
   ["Product type", "Premium rinse-out hair treatment"],
@@ -201,7 +209,7 @@ const termRows = [
         <h2>Designed for a practical opening order.</h2>
         <p class="lead">
           Opening order from {openingTier.units} units (one case). Volume pricing available at
-          {tiers.slice(1).map((tier) => tier.units).join(", ")} units.
+          {joinWithAnd(tiers.slice(1).map((tier) => tier.units))} units.
         </p>
         <p class="muted">
           Wholesale pricing, shipping and lead times are confirmed against your business type,
