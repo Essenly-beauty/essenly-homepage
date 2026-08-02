@@ -7,8 +7,9 @@ const product = siteConfig.product;
 const amazon = siteConfig.amazon;
 const wholesale = siteConfig.wholesale;
 const wholesaleEmail = siteConfig.contact.wholesaleEmail;
-const endpoint = import.meta.env.WHOLESALE_FORM_ENDPOINT as string | undefined;
-const showForm = Boolean(endpoint);
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
+const showForm = Boolean(web3formsKey);
+const thankYouUrl = new URL("/thank-you", Astro.site ?? "https://essenly.beauty").toString();
 const wholesaleReviews = siteConfig.reviews.filter((review) => review.verified && review.purpose === "wholesale");
 const supportAssets = siteConfig.supportAssets.filter((asset) => asset.available);
 
@@ -59,8 +60,12 @@ const termRows = [
           seeking a distinctive premium hair-care product made in Korea.
         </p>
         <div class="button-row">
-          <a class="btn btn-primary" href="#inquiry">Request Wholesale Information</a>
-          <a class="btn btn-secondary" href="#inquiry">Request a Sample</a>
+          <a class="btn btn-primary" href="#inquiry" data-inquiry-type="Wholesale pricing">
+            Request Wholesale Information
+          </a>
+          <a class="btn btn-secondary" href="#inquiry" data-inquiry-type="Sample">
+            Request a Sample
+          </a>
         </div>
       </div>
       <ImageAsset
@@ -264,8 +269,18 @@ const termRows = [
         <p class="muted">Bring a distinctive Korean hair ritual to your customers.</p>
       </div>
       {showForm ? (
-        <form class="inquiry-form" action={endpoint} method="post">
-          <input type="text" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot" />
+        <form class="inquiry-form" action="https://api.web3forms.com/submit" method="post">
+          <input type="hidden" name="access_key" value={web3formsKey} />
+          <input type="hidden" name="subject" value="New wholesale inquiry — Essenly" />
+          <input type="hidden" name="from_name" value="Essenly Wholesale" />
+          <input type="hidden" name="redirect" value={thankYouUrl} />
+          <input type="checkbox" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <fieldset class="inquiry-type">
+            <legend>What are you looking for?</legend>
+            <label><input type="radio" name="inquiry_type" value="Wholesale pricing" required /> Wholesale pricing</label>
+            <label><input type="radio" name="inquiry_type" value="Sample" /> Sample</label>
+            <label><input type="radio" name="inquiry_type" value="Both" /> Both</label>
+          </fieldset>
           <div class="form-grid">
             <div class="field">
               <label for="business-name">Business name</label>
@@ -300,18 +315,15 @@ const termRows = [
               <label for="city-state">City and state</label>
               <input id="city-state" name="city_state" required />
             </div>
-            <div class="field">
+            <div class="field full">
               <label for="order-size">Estimated opening order</label>
               <select id="order-size" name="estimated_order">
                 <option value="">Select one</option>
-                <option>Under 50 units</option>
-                <option>50-149 units</option>
-                <option>150-299 units</option>
+                <option>30 units (one case)</option>
+                <option>90 units</option>
+                <option>150 units</option>
                 <option>300+ units</option>
               </select>
-            </div>
-            <div class="field checkbox-field">
-              <label><input type="checkbox" name="sample_request" /> Sample request</label>
             </div>
             <div class="field full">
               <label for="message">Message</label>
@@ -497,18 +509,29 @@ const termRows = [
     color: var(--color-surface);
   }
 
-  .checkbox-field {
-    align-content: end;
+  .inquiry-type {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    border: 0;
   }
 
-  .checkbox-field label {
+  .inquiry-type legend {
+    margin-bottom: var(--space-2);
+    padding: 0;
+    color: var(--color-surface);
+    font-weight: 800;
+  }
+
+  .inquiry-type label {
     display: flex;
     gap: var(--space-2);
     align-items: center;
-    min-height: 48px;
+    min-height: 44px;
   }
 
-  .checkbox-field input {
+  .inquiry-type input {
     width: auto;
     min-height: auto;
   }
@@ -554,3 +577,15 @@ const termRows = [
     }
   }
 </style>
+
+<script is:inline>
+  document.querySelectorAll("a[data-inquiry-type]").forEach((link) => {
+    link.addEventListener("click", () => {
+      const value = link.getAttribute("data-inquiry-type");
+      const radio = document.querySelector(
+        'input[name="inquiry_type"][value="' + value + '"]'
+      );
+      if (radio) radio.checked = true;
+    });
+  });
+</script>

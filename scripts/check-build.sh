@@ -59,4 +59,15 @@ else
 fi
 assert_absent "dist/sitemap-0.xml" "/thank-you" "thank-you excluded from sitemap"
 
+echo "Task 3 — wholesale form"
+assert_contains "$WHOLESALE" "https://api.web3forms.com/submit" "form posts to Web3Forms"
+assert_contains "$WHOLESALE" 'name="access_key"' "access key field present"
+assert_contains "$WHOLESALE" 'name="redirect"' "redirect field present"
+assert_contains "$WHOLESALE" "https://essenly.beauty/thank-you" "redirect points at thank-you"
+assert_contains "$WHOLESALE" 'name="botcheck"' "Web3Forms honeypot present"
+assert_contains "$WHOLESALE" 'name="inquiry_type"' "inquiry type radio present"
+assert_contains "$WHOLESALE" 'data-inquiry-type="Sample"' "sample button tagged for preselect"
+assert_absent "$WHOLESALE" 'name="company_website"' "old honeypot removed"
+assert_absent "$WHOLESALE" 'name="sample_request"' "old sample checkbox removed"
+
 exit $FAILED
