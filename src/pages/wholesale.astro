@@ -47,6 +47,10 @@ const termRows = [
   ],
   ["Lead time", wholesale.leadTime],
   ["Samples", wholesale.sampleTerms],
+  [
+    "Marketing support",
+    `Creative assets, joint campaigns and gift-with-purchase stock, from orders of ${wholesale.supportFromUnits} units. Agreed per account`,
+  ],
   ["Returns", wholesale.returnTerms],
   ["Online resale", "Subject to channel approval"],
   ["Exclusivity", "Not available for opening orders"],
@@ -253,7 +257,11 @@ const termRows = [
           <h2>Support for a confident launch.</h2>
           <p class="lead">
             Essenly is open to marketing support for stockists — creative assets, joint
-            campaigns and gift-with-purchase stock. Scope is agreed per account.
+            campaigns and gift-with-purchase stock.
+          </p>
+          <p class="muted">
+            Available from orders of {wholesale.supportFromUnits} units. Scope is agreed per
+            account.
           </p>
         </div>
         <div class="partner-list">

@@ -146,6 +146,16 @@ assert_contains "$WHOLESALE" "wholesale@essenly.beauty" "direct email address sh
 assert_contains "$WHOLESALE" "Prefer to write to us directly" "direct-email invitation renders"
 assert_absent "$WHOLESALE" "hq@essenly.beauty" "delivery address is not exposed on the page"
 
+echo "Retail support"
+# supportAssets used to be empty, which silently hid the whole section.
+assert_contains "$WHOLESALE" "Retail support" "retail support section renders"
+assert_contains "$WHOLESALE" "Gift-with-purchase stock for campaigns" "support assets render"
+# The volume condition is a commercial term — it must appear both beside the
+# section and in the terms table, and both must quote the same threshold.
+assert_contains "$WHOLESALE" "Available from orders of 90 units" "support threshold shown with the section"
+assert_contains "$WHOLESALE" "from orders of 90 units. Agreed per account" "support threshold shown in the terms table"
+assert_contains "$WHOLESALE" "Marketing support" "marketing support row in the terms table"
+
 echo "Legal entity name"
 # The company is Essenly Inc., not a Korean Co., Ltd. Every page reads the name from
 # siteConfig.company.legalName — nothing hardcodes it, so this catches a reintroduction.

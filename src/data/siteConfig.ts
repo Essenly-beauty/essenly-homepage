@@ -68,6 +68,9 @@ export const siteConfig = {
     returnTerms: "Damaged or defective units only, reported with photos within 7 days of delivery",
     sampleTerms:
       "Available to qualified buyers at cost, credited against your first order. Ships from U.S. stock, typically 2-3 business days.",
+    // Marketing support costs real money, so it is tied to order volume.
+    // Keep this equal to one of the tier `units` values above.
+    supportFromUnits: 90,
   },
   supportAssets: [
     { label: "Product photography and marketing creatives", available: true },
