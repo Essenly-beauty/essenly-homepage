@@ -216,20 +216,24 @@ const termRows = [
           order quantity and destination.
         </p>
       </div>
-      <div class="tier-table">
-        <div class="tier-head">
-          <span>Tier</span>
-          <span>Units</span>
-          <span>Cases</span>
-        </div>
-        {tiers.map((tier) => (
-          <div class="tier-row">
-            <span>{tier.label}</span>
-            <span>{tier.units}</span>
-            <span>{tier.cases === 1 ? "1 case" : `${tier.cases} cases`}</span>
-          </div>
-        ))}
-      </div>
+      <table class="tier-table">
+        <thead>
+          <tr class="tier-head">
+            <th scope="col">Tier</th>
+            <th scope="col">Units</th>
+            <th scope="col">Cases</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tiers.map((tier) => (
+            <tr class="tier-row">
+              <td>{tier.label}</td>
+              <td>{tier.units}</td>
+              <td>{tier.cases === 1 ? "1 case" : `${tier.cases} cases`}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <dl class="details-list">
         {termRows.map(([label, value]) => (
           <div>
@@ -352,6 +356,18 @@ const termRows = [
       )}
     </div>
   </section>
+
+  <script is:inline>
+    document.querySelectorAll("a[data-inquiry-type]").forEach((link) => {
+      link.addEventListener("click", () => {
+        const value = link.getAttribute("data-inquiry-type");
+        const radio = document.querySelector(
+          'input[name="inquiry_type"][value="' + value + '"]'
+        );
+        if (radio) radio.checked = true;
+      });
+    });
+  </script>
 </Base>
 
 <style>
@@ -430,8 +446,18 @@ const termRows = [
 
   .tier-table {
     display: grid;
+    width: 100%;
     margin-bottom: var(--space-7);
     border-top: 1px solid rgba(36, 30, 25, 0.18);
+  }
+
+  /* Keep the DOM as a real table (thead/tbody/tr/th/td) for screen readers —
+     "display: contents" removes these wrappers from the box tree without
+     removing their table semantics, so the grid below stacks rows directly
+     under .tier-table while <th>/<td> stay associated for assistive tech. */
+  .tier-table thead,
+  .tier-table tbody {
+    display: contents;
   }
 
   .tier-head,
@@ -450,11 +476,16 @@ const termRows = [
     text-transform: uppercase;
   }
 
-  .tier-row span:first-child {
+  .tier-head th {
+    font-weight: inherit;
+    text-align: left;
+  }
+
+  .tier-row td:first-child {
     font-weight: 800;
   }
 
-  .tier-row span:not(:first-child) {
+  .tier-row td:not(:first-child) {
     color: var(--color-muted);
   }
 
@@ -588,15 +619,3 @@ const termRows = [
     }
   }
 </style>
-
-<script is:inline>
-  document.querySelectorAll("a[data-inquiry-type]").forEach((link) => {
-    link.addEventListener("click", () => {
-      const value = link.getAttribute("data-inquiry-type");
-      const radio = document.querySelector(
-        'input[name="inquiry_type"][value="' + value + '"]'
-      );
-      if (radio) radio.checked = true;
-    });
-  });
-</script>
