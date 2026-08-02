@@ -36,12 +36,14 @@ const productDetails = [
         <a class="btn btn-primary" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
       </div>
       <ImageAsset
-        src="/images/essenly/essenly-product-detail.png"
+        src="/images/essenly/essenly-product-detail.jpg"
         name="Product detail"
-        ratio="4:5"
-        description="High-resolution front product image with accurate label visibility."
+        ratio="21:20"
+        loading="eager"
+        fetchpriority="high"
+        description="Open jar on a marble slab beside vanilla flowers, warm cream light."
         notes="Avoid decorative elements that cover the front label."
-        alt={`Front view of ${product.shortName}`}
+        alt={`An open jar of ${product.shortName} on a marble slab beside vanilla flowers`}
       />
     </div>
   </section>
@@ -68,12 +70,12 @@ const productDetails = [
   <section class="section">
     <div class="container split reverse">
       <ImageAsset
-        src="/images/essenly/essenly-texture-macro.png"
-        name="Texture macro"
-        ratio="1:1"
-        description="Macro image of the actual creamy product texture."
-        notes="Use a white or cream background and true-to-product texture color."
-        alt={`Creamy texture of ${product.shortName}`}
+        src="/images/essenly/essenly-texture-macro.jpg"
+        name="Hair surface comparison"
+        ratio="7:6"
+        description="Electron-microscope view of a hair strand, damaged on the left and after one use on the right."
+        notes="Keep both labels legible; this sits beside the 'what to expect' copy."
+        alt="Electron-microscope comparison of a hair strand: damaged on the left, smoother after one use on the right"
       />
       <div class="stack">
         <p class="eyebrow">What to expect</p>
