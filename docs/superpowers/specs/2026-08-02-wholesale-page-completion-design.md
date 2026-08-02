@@ -47,6 +47,7 @@ Per-form changes (`wholesale.astro`, `contact.astro`):
 | Hidden `subject` | `New wholesale inquiry — Essenly` / `New contact inquiry — Essenly` |
 | Honeypot | Rename `company_website` → `botcheck` |
 | `showForm` | Condition on the key, not on the old endpoint var |
+| `inquiry_type` | Wholesale form only — replaces the `sample_request` checkbox (see Sample programme) |
 
 The honeypot rename matters: `company_website` is not a name Web3Forms recognises, so
 today's honeypot filters nothing. `botcheck` is the field the service actually inspects.
@@ -91,14 +92,57 @@ Terms:
 
 | Field | Value |
 |---|---|
-| `paymentTerms` | 100% prepayment on opening orders (wire or card); Net 30 considered after established order history |
-| `leadTime` | 3-5 business days processing, then 2-5 business days in transit from Seoul |
+| `paymentTerms` | 100% prepayment on all orders (wire or card) |
+| `leadTime` | 6-10 business days from payment: 3-5 to dispatch, 3-5 in transit from Seoul |
 | `fulfillmentOrigin` | Ships from Seoul, Korea |
 | `returnTerms` | Damaged or defective units only, reported with photos within 7 days of delivery |
-| `samplesAvailable` | `true` (unchanged) |
+| `samplesAvailable` | `true` (unchanged) — terms in Sample programme below |
 | Shipping | Ships DDP — Essenly pays customs and duties. Freight quoted by order size and destination |
 
-### 3. Per-unit prices are not published
+No Net 30 tier. At a $39 MSRP and a 30-unit opening case, even a key-account order is
+around $4,700, which is not enough exposure to justify carrying receivables or running
+credit checks on US accounts from Korea.
+
+Lead time is stated as a total because two separate stages add up: 3-5 business days to get
+stock into the forwarder after payment clears, then 3-5 business days in transit. Quoting
+only the transit leg would understate delivery by about a week. The forwarder's own quote
+says 2-5 days transit; 3-5 is used here because it matches observed performance and
+under-promising is the safer default on a page buyers will hold you to.
+
+### 3. Sample programme
+
+Samples ship from US stock, not from Seoul: 2-3 business days instead of the 6-10 a
+wholesale order takes. For a salon owner deciding whether to stock an unfamiliar Korean
+brand, that turns a two-week evaluation into a three-day one, and it is a real advantage
+over Korean competitors shipping samples internationally. The page states it explicitly.
+
+The page says "ships from US stock" and does not name Amazon. A wholesale page that
+advertises the brand's own Amazon fulfilment reminds retailers of the channel they are
+competing with — see the couponing note under Open items.
+
+Samples are paid at cost and credited against the buyer's first order. A fee filters out
+consumers and tyre-kickers; crediting it removes the disincentive for a buyer who is
+genuinely going to order. The fee itself is not published, for the same reason wholesale
+prices are not: a sample priced near cost sits visibly below the $39 retail price on a page
+consumers can find. It is quoted in the reply.
+
+Page wording: `Samples are available to qualified buyers at cost, credited against your
+first order. Ships from US stock, typically 2-3 business days.`
+
+The hero already has a "Request a Sample" button, but it points at `#inquiry` — the same
+target as "Request Wholesale Information" — so the page promises a sample path and delivers
+the general form. The fix is a required radio as the first field of the inquiry form:
+
+```
+What are you looking for?   ( ) Wholesale pricing   ( ) Sample   ( ) Both
+```
+
+Field name `inquiry_type`, replacing the existing `sample_request` checkbox. Both hero
+buttons still scroll to `#inquiry`; a short inline script preselects Sample when the sample
+button is the one used. With JavaScript unavailable the form still works — the buyer picks
+the radio themselves — so this stays progressive enhancement, not a dependency.
+
+### 4. Per-unit prices are not published
 
 Tier quantities go on the page; dollar figures do not. `/wholesale` is public and in the
 sitemap, so a consumer who paid $39 on Amazon can find it. Printing "$15.60 at 300 units"
@@ -124,7 +168,7 @@ lost. Figures assume a 15% fuel surcharge, ~$130 fixed customs cost per shipment
 | Volume | 150 | $17.50 | 55% | 61% |
 | Key account | 300 | $15.60 | 60% | 60% |
 
-### 4. Images
+### 5. Images
 
 Six English assets exist at `~/Downloads/880032497001.PT0*.png`, all 2000×2000 except PT05
 at 1562×1562. In scope for this work is one of them:
@@ -198,6 +242,9 @@ there is no second copy of the numbers to drift out of sync.
    `mailto:` as they do today.
 5. The hero renders `<img>`, not `PlaceholderAsset`.
 6. A live submission arrives by email and the browser lands on `/thank-you`.
+7. `inquiry_type` is required and its value appears in the notification email, so wholesale
+   and sample requests can be told apart without opening the message.
+8. With JavaScript disabled, the "Request a Sample" button still reaches a usable form.
 
 ## Open items — none of which block this work
 
