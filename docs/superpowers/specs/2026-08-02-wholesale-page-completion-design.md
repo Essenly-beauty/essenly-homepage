@@ -81,8 +81,8 @@ Order tiers, aligned to the 30-unit case pack so no shipment ever splits a box:
 | Volume | 150 | 5 |
 | Key account | 300 | 10 |
 
-MOQ is 30, not 150. Landed cost per unit only falls from about $6.47 (1 case) to $5.87
-(10 cases) — roughly 9%, or 3% of the wholesale price. That is not enough margin to
+MOQ is 30, not 150. Landed cost per unit only falls from about $6.08 (1 case) to $5.56
+(10 cases) — roughly 8%, or 2.7% of the wholesale price. That is not enough margin to
 justify excluding the salons, head spas and boutiques the page explicitly targets, none of
 which will commit to 150 units of a single SKU on a first order. Volume is driven by tier
 pricing instead, and unserious buyers are filtered by qualification (business licence,
@@ -158,15 +158,26 @@ which raises inquiry quality.
 #### Private rate card — provisional
 
 Not committed to code and not shown on the page; recorded here so the agreed shape is not
-lost. Figures assume a 15% fuel surcharge, ~$130 fixed customs cost per shipment and
-₩1,440/$, all of which need confirmation (see Open items).
+lost.
 
-| Tier | Units | Per unit | Off MSRP | Gross margin |
-|---|---|---|---|---|
-| Opening | 30 | $21.00 | 46% | 49% |
-| Growth | 90 | $19.50 | 50% | 59% |
-| Volume | 150 | $17.50 | 55% | 61% |
-| Key account | 300 | $15.60 | 60% | 60% |
+Landed cost is ₩4,800 COGS + ₩200 storage + freight, at ₩1,440/$. Freight comes straight
+from the forwarder's quote, which is confirmed all-inclusive of the fuel surcharge. Customs
+clearance is billed separately in arrears and is not yet priced; the margins below assume
+$130 per shipment as a placeholder. Duty is unconfirmed and would add about $0.50/unit at
+15%.
+
+| Tier | Units | Landed | Per unit | Off MSRP | Gross margin |
+|---|---|---|---|---|---|
+| Opening | 30 | $10.41 | $21.00 | 46% | 50% |
+| Growth | 90 | $7.52 | $19.50 | 50% | 61% |
+| Volume | 150 | $6.45 | $17.50 | 55% | 63% |
+| Key account | 300 | $5.99 | $15.60 | 60% | 62% |
+
+Only the Opening row is sensitive to the customs placeholder, because the fee is
+per-shipment: at $130 it costs $4.33/unit across 30 units but $0.43 across 300. If the real
+fee lands at $200 the Opening tier falls to roughly 39% while the others barely move. Lock
+the Opening price after the first shipment's clearance invoice arrives; $21.00 holds until
+then.
 
 ### 5. Images
 
@@ -248,25 +259,26 @@ there is no second copy of the numbers to drift out of sync.
 
 ## Open items — none of which block this work
 
-**Unit costs are provisional.** The shipping quote does not state whether the rates
-(₩112,500 fixed for 1-3 boxes; ₩9,800-10,000/kg above) include the fuel surcharge, customs
-brokerage is unpriced, and the duty rate is unconfirmed. HTS 3305 hair preparations are
-normally duty-free and KORUS gives 0%, but the 2025 IEEPA reciprocal tariffs and Executive
-Order 14389 (2026-02-20) leave this unsettled, and the US de minimis exemption ended in
-2025, so even small direct shipments clear formally. Ask 프리즘: (1) is the fuel surcharge
-included, (2) is customs clearance included or billed per shipment and at what rate, (3) is
-DDP billing available. Because per-unit prices are never published, the page ships without
-these answers; only the private rate card depends on them.
+**Two of three cost questions are settled.** The forwarder's rates (₩112,500 fixed for 1-3
+boxes; ₩9,800-10,000/kg above) are all-inclusive of the fuel surcharge, and Essenly absorbs
+customs and duty under DDP. What remains open is the clearance fee, which is billed in
+arrears and so will not be known until the first shipment clears, and the duty rate. HTS
+3305 hair preparations are normally duty-free and KORUS gives 0%, but the 2025 IEEPA
+reciprocal tariffs and Executive Order 14389 (2026-02-20) leave this unsettled, and the US
+de minimis exemption ended in 2025, so even small direct shipments clear formally. Because
+per-unit prices are never published, the page ships without these answers; only the private
+rate card depends on them.
+
+**DDP is affordable, but the exposure is concentrated.** Gross margin sits at 50-63% across
+the ladder, so absorbing duty and clearance is comfortable in aggregate. The caveat is that
+clearance is a per-shipment cost, so all of the uncertainty lands on the 30-unit tier — see
+the rate card. Ten 30-unit orders carry ten clearance fees; one 300-unit order carries one.
+This is an argument for watching the Opening tier's actual margin over the first few
+shipments, not for raising the MOQ.
 
 **DDP mechanism.** A foreign entity acting as US Importer of Record needs a customs bond
 and a local agent. Use the courier's DDP billing option — the carrier fronts the duty and
 bills Essenly — rather than registering as IOR.
-
-**Fixed per-shipment customs cost cuts against small orders.** Under DDP those costs land on
-Essenly, and at roughly $130 per entry that is $4.33/unit on a 30-unit order versus
-$0.43/unit on 300. The tier ladder absorbs this: the entry tier is priced at a shallower
-discount so margin stays in a 49-61% band across all four steps, and keystone (50% off
-MSRP) begins at 90 units, giving buyers a clear reason to reach 3 cases.
 
 **Amazon couponing caps the wholesale price.** MSRP is $39 but 15% coupons put the street
 price near $33. A retailer buying at keystone competes against Essenly's own listing at a
