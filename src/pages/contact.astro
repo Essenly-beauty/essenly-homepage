@@ -58,10 +58,13 @@ const fallbackEmail = getContactEmail();
         <p class="eyebrow">Inquiry</p>
         <h2>Send the right note to the right place</h2>
         <p class="lead">Choose what your message is about and tell us what you are looking for.</p>
-        <p class="muted">
-          Stocking Essenly? The <a href="/wholesale#inquiry">wholesale form</a> asks the few
-          extra questions we need to quote you.
-        </p>
+        <div class="side-note">
+          <p class="muted">
+            Stocking Essenly? The wholesale form asks the few extra questions we need to
+            quote you.
+          </p>
+          <a class="btn btn-secondary" href="/wholesale#inquiry">Go to the Wholesale Form</a>
+        </div>
         <p class="muted">
           Urgent? Email <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a> directly.
         </p>
@@ -136,11 +139,23 @@ const fallbackEmail = getContactEmail();
     color: var(--color-muted);
   }
 
-  .hero-direct a,
-  .form-layout .stack a {
+  /* :not(.btn) matters — these selectors out-specify .btn-secondary, so without
+     it the wholesale button's text would be repainted accent-dark. */
+  .hero-direct a:not(.btn),
+  .form-layout .stack a:not(.btn) {
     color: var(--color-accent-dark);
     font-weight: 800;
     overflow-wrap: anywhere;
+  }
+
+  .side-note {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+    padding: var(--space-5);
+    border: 1px solid rgba(31, 25, 21, 0.16);
+    border-radius: var(--radius);
+    background: rgba(255, 250, 244, 0.5);
   }
 
   .contact-grid {
