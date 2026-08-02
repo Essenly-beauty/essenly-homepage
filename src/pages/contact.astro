@@ -24,10 +24,23 @@ const fallbackEmail = getContactEmail();
       <p class="lead">
         For product, wholesale, press and partnership inquiries, contact the Essenly team.
       </p>
+      <p class="hero-direct">
+        Use the form below, or email
+        <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a> directly.
+      </p>
+      <div class="button-row">
+        <a class="btn btn-primary" href="#inquiry">Send an Inquiry</a>
+        <a class="btn btn-secondary" href="/wholesale">Wholesale Information</a>
+      </div>
     </div>
   </section>
 
-  {contactMethods.length > 0 && (
+  {/*
+    Only worth its own section once there is more than one address to choose
+    between. With a single method the grid leaves an orphaned card, and the
+    hero above already names that address.
+  */}
+  {contactMethods.length > 1 && (
     <section class="section-tight">
       <div class="container contact-grid">
         {contactMethods.map(([label, email]) => (
@@ -40,12 +53,16 @@ const fallbackEmail = getContactEmail();
     </section>
   )}
 
-  <section class="section rose-band">
+  <section class="section rose-band" id="inquiry">
     <div class="container form-layout">
       <div class="stack">
         <p class="eyebrow">Inquiry</p>
         <h2>Send the right note to the right place</h2>
         <p class="lead">Choose the inquiry type and tell us what you are looking for.</p>
+        <p class="muted">
+          Prefer email? Write to
+          <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a>.
+        </p>
       </div>
       {showForm ? (
         <form class="contact-form" action="https://api.web3forms.com/submit" method="post">
@@ -113,6 +130,21 @@ const fallbackEmail = getContactEmail();
     text-align: center;
   }
 
+  .contact-hero .button-row {
+    justify-content: center;
+  }
+
+  .hero-direct {
+    color: var(--color-muted);
+  }
+
+  .hero-direct a,
+  .form-layout .stack a {
+    color: var(--color-accent-dark);
+    font-weight: 800;
+    overflow-wrap: anywhere;
+  }
+
   .contact-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -136,6 +168,13 @@ const fallbackEmail = getContactEmail();
     display: grid;
     grid-template-columns: 0.85fr 1.15fr;
     gap: var(--space-7);
+    align-items: start;
+  }
+
+  /* .stack is a grid, so without this it stretches to the form's height and
+     spreads the eyebrow, heading and copy apart down the column. */
+  .form-layout .stack {
+    align-content: start;
   }
 
   .contact-form,

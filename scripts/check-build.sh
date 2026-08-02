@@ -156,6 +156,17 @@ assert_contains "$WHOLESALE" "Available from orders of 90 units" "support thresh
 assert_contains "$WHOLESALE" "from orders of 90 units. Agreed per account" "support threshold shown in the terms table"
 assert_contains "$WHOLESALE" "Marketing support" "marketing support row in the terms table"
 
+echo "Contact page"
+# The hero used to be a bare heading with the only address stranded in a
+# one-card grid below it. It now names the address and links to the form.
+assert_contains "$CONTACT" "Use the form below, or email" "contact hero points at both routes"
+assert_contains "$CONTACT" "wholesale@essenly.beauty" "contact hero names the address"
+assert_contains "$CONTACT" 'id="inquiry"' "form section is anchorable from the hero"
+# Test the rendered element, not the class name — Astro inlines the scoped
+# stylesheet into the page, so "contact-grid" is present in the CSS whether or
+# not the section renders. `info-card` only appears if a card was emitted.
+assert_absent "$CONTACT" "info-card" "single-method card grid stays hidden"
+
 echo "Legal entity name"
 # The company is Essenly Inc., not a Korean Co., Ltd. Every page reads the name from
 # siteConfig.company.legalName — nothing hardcodes it, so this catches a reintroduction.
