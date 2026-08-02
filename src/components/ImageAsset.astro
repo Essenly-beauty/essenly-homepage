@@ -11,6 +11,8 @@ interface Props {
   ratio: string;
   description: string;
   notes: string;
+  loading?: "lazy" | "eager";
+  fetchpriority?: "high" | "low" | "auto";
 }
 
 const {
@@ -21,6 +23,8 @@ const {
   ratio,
   description,
   notes,
+  loading = "lazy",
+  fetchpriority,
 } = Astro.props;
 
 const publicPath = src.startsWith("/") ? src.slice(1) : src;
@@ -30,7 +34,7 @@ const hasImage = existsSync(join(process.cwd(), "public", publicPath));
 {
   hasImage ? (
     <figure class:list={["image-asset", className]}>
-      <img src={src} alt={alt} loading="lazy" decoding="async" />
+      <img src={src} alt={alt} loading={loading} fetchpriority={fetchpriority} decoding="async" />
     </figure>
   ) : (
     <PlaceholderAsset
