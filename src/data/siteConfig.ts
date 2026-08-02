@@ -19,7 +19,7 @@ export type WholesaleTier = {
 
 export const siteConfig = {
   company: {
-    legalName: "Essenly Co., Ltd.",
+    legalName: "Essenly Inc.",
     city: "Seoul",
     country: "Republic of Korea",
     businessAddress: null as string | null,

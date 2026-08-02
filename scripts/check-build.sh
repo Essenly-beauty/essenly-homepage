@@ -146,4 +146,14 @@ assert_contains "$WHOLESALE" "wholesale@essenly.beauty" "direct email address sh
 assert_contains "$WHOLESALE" "Prefer to write to us directly" "direct-email invitation renders"
 assert_absent "$WHOLESALE" "hq@essenly.beauty" "delivery address is not exposed on the page"
 
+echo "Legal entity name"
+# The company is Essenly Inc., not a Korean Co., Ltd. Every page reads the name from
+# siteConfig.company.legalName — nothing hardcodes it, so this catches a reintroduction.
+for page in dist/index.html dist/product/index.html dist/wholesale/index.html \
+            dist/contact/index.html dist/privacy/index.html dist/terms/index.html; do
+  assert_absent "$page" "Co., Ltd." "old legal entity absent from $page"
+done
+assert_contains "dist/index.html" "Essenly Inc." "home renders the legal entity"
+assert_contains "dist/privacy/index.html" "Essenly Inc." "privacy meta renders the legal entity"
+
 exit $FAILED
