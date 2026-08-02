@@ -448,6 +448,11 @@ p {
   object-position: center;
 }
 
+.image-asset.hero-portrait {
+  aspect-ratio: 1200 / 1373;
+  min-height: 0;
+}
+
 .placeholder-stage {
   position: relative;
   width: min(62%, 360px);

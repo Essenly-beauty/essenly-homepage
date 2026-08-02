@@ -78,4 +78,18 @@ assert_contains "$CONTACT" "https://essenly.beauty/thank-you" "contact redirect 
 assert_contains "$CONTACT" 'name="botcheck"' "contact honeypot present"
 assert_absent "$CONTACT" 'name="company_website"' "old contact honeypot removed"
 
+echo "Task 5 — hero image"
+assert_contains "$WHOLESALE" "/images/essenly/essenly-wholesale-hero.jpg" "hero src points at the jpg"
+assert_contains "$WHOLESALE" "hero-portrait" "portrait class applied"
+assert_absent "$WHOLESALE" "placeholder-stage" "hero renders an img, not a placeholder"
+if [ -f "dist/images/essenly/essenly-wholesale-hero.jpg" ]; then
+  echo "  PASS  hero asset copied to dist"
+else
+  echo "  FAIL  hero asset copied to dist"
+  FAILED=1
+fi
+grep -q "hero-portrait" dist/_astro/*.css 2>/dev/null \
+  && echo "  PASS  hero-portrait rule shipped in CSS" \
+  || { echo "  FAIL  hero-portrait rule shipped in CSS"; FAILED=1; }
+
 exit $FAILED
