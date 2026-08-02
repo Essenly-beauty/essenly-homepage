@@ -18,7 +18,7 @@ const productDetails = [
 ---
 
 <Base
-  title="Essenly Keratin Hair Mask | Made in Korea"
+  title={`${product.name} | Made in Korea`}
   description="A rich 5-7 minute Korean hair treatment for dry, frizzy and color-treated hair, finished with a warm Amber Vanilla scent."
   canonicalPath="/product"
 >
@@ -41,7 +41,7 @@ const productDetails = [
         ratio="4:5"
         description="High-resolution front product image with accurate label visibility."
         notes="Avoid decorative elements that cover the front label."
-        alt="Front view of Essenly Keratin Hair Mask"
+        alt={`Front view of ${product.shortName}`}
       />
     </div>
   </section>
@@ -73,13 +73,13 @@ const productDetails = [
         ratio="1:1"
         description="Macro image of the actual creamy product texture."
         notes="Use a white or cream background and true-to-product texture color."
-        alt="Creamy texture of Essenly Keratin Hair Mask"
+        alt={`Creamy texture of ${product.shortName}`}
       />
       <div class="stack">
         <p class="eyebrow">What to expect</p>
         <h2>Softer feel. Smoother finish. Easier styling.</h2>
         <p class="lead">
-          Essenly Keratin Hair Mask helps condition dry-looking hair and improve its overall
+          {product.shortName} helps condition dry-looking hair and improve its overall
           appearance and manageability.
         </p>
         <p class="muted">
@@ -165,7 +165,7 @@ const productDetails = [
     <div class="container cta-grid">
       <div class="stack">
         <p class="eyebrow">Available in the United States</p>
-        <h2>Purchase Essenly Keratin Hair Mask through our U.S. Amazon listing.</h2>
+        <h2>Purchase {product.shortName} through our U.S. Amazon listing.</h2>
         <a class="btn btn-light" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
       </div>
       <div class="stack">

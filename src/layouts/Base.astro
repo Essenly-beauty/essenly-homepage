@@ -1,28 +1,30 @@
 ---
 import BrandLogo from "../components/BrandLogo.astro";
-import { amazonUrl, getContactEmail, navItems, siteConfig } from "../data/siteConfig";
+import { amazonUrl, getContactEmail, navItems, siteConfig, siteUrl } from "../data/siteConfig";
 
 interface Props {
   title: string;
   description?: string;
   canonicalPath?: string;
   ogImage?: string;
+  noindex?: boolean;
 }
 
 const {
   title,
-  description = "Discover Essenly Keratin Hair Mask, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair.",
+  description = `Discover ${siteConfig.product.name}, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair.`,
   canonicalPath = Astro.url.pathname,
   ogImage,
+  noindex = false,
 } = Astro.props;
 
 const fullTitle = title.includes("Essenly") ? title : `${title} | Essenly`;
-const canonicalUrl = new URL(canonicalPath, Astro.site ?? "https://essenly.beauty").toString();
+const canonicalUrl = new URL(canonicalPath, Astro.site ?? siteUrl).toString();
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: siteConfig.company.legalName,
-  url: "https://essenly.beauty",
+  url: siteUrl,
   sameAs: [siteConfig.links.instagram],
 };
 
@@ -36,6 +38,7 @@ const contactEmail = getContactEmail();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonicalUrl} />
 
     <meta property="og:title" content={fullTitle} />

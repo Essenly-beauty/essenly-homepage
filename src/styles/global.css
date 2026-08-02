@@ -401,7 +401,8 @@ p {
 
 .dark-band .lead,
 .dark-band .muted,
-.dark-band .eyebrow {
+.dark-band .eyebrow,
+.dark-band .fine-print {
   color: rgba(255, 253, 248, 0.72);
 }
 
@@ -446,6 +447,11 @@ p {
   min-height: inherit;
   object-fit: cover;
   object-position: center;
+}
+
+.image-asset.hero-portrait {
+  aspect-ratio: 1200 / 1373;
+  min-height: 0;
 }
 
 .placeholder-stage {

@@ -1,16 +1,28 @@
 ---
 import ImageAsset from "../components/ImageAsset.astro";
 import Base from "../layouts/Base.astro";
-import { amazonUrl, siteConfig } from "../data/siteConfig";
+import { amazonUrl, siteConfig, thankYouUrl } from "../data/siteConfig";
 
 const product = siteConfig.product;
 const amazon = siteConfig.amazon;
 const wholesale = siteConfig.wholesale;
 const wholesaleEmail = siteConfig.contact.wholesaleEmail;
-const endpoint = import.meta.env.WHOLESALE_FORM_ENDPOINT as string | undefined;
-const showForm = Boolean(endpoint);
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
+const showForm = Boolean(web3formsKey);
 const wholesaleReviews = siteConfig.reviews.filter((review) => review.verified && review.purpose === "wholesale");
 const supportAssets = siteConfig.supportAssets.filter((asset) => asset.available);
+
+const tiers = wholesale.tiers;
+const openingTier = tiers[0];
+
+// Oxford-comma-free "a, b and c" join for the volume-pricing sentence — reads
+// correctly for any tier count, not just today's three.
+const joinWithAnd = (items: Array<string | number>): string => {
+  if (items.length === 0) return "";
+  if (items.length === 1) return `${items[0]}`;
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
+};
 
 const glanceRows = [
   ["Product type", "Premium rinse-out hair treatment"],
@@ -20,23 +32,21 @@ const glanceRows = [
   ["Recommended use", `${product.useTime} after shampooing`],
   ["Net weight", product.netWeight],
   ["Current U.S. retail price", wholesale.msrp],
-  ["Opening order", wholesale.openingMoq ? `From ${wholesale.openingMoq} units` : "Opening orders available upon inquiry"],
-  ["Volume pricing", wholesale.volumeMoq ? `Available from ${wholesale.volumeMoq} units` : null],
+  ["Opening order", openingTier ? `From ${openingTier.units} units (one case)` : null],
   ["Wholesale price", "Available upon qualified inquiry"],
-  [
-    "Fulfillment",
-    wholesale.fulfillmentOrigin ?? "Shipping terms provided based on order quantity and destination",
-  ],
+  ["Fulfillment", wholesale.fulfillmentOrigin],
 ].filter((row): row is [string, string] => Boolean(row[1]));
 
 const termRows = [
-  ["Opening MOQ", wholesale.openingMoq],
-  ["Standard wholesale MOQ", wholesale.standardMoq],
+  ["Minimum order", openingTier ? `${openingTier.units} units (one case)` : null],
   ["Wholesale pricing", "Provided based on order volume"],
   ["Payment", wholesale.paymentTerms],
-  ["Shipping", "Quoted based on order size and destination"],
+  [
+    "Shipping",
+    "Ships DDP — Essenly pays customs and duties. Freight quoted by order size and destination",
+  ],
   ["Lead time", wholesale.leadTime],
-  ["Samples", wholesale.samplesAvailable ? "Available to qualified buyers" : null],
+  ["Samples", wholesale.sampleTerms],
   ["Returns", wholesale.returnTerms],
   ["Online resale", "Subject to channel approval"],
   ["Exclusivity", "Not available for opening orders"],
@@ -58,17 +68,24 @@ const termRows = [
           seeking a distinctive premium hair-care product made in Korea.
         </p>
         <div class="button-row">
-          <a class="btn btn-primary" href="#inquiry">Request Wholesale Information</a>
-          <a class="btn btn-secondary" href="#inquiry">Request a Sample</a>
+          <a class="btn btn-primary" href="#inquiry" data-inquiry-type="Wholesale pricing">
+            Request Wholesale Information
+          </a>
+          <a class="btn btn-secondary" href="#inquiry" data-inquiry-type="Sample">
+            Request a Sample
+          </a>
         </div>
       </div>
       <ImageAsset
-        src="/images/essenly/essenly-wholesale-hero.png"
+        src="/images/essenly/essenly-wholesale-hero.jpg"
+        class="hero-portrait"
         name="Wholesale hero"
-        ratio="16:10"
-        description="Retail presentation image with one to three products in a premium beauty setting."
+        ratio="7:8"
+        description="Model holding the product, premium beauty setting."
         notes="Avoid warehouse or bulk inventory imagery."
-        alt="Essenly Hair Mask presented for premium retail partners"
+        alt="A model holding the Essenly RenewShell Intense Hydrating Hair Mask jar"
+        loading="eager"
+        fetchpriority="high"
       />
     </div>
   </section>
@@ -186,15 +203,37 @@ const termRows = [
   </section>
 
   <section class="section sage-band">
-    <div class="container data-section">
-      <div class="stack">
+    <div class="container">
+      <div class="section-title">
         <p class="eyebrow">Wholesale terms</p>
         <h2>Designed for a practical opening order.</h2>
         <p class="lead">
-          Opening-order terms, volume pricing and shipping options are provided based on your
-          business type, order quantity and destination.
+          Opening order from {openingTier.units} units (one case). Volume pricing available at
+          {joinWithAnd(tiers.slice(1).map((tier) => tier.units))} units.
+        </p>
+        <p class="muted">
+          Wholesale pricing, shipping and lead times are confirmed against your business type,
+          order quantity and destination.
         </p>
       </div>
+      <table class="tier-table">
+        <thead>
+          <tr class="tier-head">
+            <th scope="col">Tier</th>
+            <th scope="col">Units</th>
+            <th scope="col">Cases</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tiers.map((tier) => (
+            <tr class="tier-row">
+              <td>{tier.label}</td>
+              <td>{tier.units}</td>
+              <td>{tier.cases === 1 ? "1 case" : `${tier.cases} cases`}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
       <dl class="details-list">
         {termRows.map(([label, value]) => (
           <div>
@@ -245,8 +284,18 @@ const termRows = [
         <p class="muted">Bring a distinctive Korean hair ritual to your customers.</p>
       </div>
       {showForm ? (
-        <form class="inquiry-form" action={endpoint} method="post">
-          <input type="text" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot" />
+        <form class="inquiry-form" action="https://api.web3forms.com/submit" method="post">
+          <input type="hidden" name="access_key" value={web3formsKey} />
+          <input type="hidden" name="subject" value="New wholesale inquiry — Essenly" />
+          <input type="hidden" name="from_name" value="Essenly Wholesale" />
+          <input type="hidden" name="redirect" value={thankYouUrl} />
+          <input type="checkbox" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <fieldset class="inquiry-type">
+            <legend>What are you looking for?</legend>
+            <label><input type="radio" name="inquiry_type" value="Wholesale pricing" required /> Wholesale pricing</label>
+            <label><input type="radio" name="inquiry_type" value="Sample" /> Sample</label>
+            <label><input type="radio" name="inquiry_type" value="Both" /> Both</label>
+          </fieldset>
           <div class="form-grid">
             <div class="field">
               <label for="business-name">Business name</label>
@@ -281,18 +330,15 @@ const termRows = [
               <label for="city-state">City and state</label>
               <input id="city-state" name="city_state" required />
             </div>
-            <div class="field">
+            <div class="field full">
               <label for="order-size">Estimated opening order</label>
               <select id="order-size" name="estimated_order">
                 <option value="">Select one</option>
-                <option>Under 50 units</option>
-                <option>50-149 units</option>
-                <option>150-299 units</option>
+                <option>30 units (one case)</option>
+                <option>90 units</option>
+                <option>150 units</option>
                 <option>300+ units</option>
               </select>
-            </div>
-            <div class="field checkbox-field">
-              <label><input type="checkbox" name="sample_request" /> Sample request</label>
             </div>
             <div class="field full">
               <label for="message">Message</label>
@@ -301,6 +347,10 @@ const termRows = [
           </div>
           <button class="btn btn-light" type="submit">Start a Wholesale Conversation</button>
           <p class="fine-print">By submitting, you agree that Essenly may use your information to respond to your inquiry.</p>
+          <p class="direct-email">
+            Prefer to write to us directly? Email
+            <a href={`mailto:${wholesaleEmail}`}>{wholesaleEmail}</a>.
+          </p>
         </form>
       ) : (
         <div class="email-fallback">
@@ -310,6 +360,18 @@ const termRows = [
       )}
     </div>
   </section>
+
+  <script is:inline>
+    document.querySelectorAll("a[data-inquiry-type]").forEach((link) => {
+      link.addEventListener("click", () => {
+        const value = link.getAttribute("data-inquiry-type");
+        const radio = document.querySelector(
+          'input[name="inquiry_type"][value="' + value + '"]'
+        );
+        if (radio) radio.checked = true;
+      });
+    });
+  </script>
 </Base>
 
 <style>
@@ -386,6 +448,51 @@ const termRows = [
     color: var(--color-muted);
   }
 
+  .tier-table {
+    display: grid;
+    width: 100%;
+    margin-bottom: var(--space-7);
+    border-top: 1px solid rgba(36, 30, 25, 0.18);
+  }
+
+  /* Keep the DOM as a real table (thead/tbody/tr/th/td) for screen readers —
+     "display: contents" removes these wrappers from the box tree without
+     removing their table semantics, so the grid below stacks rows directly
+     under .tier-table while <th>/<td> stay associated for assistive tech. */
+  .tier-table thead,
+  .tier-table tbody {
+    display: contents;
+  }
+
+  .tier-head,
+  .tier-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid rgba(36, 30, 25, 0.18);
+  }
+
+  .tier-head {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .tier-head th {
+    font-weight: inherit;
+    text-align: left;
+  }
+
+  .tier-row td:first-child {
+    font-weight: 800;
+  }
+
+  .tier-row td:not(:first-child) {
+    color: var(--color-muted);
+  }
+
   .review-band {
     background: var(--color-surface);
     border-block: 1px solid rgba(31, 25, 21, 0.12);
@@ -448,18 +555,43 @@ const termRows = [
     color: var(--color-surface);
   }
 
-  .checkbox-field {
-    align-content: end;
+  /* The inquiry section sits on .dark-band, so this needs light text and an
+     accent link — .direct-email is not in global.css's dark-band override. */
+  .direct-email {
+    margin: 0;
+    color: rgba(255, 253, 248, 0.72);
+    font-size: 0.86rem;
   }
 
-  .checkbox-field label {
+  .direct-email a {
+    color: var(--color-accent);
+    font-weight: 800;
+    overflow-wrap: anywhere;
+  }
+
+  .inquiry-type {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .inquiry-type legend {
+    margin-bottom: var(--space-2);
+    padding: 0;
+    color: var(--color-surface);
+    font-weight: 800;
+  }
+
+  .inquiry-type label {
     display: flex;
     gap: var(--space-2);
     align-items: center;
-    min-height: 48px;
+    min-height: 44px;
   }
 
-  .checkbox-field input {
+  .inquiry-type input {
     width: auto;
     min-height: auto;
   }
