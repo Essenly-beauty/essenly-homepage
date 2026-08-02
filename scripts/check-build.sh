@@ -47,4 +47,16 @@ assert_absent "$WHOLESALE" "\$21.00" "opening tier price stays private"
 assert_absent "$WHOLESALE" "\$15.60" "key account price stays private"
 assert_absent "$WHOLESALE" "200ml" "wrong net weight absent"
 
+echo "Task 2 — thank-you page"
+THANKYOU="dist/thank-you/index.html"
+if [ -f "$THANKYOU" ]; then
+  echo "  PASS  /thank-you is built"
+  assert_contains "$THANKYOU" "Thank you" "thank-you heading renders"
+  assert_contains "$THANKYOU" "wholesale@essenly.beauty" "fallback email renders"
+else
+  echo "  FAIL  /thank-you is built — dist/thank-you/index.html missing"
+  FAILED=1
+fi
+assert_absent "dist/sitemap-0.xml" "/thank-you" "thank-you excluded from sitemap"
+
 exit $FAILED

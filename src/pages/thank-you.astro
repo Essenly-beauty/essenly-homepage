@@ -1,0 +1,46 @@
+---
+import Base from "../layouts/Base.astro";
+import { siteConfig } from "../data/siteConfig";
+
+const wholesaleEmail = siteConfig.contact.wholesaleEmail;
+---
+
+<Base
+  title="Thank you"
+  description="Your inquiry has reached the Essenly team."
+  canonicalPath="/thank-you"
+>
+  <section class="section">
+    <div class="narrow stack thanks">
+      <p class="eyebrow">Inquiry received</p>
+      <h1>Thank you.</h1>
+      <p class="lead">
+        Your inquiry has reached the Essenly team. We reply to wholesale and sample requests
+        within two business days.
+      </p>
+      <p class="muted">
+        If your message is urgent, email <a href={`mailto:${wholesaleEmail}`}>{wholesaleEmail}</a>
+        directly.
+      </p>
+      <div class="button-row">
+        <a class="btn btn-primary" href="/wholesale">Back to Wholesale</a>
+        <a class="btn btn-secondary" href="/">Return Home</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .thanks {
+    text-align: center;
+  }
+
+  .thanks .button-row {
+    justify-content: center;
+  }
+
+  .thanks a {
+    color: var(--color-accent-dark);
+    font-weight: 800;
+  }
+</style>
