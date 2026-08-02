@@ -12,6 +12,9 @@ const showForm = Boolean(endpoint);
 const wholesaleReviews = siteConfig.reviews.filter((review) => review.verified && review.purpose === "wholesale");
 const supportAssets = siteConfig.supportAssets.filter((asset) => asset.available);
 
+const tiers = wholesale.tiers;
+const openingTier = tiers[0];
+
 const glanceRows = [
   ["Product type", "Premium rinse-out hair treatment"],
   ["Made in", product.madeIn],
@@ -20,23 +23,21 @@ const glanceRows = [
   ["Recommended use", `${product.useTime} after shampooing`],
   ["Net weight", product.netWeight],
   ["Current U.S. retail price", wholesale.msrp],
-  ["Opening order", wholesale.openingMoq ? `From ${wholesale.openingMoq} units` : "Opening orders available upon inquiry"],
-  ["Volume pricing", wholesale.volumeMoq ? `Available from ${wholesale.volumeMoq} units` : null],
+  ["Opening order", openingTier ? `From ${openingTier.units} units (one case)` : null],
   ["Wholesale price", "Available upon qualified inquiry"],
-  [
-    "Fulfillment",
-    wholesale.fulfillmentOrigin ?? "Shipping terms provided based on order quantity and destination",
-  ],
+  ["Fulfillment", wholesale.fulfillmentOrigin],
 ].filter((row): row is [string, string] => Boolean(row[1]));
 
 const termRows = [
-  ["Opening MOQ", wholesale.openingMoq],
-  ["Standard wholesale MOQ", wholesale.standardMoq],
+  ["Minimum order", openingTier ? `${openingTier.units} units (one case)` : null],
   ["Wholesale pricing", "Provided based on order volume"],
   ["Payment", wholesale.paymentTerms],
-  ["Shipping", "Quoted based on order size and destination"],
+  [
+    "Shipping",
+    "Ships DDP — Essenly pays customs and duties. Freight quoted by order size and destination",
+  ],
   ["Lead time", wholesale.leadTime],
-  ["Samples", wholesale.samplesAvailable ? "Available to qualified buyers" : null],
+  ["Samples", wholesale.sampleTerms],
   ["Returns", wholesale.returnTerms],
   ["Online resale", "Subject to channel approval"],
   ["Exclusivity", "Not available for opening orders"],
@@ -186,14 +187,32 @@ const termRows = [
   </section>
 
   <section class="section sage-band">
-    <div class="container data-section">
-      <div class="stack">
+    <div class="container">
+      <div class="section-title">
         <p class="eyebrow">Wholesale terms</p>
         <h2>Designed for a practical opening order.</h2>
         <p class="lead">
-          Opening-order terms, volume pricing and shipping options are provided based on your
-          business type, order quantity and destination.
+          Opening order from {openingTier.units} units (one case). Volume pricing available at
+          {tiers.slice(1).map((tier) => tier.units).join(", ")} units.
         </p>
+        <p class="muted">
+          Wholesale pricing, shipping and lead times are confirmed against your business type,
+          order quantity and destination.
+        </p>
+      </div>
+      <div class="tier-table">
+        <div class="tier-head">
+          <span>Tier</span>
+          <span>Units</span>
+          <span>Cases</span>
+        </div>
+        {tiers.map((tier) => (
+          <div class="tier-row">
+            <span>{tier.label}</span>
+            <span>{tier.units}</span>
+            <span>{tier.cases === 1 ? "1 case" : `${tier.cases} cases`}</span>
+          </div>
+        ))}
       </div>
       <dl class="details-list">
         {termRows.map(([label, value]) => (
@@ -383,6 +402,36 @@ const termRows = [
 
   .details-list dd {
     margin: 0;
+    color: var(--color-muted);
+  }
+
+  .tier-table {
+    display: grid;
+    margin-bottom: var(--space-7);
+    border-top: 1px solid rgba(36, 30, 25, 0.18);
+  }
+
+  .tier-head,
+  .tier-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid rgba(36, 30, 25, 0.18);
+  }
+
+  .tier-head {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .tier-row span:first-child {
+    font-weight: 800;
+  }
+
+  .tier-row span:not(:first-child) {
     color: var(--color-muted);
   }
 

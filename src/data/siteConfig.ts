@@ -11,6 +11,12 @@ export type WholesaleSupportAsset = {
   available: boolean;
 };
 
+export type WholesaleTier = {
+  label: string;
+  units: number;
+  cases: number;
+};
+
 export const siteConfig = {
   company: {
     legalName: "Essenly Co., Ltd.",
@@ -30,9 +36,9 @@ export const siteConfig = {
     instagram: "https://instagram.com/essenly.beauty",
   },
   product: {
-    name: "Essenly Keratin Hair Mask",
+    name: "Essenly RenewShell™ Intense Hydrating Hair Mask",
     type: "Rinse-out conditioning hair treatment",
-    netWeight: null as string | null,
+    netWeight: "190ml",
     countryOfOrigin: "Made in Korea",
     madeIn: "Korea",
     fragrance: "Amber Vanilla",
@@ -48,15 +54,20 @@ export const siteConfig = {
   },
   reviews: [] as VerifiedReview[],
   wholesale: {
-    msrp: null as string | null,
-    openingMoq: null as string | null,
-    standardMoq: null as string | null,
-    volumeMoq: null as string | null,
-    fulfillmentOrigin: null as string | null,
-    paymentTerms: null as string | null,
-    leadTime: null as string | null,
-    returnTerms: null as string | null,
+    msrp: "$39.00",
+    tiers: [
+      { label: "Opening", units: 30, cases: 1 },
+      { label: "Growth", units: 90, cases: 3 },
+      { label: "Volume", units: 150, cases: 5 },
+      { label: "Key account", units: 300, cases: 10 },
+    ] as WholesaleTier[],
+    fulfillmentOrigin: "Ships from Seoul, Korea",
+    paymentTerms: "100% prepayment on all orders (wire transfer or card)",
+    leadTime: "6-10 business days from payment — 3-5 business days to dispatch, 3-5 business days in transit",
+    returnTerms: "Damaged or defective units only, reported with photos within 7 days of delivery",
     samplesAvailable: true,
+    sampleTerms:
+      "Available to qualified buyers at cost, credited against your first order. Ships from U.S. stock, typically 2-3 business days.",
   },
   supportAssets: [] as WholesaleSupportAsset[],
 } as const;
