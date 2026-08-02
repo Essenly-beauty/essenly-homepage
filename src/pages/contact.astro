@@ -2,8 +2,9 @@
 import Base from "../layouts/Base.astro";
 import { getContactEmail, siteConfig } from "../data/siteConfig";
 
-const endpoint = import.meta.env.CONTACT_FORM_ENDPOINT as string | undefined;
-const showForm = Boolean(endpoint);
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
+const showForm = Boolean(web3formsKey);
+const thankYouUrl = new URL("/thank-you", Astro.site ?? "https://essenly.beauty").toString();
 const contactMethods = [
   ["General inquiries", siteConfig.contact.generalEmail],
   ["U.S. wholesale", siteConfig.contact.wholesaleEmail],
@@ -48,8 +49,12 @@ const fallbackEmail = getContactEmail();
         <p class="lead">Choose the inquiry type and tell us what you are looking for.</p>
       </div>
       {showForm ? (
-        <form class="contact-form" action={endpoint} method="post">
-          <input type="text" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot" />
+        <form class="contact-form" action="https://api.web3forms.com/submit" method="post">
+          <input type="hidden" name="access_key" value={web3formsKey} />
+          <input type="hidden" name="subject" value="New contact inquiry — Essenly" />
+          <input type="hidden" name="from_name" value="Essenly Website" />
+          <input type="hidden" name="redirect" value={thankYouUrl} />
+          <input type="checkbox" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <div class="form-grid">
             <div class="field">
               <label for="name">Name</label>

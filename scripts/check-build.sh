@@ -70,4 +70,12 @@ assert_contains "$WHOLESALE" 'data-inquiry-type="Sample"' "sample button tagged 
 assert_absent "$WHOLESALE" 'name="company_website"' "old honeypot removed"
 assert_absent "$WHOLESALE" 'name="sample_request"' "old sample checkbox removed"
 
+echo "Task 4 — contact form"
+CONTACT="dist/contact/index.html"
+assert_contains "$CONTACT" "https://api.web3forms.com/submit" "contact form posts to Web3Forms"
+assert_contains "$CONTACT" 'name="access_key"' "contact access key field present"
+assert_contains "$CONTACT" "https://essenly.beauty/thank-you" "contact redirect points at thank-you"
+assert_contains "$CONTACT" 'name="botcheck"' "contact honeypot present"
+assert_absent "$CONTACT" 'name="company_website"' "old contact honeypot removed"
+
 exit $FAILED
