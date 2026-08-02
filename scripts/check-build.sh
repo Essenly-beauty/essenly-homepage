@@ -162,6 +162,9 @@ echo "Contact page"
 assert_contains "$CONTACT" "Use the form below, or email" "contact hero points at both routes"
 assert_contains "$CONTACT" "wholesale@essenly.beauty" "contact hero names the address"
 assert_contains "$CONTACT" 'id="inquiry"' "form section is anchorable from the hero"
+assert_contains "$CONTACT" 'name="inquiry_type"' "contact form uses the same radio pattern as wholesale"
+assert_contains "$CONTACT" 'name="contact_name"' "contact form uses the shared contact_name field"
+assert_absent "$CONTACT" 'name="category"' "old category select removed"
 # Test the rendered element, not the class name — Astro inlines the scoped
 # stylesheet into the page, so "contact-grid" is present in the CSS whether or
 # not the section renders. `info-card` only appears if a card was emitted.
