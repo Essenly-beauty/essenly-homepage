@@ -146,4 +146,38 @@ assert_contains "$WHOLESALE" "wholesale@essenly.beauty" "direct email address sh
 assert_contains "$WHOLESALE" "Prefer to write to us directly" "direct-email invitation renders"
 assert_absent "$WHOLESALE" "hq@essenly.beauty" "delivery address is not exposed on the page"
 
+echo "Retail support"
+# supportAssets used to be empty, which silently hid the whole section.
+assert_contains "$WHOLESALE" "Retail support" "retail support section renders"
+assert_contains "$WHOLESALE" "Gift-with-purchase stock for campaigns" "support assets render"
+# The volume condition is a commercial term — it must appear both beside the
+# section and in the terms table, and both must quote the same threshold.
+assert_contains "$WHOLESALE" "Available from orders of 90 units" "support threshold shown with the section"
+assert_contains "$WHOLESALE" "from orders of 90 units. Agreed per account" "support threshold shown in the terms table"
+assert_contains "$WHOLESALE" "Marketing support" "marketing support row in the terms table"
+
+echo "Contact page"
+# The hero used to be a bare heading with the only address stranded in a
+# one-card grid below it. It now names the address and links to the form.
+assert_contains "$CONTACT" "Use the form below, or email" "contact hero points at both routes"
+assert_contains "$CONTACT" "wholesale@essenly.beauty" "contact hero names the address"
+assert_contains "$CONTACT" 'id="inquiry"' "form section is anchorable from the hero"
+assert_contains "$CONTACT" 'name="inquiry_type"' "contact form uses the same radio pattern as wholesale"
+assert_contains "$CONTACT" 'name="contact_name"' "contact form uses the shared contact_name field"
+assert_absent "$CONTACT" 'name="category"' "old category select removed"
+# Test the rendered element, not the class name — Astro inlines the scoped
+# stylesheet into the page, so "contact-grid" is present in the CSS whether or
+# not the section renders. `info-card` only appears if a card was emitted.
+assert_absent "$CONTACT" "info-card" "single-method card grid stays hidden"
+
+echo "Legal entity name"
+# The company is Essenly Inc., not a Korean Co., Ltd. Every page reads the name from
+# siteConfig.company.legalName — nothing hardcodes it, so this catches a reintroduction.
+for page in dist/index.html dist/product/index.html dist/wholesale/index.html \
+            dist/contact/index.html dist/privacy/index.html dist/terms/index.html; do
+  assert_absent "$page" "Co., Ltd." "old legal entity absent from $page"
+done
+assert_contains "dist/index.html" "Essenly Inc." "home renders the legal entity"
+assert_contains "dist/privacy/index.html" "Essenly Inc." "privacy meta renders the legal entity"
+
 exit $FAILED

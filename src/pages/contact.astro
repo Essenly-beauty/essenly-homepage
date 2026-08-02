@@ -14,20 +14,32 @@ const fallbackEmail = getContactEmail();
 
 <Base
   title="Contact Essenly"
-  description="Contact Essenly Co., Ltd. for product, U.S. wholesale, press and partnership inquiries."
+  description={`Contact ${siteConfig.company.legalName} for product, U.S. wholesale, press and partnership inquiries.`}
   canonicalPath="/contact"
 >
   <section class="section contact-hero">
     <div class="narrow stack">
       <p class="eyebrow">Contact</p>
-      <h1>Let's talk.</h1>
+      <h1>Let's talk</h1>
       <p class="lead">
         For product, wholesale, press and partnership inquiries, contact the Essenly team.
       </p>
+      <p class="hero-direct">
+        Use the form below, or email
+        <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a> directly.
+      </p>
+      <div class="button-row">
+        <a class="btn btn-primary" href="#inquiry">Send an Inquiry</a>
+      </div>
     </div>
   </section>
 
-  {contactMethods.length > 0 && (
+  {/*
+    Only worth its own section once there is more than one address to choose
+    between. With a single method the grid leaves an orphaned card, and the
+    hero above already names that address.
+  */}
+  {contactMethods.length > 1 && (
     <section class="section-tight">
       <div class="container contact-grid">
         {contactMethods.map(([label, email]) => (
@@ -40,12 +52,19 @@ const fallbackEmail = getContactEmail();
     </section>
   )}
 
-  <section class="section rose-band">
+  <section class="section rose-band" id="inquiry">
     <div class="container form-layout">
       <div class="stack">
         <p class="eyebrow">Inquiry</p>
-        <h2>Send the right note to the right place.</h2>
-        <p class="lead">Choose the inquiry type and tell us what you are looking for.</p>
+        <h2>Send the right note to the right place</h2>
+        <p class="lead">Choose what your message is about and tell us what you are looking for.</p>
+        <p class="muted">
+          Stocking Essenly? The <a href="/wholesale#inquiry">wholesale form</a> asks the few
+          extra questions we need to quote you.
+        </p>
+        <p class="muted">
+          Urgent? Email <a href={`mailto:${fallbackEmail}`}>{fallbackEmail}</a> directly.
+        </p>
       </div>
       {showForm ? (
         <form class="contact-form" action="https://api.web3forms.com/submit" method="post">
@@ -54,29 +73,25 @@ const fallbackEmail = getContactEmail();
           <input type="hidden" name="from_name" value="Essenly Website" />
           <input type="hidden" name="redirect" value={thankYouUrl} />
           <input type="checkbox" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <fieldset class="inquiry-type">
+            <legend>What is this about?</legend>
+            <label><input type="radio" name="inquiry_type" value="Product question" required /> Product question</label>
+            <label><input type="radio" name="inquiry_type" value="Press" /> Press</label>
+            <label><input type="radio" name="inquiry_type" value="Partnership" /> Partnership</label>
+            <label><input type="radio" name="inquiry_type" value="Other" /> Other</label>
+          </fieldset>
           <div class="form-grid">
             <div class="field">
-              <label for="name">Name</label>
-              <input id="name" name="name" autocomplete="name" required />
+              <label for="contact-name">Contact name</label>
+              <input id="contact-name" name="contact_name" autocomplete="name" required />
             </div>
             <div class="field">
               <label for="email">Email</label>
               <input id="email" name="email" type="email" autocomplete="email" required />
             </div>
-            <div class="field">
+            <div class="field full">
               <label for="company">Company</label>
               <input id="company" name="company" autocomplete="organization" />
-            </div>
-            <div class="field">
-              <label for="category">Inquiry type</label>
-              <select id="category" name="category" required>
-                <option value="">Select one</option>
-                <option>Product question</option>
-                <option>Wholesale</option>
-                <option>Press</option>
-                <option>Partnership</option>
-                <option>Other</option>
-              </select>
             </div>
             <div class="field full">
               <label for="message">Message</label>
@@ -113,6 +128,21 @@ const fallbackEmail = getContactEmail();
     text-align: center;
   }
 
+  .contact-hero .button-row {
+    justify-content: center;
+  }
+
+  .hero-direct {
+    color: var(--color-muted);
+  }
+
+  .hero-direct a,
+  .form-layout .stack a {
+    color: var(--color-accent-dark);
+    font-weight: 800;
+    overflow-wrap: anywhere;
+  }
+
   .contact-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -136,12 +166,47 @@ const fallbackEmail = getContactEmail();
     display: grid;
     grid-template-columns: 0.85fr 1.15fr;
     gap: var(--space-7);
+    align-items: start;
+  }
+
+  /* .stack is a grid, so without this it stretches to the form's height and
+     spreads the eyebrow, heading and copy apart down the column. */
+  .form-layout .stack {
+    align-content: start;
   }
 
   .contact-form,
   .email-panel {
     display: grid;
     gap: var(--space-5);
+  }
+
+  /* Same shape as the wholesale radio group, but this sits on .rose-band, so
+     the text stays dark rather than the light treatment used on .dark-band. */
+  .inquiry-type {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .inquiry-type legend {
+    margin-bottom: var(--space-2);
+    padding: 0;
+    font-weight: 800;
+  }
+
+  .inquiry-type label {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .inquiry-type input {
+    width: auto;
+    min-height: auto;
   }
 
   .email-panel {

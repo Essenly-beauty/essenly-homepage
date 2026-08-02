@@ -17,7 +17,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
     <div class="container hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">Sensorial Korean hair care</p>
-        <h1>Hair care that stays with you.</h1>
+        <h1>Hair care that stays with you</h1>
         <p class="lead">
           A sensorial Korean hair mask for softer, smoother, beautifully scented hair.
         </p>
@@ -27,12 +27,14 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
         </div>
       </div>
       <ImageAsset
-        src="/images/essenly/essenly-product-hero.png"
+        src="/images/essenly/essenly-product-hero.jpg"
         name="Home hero"
-        ratio="16:10 desktop, 4:5 mobile"
-        description="Editorial hero image of Essenly Hair Mask in warm ivory, cream or amber light."
-        notes="Use a crop with clear negative space and an undistorted product label."
-        alt={`${product.shortName} in warm editorial light`}
+        ratio="5:3"
+        loading="eager"
+        fetchpriority="high"
+        description="Open jar in shallow water, mid-splash, on a warm cream background."
+        notes="Keep the label unobstructed by the splash."
+        alt={`An open jar of ${product.shortName} with water splashing around it`}
       />
     </div>
   </section>
@@ -41,7 +43,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
     <div class="container split">
       <div class="stack">
         <p class="eyebrow">{product.name}</p>
-        <h2>One treatment. A softer ritual.</h2>
+        <h2>One treatment. A softer ritual</h2>
         <p class="lead">
           {product.shortName} is a rich rinse-out treatment created for dry,
           frizzy and color-treated hair.
@@ -58,12 +60,12 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
         <a class="btn btn-secondary" href="/product">Discover the Hair Mask</a>
       </div>
       <ImageAsset
-        src="/images/essenly/essenly-product-primary.png"
+        src="/images/essenly/essenly-product-primary.jpg"
         name="Product primary"
-        ratio="4:5"
-        description="Front product image or open jar with texture."
-        notes="Use a warm crop distinct from the home hero."
-        alt={`${product.shortName} product and texture`}
+        ratio="6:5"
+        description="Split frame of the same hair before and after a single use."
+        notes="Keep the Before and After labels legible; no other text."
+        alt={`The same hair before and after one use of ${product.shortName}`}
       />
     </div>
   </section>
@@ -72,7 +74,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
     <div class="container">
       <div class="section-head">
         <p class="eyebrow">The difference</p>
-        <h2>Rich care, without the heavy finish.</h2>
+        <h2>Rich care, without the heavy finish</h2>
       </div>
       <div class="benefit-grid">
         <article class="info-card">
@@ -94,16 +96,17 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
   <section class="section ritual-section">
     <div class="container split reverse">
       <ImageAsset
-        src="/images/essenly/essenly-hair-ritual.png"
+        src="/images/essenly/essenly-hair-ritual.jpg"
+        class="hero-portrait"
         name="Hair ritual"
-        ratio="4:5"
-        description="Damp hair, towel, product in hand or close sensory application scene."
-        notes="Avoid medical before-and-after imagery and generic stock styling."
-        alt={`A simple hair-care ritual with ${product.shortName}`}
+        ratio="7:8"
+        description="Model with damp hair holding the jar against her shoulder."
+        notes="Portrait crop — keep the face and the full jar in frame."
+        alt={`A model with damp hair holding a jar of ${product.shortName}`}
       />
       <div class="stack">
         <p class="eyebrow">The ritual</p>
-        <h2>Five minutes can change how your hair feels.</h2>
+        <h2>Five minutes can change how your hair feels</h2>
         <p class="lead">
           After shampooing, apply the mask to damp hair, focusing on the mid-lengths and ends.
         </p>
@@ -119,7 +122,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
     <div class="container split">
       <div class="stack">
         <p class="eyebrow">Texture</p>
-        <h2>Made to feel as good as the result.</h2>
+        <h2>Made to feel as good as the result</h2>
         <p class="lead">
           The creamy texture coats the hair with conditioning care, while the finish stays soft,
           touchable and light.
@@ -127,10 +130,10 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
         <p class="muted">A treatment for the days when regular conditioner does not feel like enough.</p>
       </div>
       <ImageAsset
-        src="/images/essenly/essenly-product-texture.png"
+        src="/images/essenly/essenly-product-texture.jpg"
         name="Product texture"
-        ratio="1:1"
-        description="Macro image of the product texture on a cream or white background."
+        ratio="2:1"
+        description="Macro of the cream swatch on a warm blush background."
         notes="Texture color and density should match the actual product."
         alt={`Creamy texture of ${product.shortName}`}
       />
@@ -151,7 +154,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
       </div>
       <div class="stack">
         <p class="eyebrow">Amazon proof</p>
-        <h2>Loved by early U.S. customers.</h2>
+        <h2>Loved by early U.S. customers</h2>
         {hasAmazonRating ? (
           <p class="lead">
             {amazon.rating} out of 5 on Amazon, based on {amazon.ratingCount} customer ratings.
@@ -172,7 +175,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
   <section class="section consumer-cta">
     <div class="narrow stack">
       <p class="eyebrow">For your routine</p>
-      <h2>Bring softness back to your routine.</h2>
+      <h2>Bring softness back to your routine</h2>
       <p class="lead">{product.shortName} is available to U.S. customers through Amazon.</p>
       <a class="btn btn-primary" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
     </div>
@@ -181,7 +184,7 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
   <section class="section dark-band wholesale-cta">
     <div class="narrow stack">
       <p class="eyebrow">Wholesale</p>
-      <h2>A distinctive Korean hair-care addition for your customers.</h2>
+      <h2>A distinctive Korean hair-care addition for your customers</h2>
       <p class="lead">
         Essenly works with selected U.S. beauty retailers, salons, head spas and online stores.
       </p>
@@ -194,8 +197,8 @@ const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
       <p class="eyebrow">About Essenly</p>
       <h2>About Essenly</h2>
       <p class="lead">
-        Essenly Co., Ltd. is a Seoul-based beauty company creating Korean beauty products and
-        sensorial experiences for global customers.
+        {siteConfig.company.legalName} is a Seoul-based beauty company creating Korean beauty
+        products and sensorial experiences for global customers.
       </p>
       <p class="muted">
         Our first release brings together effective conditioning care, a memorable fragrance

@@ -1,10 +1,11 @@
 ---
 import Base from "../layouts/Base.astro";
+import { siteConfig } from "../data/siteConfig";
 ---
 
 <Base
   title="Terms of Use"
-  description="Terms of use for Essenly Co., Ltd."
+  description={`Terms of use for ${siteConfig.company.legalName}`}
   canonicalPath="/terms"
 >
   <section class="section">

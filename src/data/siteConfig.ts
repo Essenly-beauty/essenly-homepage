@@ -19,7 +19,7 @@ export type WholesaleTier = {
 
 export const siteConfig = {
   company: {
-    legalName: "Essenly Co., Ltd.",
+    legalName: "Essenly Inc.",
     city: "Seoul",
     country: "Republic of Korea",
     businessAddress: null as string | null,
@@ -68,8 +68,16 @@ export const siteConfig = {
     returnTerms: "Damaged or defective units only, reported with photos within 7 days of delivery",
     sampleTerms:
       "Available to qualified buyers at cost, credited against your first order. Ships from U.S. stock, typically 2-3 business days.",
+    // Marketing support costs real money, so it is tied to order volume.
+    // Keep this equal to one of the tier `units` values above.
+    supportFromUnits: 90,
   },
-  supportAssets: [] as WholesaleSupportAsset[],
+  supportAssets: [
+    { label: "Product photography and marketing creatives", available: true },
+    { label: "Joint promotions and in-store events", available: true },
+    { label: "Gift-with-purchase stock for campaigns", available: true },
+    { label: "Product copy and ingredient detail for listings", available: true },
+  ] as WholesaleSupportAsset[],
 } as const;
 
 export const navItems = [
