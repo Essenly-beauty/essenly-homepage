@@ -1,0 +1,18 @@
+---
+/*
+  The reveal primitive used by every section: an outer element that clips and an
+  inner element that moves. Declared once here rather than repeated in eleven
+  components. Step 2's motion script animates `.rise-inner`; with the motion
+  layer off the inner sits at rest and the page reads normally.
+*/
+interface Props {
+  as?: "div" | "li" | "p" | "span";
+  class?: string;
+}
+
+const { as: Tag = "div", class: className } = Astro.props;
+---
+
+<Tag class:list={["rise", className]}>
+  <span class="rise-inner"><slot /></span>
+</Tag>

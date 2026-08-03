@@ -1,0 +1,64 @@
+---
+import { siteConfig } from "../../data/siteConfig";
+import Rise from "./Rise.astro";
+
+const { wholesale } = siteConfig;
+
+/* Every number here comes from siteConfig so the tiers and terms stay in one
+   place. The 90-unit marketing-support gate is a config value, not markup. */
+const terms = [
+  ["Payment", wholesale.paymentTerms],
+  ["Lead time", wholesale.leadTime],
+  ["Samples", wholesale.sampleTerms],
+];
+---
+
+<section class="l-wholesale band-black section--tall" id="wholesale">
+  <div class="container">
+    <div class="l-wholesale__head">
+      <p class="eyebrow"><span>U.S. wholesale</span></p>
+      <h2 class="h-section">A distinctive Korean hair-care addition for your shelf.</h2>
+      <p class="body-copy">
+        Essenly works with selected U.S. beauty retailers, salons, head spas and online stores.
+        {wholesale.fulfillmentOrigin}.
+      </p>
+    </div>
+
+    <div class="l-wholesale__msrp">
+      <strong>{wholesale.msrp}</strong>
+      <span>MSRP per unit</span>
+    </div>
+
+    <div class="l-tiers">
+      {
+        wholesale.tiers.map((tier) => (
+          <Rise class="l-tier">
+            <p class="l-tier__label">{tier.label}</p>
+            <p class="l-tier__units">{tier.units} units</p>
+            <p class="l-tier__cases">
+              {tier.cases} {tier.cases === 1 ? "case" : "cases"}
+            </p>
+          </Rise>
+        ))
+      }
+    </div>
+
+    <div class="l-terms">
+      {
+        terms.map(([label, value]) => (
+          <dl class="l-term">
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </dl>
+        ))
+      }
+    </div>
+
+    <p class="body-copy" style="margin-top: 60rem;">
+      Marketing support &mdash; product photography, joint promotions, gift-with-purchase stock and
+      listing copy &mdash; is available from {wholesale.supportFromUnits} units.
+    </p>
+
+    <a class="btn-solid btn-light" href="#contact" data-tab="Wholesale">Wholesale Inquiry</a>
+  </div>
+</section>

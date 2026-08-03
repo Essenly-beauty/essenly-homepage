@@ -1,0 +1,34 @@
+---
+/*
+  The headline the hero image morphs into. The two `.l-info__slot` images are the
+  destination rects the motion layer measures, which is why they are real inline
+  <img> elements rather than background images.
+*/
+---
+
+<section class="l-info" id="l-info">
+  <div class="container">
+    <h1 class="h-display l-info__headline">
+      Rich Enough
+      <img
+        class="l-info__slot"
+        id="l-slot-a"
+        src="/images/essenly/essenly-inline-a.jpg"
+        alt=""
+        aria-hidden="true"
+      />
+      To Matter<br />
+      Light Enough
+      <img
+        class="l-info__slot"
+        id="l-slot-b"
+        src="/images/essenly/essenly-inline-b.jpg"
+        alt=""
+        aria-hidden="true"
+      />
+      To Love Daily
+    </h1>
+    <p class="eyebrow eyebrow--center"><span>A new chapter for your hair</span></p>
+    <p class="body-copy">Softer, smoother, beautifully scented hair in five minutes.</p>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+---
+import Rise from "./Rise.astro";
+
+/* Texture, then a person, then the science — the same widening-out the reference
+   uses across its three-up row. */
+const shots = [
+  {
+    src: "/images/essenly/essenly-product-texture.jpg",
+    alt: "Macro view of the creamy Essenly Hair Mask texture",
+  },
+  {
+    src: "/images/essenly/essenly-portrait-model.jpg",
+    alt: "A model with damp hair holding a jar of the Essenly Hair Mask",
+  },
+  {
+    src: "/images/essenly/essenly-texture-macro.jpg",
+    alt: "Close comparison of a hair strand before and after one use",
+  },
+];
+---
+
+<div class="l-pictorial">
+  {
+    shots.map((shot) => (
+      <Rise>
+        <img src={shot.src} alt={shot.alt} loading="lazy" />
+      </Rise>
+    ))
+  }
+</div>

@@ -1,0 +1,65 @@
+---
+import { siteConfig, siteUrl } from "../data/siteConfig";
+
+interface Props {
+  title: string;
+  description?: string;
+  canonicalPath?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = `Discover ${siteConfig.product.name}, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair.`,
+  canonicalPath = Astro.url.pathname,
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title.includes("Essenly") ? title : `${title} | Essenly`;
+const canonicalUrl = new URL(canonicalPath, Astro.site ?? siteUrl).toString();
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.company.legalName,
+  url: siteUrl,
+  sameAs: [siteConfig.links.instagram],
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Essenly" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={new URL("/images/essenly/essenly-product-hero.jpg", Astro.site ?? siteUrl).toString()} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+    <style is:global>
+      @import "../styles/landing.css";
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

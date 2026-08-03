@@ -1,0 +1,125 @@
+---
+import { amazonUrl, getContactEmail, siteConfig, thankYouUrl } from "../../data/siteConfig";
+
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined;
+const showForm = Boolean(web3formsKey);
+const contactEmail = getContactEmail();
+
+/* Product is the default because the site leads with the consumer. Selecting
+   Wholesale is what makes the Company field required — see landing-tabs.ts. */
+const tabs = ["Product", "Wholesale", "Other"];
+---
+
+<section class="l-contact-section section" id="contact">
+  <div class="container l-contact">
+    <div class="l-contact__left">
+      <p class="eyebrow"><span>Contact</span></p>
+      <h2 class="h-section">Tell us what<br />you are looking for.</h2>
+      <p class="body-copy">
+        Product questions, wholesale, press and partnerships all reach the same team.
+      </p>
+
+      <div class="l-contact__buy">
+        <p class="link-arrow">Where to buy</p>
+        <div class="l-buylist">
+          <a href={amazonUrl} target="_blank" rel="noopener noreferrer">Amazon U.S.</a>
+          {contactEmail && <a href={`mailto:${contactEmail}`}>{contactEmail}</a>}
+          <a href={siteConfig.links.instagram} target="_blank" rel="noopener noreferrer">
+            Instagram
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="l-contact__right">
+      {
+        showForm ? (
+          <form class="l-form" id="l-form" action="https://api.web3forms.com/submit" method="post">
+            <input type="hidden" name="access_key" value={web3formsKey} />
+            <input type="hidden" name="from_name" value="Essenly Website" />
+            <input type="hidden" name="redirect" value={thankYouUrl} />
+            <input
+              type="hidden"
+              name="subject"
+              id="l-form-subject"
+              value="New product inquiry — Essenly"
+            />
+            <input type="hidden" name="inquiry_type" id="l-form-type" value="Product" />
+            <input
+              type="checkbox"
+              name="botcheck"
+              class="honeypot"
+              tabindex="-1"
+              autocomplete="off"
+              aria-hidden="true"
+            />
+
+            <div class="l-tabs" role="tablist" aria-label="Inquiry type">
+              {tabs.map((tab, i) => (
+                <button
+                  class="l-tab"
+                  type="button"
+                  role="tab"
+                  id={`l-tab-${tab.toLowerCase()}`}
+                  data-tab={tab}
+                  aria-selected={i === 0 ? "true" : "false"}
+                >
+                  {tab} Inquiry
+                </button>
+              ))}
+            </div>
+
+            <div class="l-form__grid">
+              <div class="l-field">
+                <label for="l-name">Name *</label>
+                <input id="l-name" name="contact_name" autocomplete="name" required />
+              </div>
+              <div class="l-field">
+                <label for="l-phone">Phone</label>
+                <input id="l-phone" name="phone" type="tel" autocomplete="tel" />
+              </div>
+              <div class="l-field">
+                <label for="l-email">Email *</label>
+                <input id="l-email" name="email" type="email" autocomplete="email" required />
+              </div>
+              <div class="l-field">
+                <label for="l-company" id="l-company-label">Company</label>
+                <input id="l-company" name="company" autocomplete="organization" />
+              </div>
+              <div class="l-field l-field--full">
+                <label for="l-subject">Subject *</label>
+                <input id="l-subject" name="user_subject" required />
+              </div>
+              <div class="l-field l-field--full">
+                <label for="l-message">Message *</label>
+                <textarea id="l-message" name="message" required />
+              </div>
+            </div>
+
+            <label class="l-agree">
+              <input type="checkbox" name="consent" value="Agreed" required />
+              <span>
+                I agree that Essenly may use my information to respond to this inquiry.
+                <a href="/privacy">Privacy Policy</a>
+              </span>
+            </label>
+
+            <button class="btn-solid" type="submit">Submit</button>
+          </form>
+        ) : (
+          <div class="l-mailto">
+            <p class="body-copy">
+              The inquiry form is not connected yet. Email the Essenly team directly and we will
+              come back to you.
+            </p>
+            {contactEmail && (
+              <a class="btn-solid" href={`mailto:${contactEmail}`}>
+                Email Essenly
+              </a>
+            )}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>

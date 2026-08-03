@@ -1,0 +1,54 @@
+---
+import { amazonUrl, siteConfig } from "../../data/siteConfig";
+import Rise from "./Rise.astro";
+
+const { product, wholesale } = siteConfig;
+
+/* MSRP lives under `wholesale` in siteConfig but it is the retail price, so it is
+   the right number to show a consumer here. */
+const specs = [
+  ["Volume", product.netWeight],
+  ["Fragrance", product.fragrance],
+  ["MSRP", wholesale.msrp],
+];
+---
+
+<section class="l-product section band-off" id="product">
+  <div class="container">
+    <div class="l-product__head">
+      <p class="eyebrow eyebrow--center"><span>The hair mask &mdash; lack no more</span></p>
+      <h2 class="h-section">
+        Where dry hair drinks deepest,<br />its natural softness returns.
+      </h2>
+      <p class="body-copy">
+        A rich five-minute treatment for hair that needs more than everyday conditioner.
+      </p>
+    </div>
+    <div class="l-product__body">
+      <Rise class="l-product__shot">
+        <img
+          src="/images/essenly/essenly-product-detail.jpg"
+          alt={`An open jar of ${product.shortName} beside vanilla flowers`}
+          loading="lazy"
+        />
+      </Rise>
+      <div class="l-product__specs">
+        {
+          specs.map(([label, value]) => (
+            <Rise>
+              <dl class="l-spec">
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </dl>
+            </Rise>
+          ))
+        }
+        <Rise>
+          <a class="btn-solid" href={amazonUrl} target="_blank" rel="noopener noreferrer">
+            Shop on Amazon
+          </a>
+        </Rise>
+      </div>
+    </div>
+  </div>
+</section>
