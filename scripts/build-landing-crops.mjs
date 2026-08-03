@@ -22,10 +22,12 @@ const jobs = [
     crop: { left: 160, top: 200, width: 780, height: 1010 },
   },
   // Inline headline slots: 2.15:1, matching the reference's 215x100 slot.
+  // Slot A is cropped from the hero photo on purpose — it is what the hero morphs
+  // into, so landing on a different picture would read as a jump cut.
   {
-    from: "essenly-product-texture.jpg",
+    from: "essenly-product-hero.jpg",
     to: "essenly-inline-a.jpg",
-    crop: { left: 300, top: 130, width: 1000, height: 465 },
+    crop: { left: 300, top: 180, width: 1000, height: 465 },
   },
   {
     from: "essenly-texture-macro.jpg",

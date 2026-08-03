@@ -19,6 +19,13 @@
   --gutter: 80rem;
   --header-h: 70rem;
 
+  /* The two ends of the wordmark shrink. landing-motion.ts reads both and scrubs
+     between them, so they are declared here rather than duplicated in the script. */
+  --logo-h-open: 300rem;
+  --logo-h-lock: 70rem;
+  --logo-pt-open: 46rem;
+  --logo-pt-lock: 18rem;
+
   --hero-w: 1258rem;
   --hero-h: 642rem;
   --hero-expand-scroll: 480px;
@@ -278,14 +285,17 @@ html.motion .rise-inner {
   height: 100%;
 }
 
+/* The opening size. From here landing-motion.ts scrubs the height and padding
+   inline, down to --logo-h-lock, then adds .is-locked to hand control back. */
 html.motion .l-header__logo {
-  height: 300rem;
-  padding-top: 46rem;
+  height: var(--logo-h-open);
+  padding-top: var(--logo-pt-open);
+  transition: none;
 }
 
 html.motion .l-header.is-locked .l-header__logo {
-  height: var(--header-h);
-  padding-top: 18rem;
+  height: var(--logo-h-lock);
+  padding-top: var(--logo-pt-lock);
 }
 
 .l-header__right {
@@ -323,10 +333,13 @@ html.motion .l-header.is-locked .l-header__logo {
   position: relative;
 }
 
+/* margin-block matters: this is a <figure>, and its default 1em block margin is
+   added to `top` once the motion layer positions it fixed — the hero would sit
+   16px below where the script placed it. */
 .l-hero__bg {
   width: var(--hero-w);
   height: var(--hero-h);
-  margin-inline: auto;
+  margin: 0 auto;
   overflow: hidden;
 }
 
@@ -340,15 +353,19 @@ html.motion .l-header.is-locked .l-header__logo {
   height: 200rem;
 }
 
-/* Motion layer only. The static page keeps the hero in normal flow. */
+/* Motion layer only. The static page keeps the hero in normal flow.
+
+   Under motion the hero is driven entirely by explicit left/top/width/height in
+   px from landing-motion.ts. Mixing a percentage `left` with a translate offset
+   would mean interpolating across two coordinate systems during the morph, so
+   the transform is dropped and the script owns all four values. */
 html.motion .l-hero__bg {
   position: fixed;
-  bottom: 0;
-  left: 50%;
+  top: 0;
+  left: 0;
   margin-inline: 0;
-  transform: translateX(-50%);
-  transform-origin: 50% 50%;
-  will-change: width, height, transform;
+  transform: none;
+  will-change: left, top, width, height;
 }
 
 html.motion .l-hero__track {
@@ -636,11 +653,13 @@ html:not(.motion) .l-philosophy__line {
   transform: rotate(180deg);
 }
 
+/* overflow clips the panel while landing-accordion.ts animates its height. */
 .l-acc__panel {
   display: grid;
   grid-template-columns: 200rem 1fr 1fr;
   gap: 0 120rem;
   padding-bottom: 60rem;
+  overflow: hidden;
 }
 
 .l-acc__kicker {

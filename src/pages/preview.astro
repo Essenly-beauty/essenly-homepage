@@ -35,3 +35,15 @@ import Wholesale from "../components/landing/Wholesale.astro";
   </main>
   <Footer />
 </Landing>
+
+<script>
+  import { initLandingAccordion } from "../scripts/landing-accordion";
+  import { initLandingMotion } from "../scripts/landing-motion";
+  import { initLandingTabs } from "../scripts/landing-tabs";
+
+  /* Tabs and the accordion first: they are the interactive parts, and neither
+     depends on the motion layer coming up. */
+  initLandingTabs();
+  initLandingAccordion();
+  initLandingMotion();
+</script>
