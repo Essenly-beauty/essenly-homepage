@@ -200,6 +200,20 @@ dropping the visitor onto what looks like a different site.
 repeated in eleven components. Accordion and tabs are deliberately independent
 of GSAP — they must keep working if the motion layer fails to load.
 
+**Reveal timing** was retuned after scrolling the shipped page: sections were
+appearing after the reader had already gone past them. The root cause was a
+measurement bug — the trigger watched the *inner* element, which CSS had
+pre-translated 110% of its own height, so ScrollTrigger measured a 900px image
+990px below its visible slot and fired only when the empty slot was leaving the
+top of the viewport. The rules now: triggers watch the outer `.rise` clip; the
+start offset is set by the script and capped at 96px (text keeps its full masked
+slide, media stops travelling its own height); triggers fire at the viewport
+edge with a velocity-adaptive duration (0.6s reading pace, 0.35s for a flick);
+and a per-element backstop force-completes anything still mid-tween the moment
+its slot crosses 70% of the viewport, so no speed can leave a hole where the eye
+lands. Philosophy lines light at 80% of the viewport; headline slot B fades in
+at 72%.
+
 `landing-motion.ts` owns every ScrollTrigger and the Lenis instance, and exports
 a single `initLandingMotion()`. It is the only file that needs to know about
 `--hero-expand-scroll` and friends. It no-ops under
@@ -301,7 +315,12 @@ text can resolve below 14px.
 `tests/landing.spec.mjs`, run with `npm test [baseUrl]`. It drives the installed
 Chrome through `playwright-core` rather than downloading a browser, and steps the
 scroll position deliberately because the choreography is the thing under test.
-49 assertions, exits non-zero on failure.
+Sixty-plus assertions, exits non-zero on failure.
+
+One measurement rule the suite enforces on itself: visibility is always judged
+on the outer `.rise` clip, never the translated inner. An early version filtered
+on the inner's rect, which classified a hidden image as "below the viewport" and
+skipped it — the suite passed while sections were visibly empty mid-screen.
 
 Covered: the reference's own numbers (root font-size, headline size, the hero's
 resting rect); each phase of the hero — expand, hold, morph, and the reverse path

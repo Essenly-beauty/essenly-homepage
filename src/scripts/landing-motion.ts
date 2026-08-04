@@ -173,11 +173,13 @@ export function initLandingMotion(): void {
       },
     });
 
-    /* The second slot has no hero to receive, so it just reveals on its own. */
+    /* The second slot has no hero to receive, so it fades in on its own — early
+       enough (72% of the viewport) that the headline never shows a hole while
+       being read. */
     if (slotB) {
       ScrollTrigger.create({
         trigger: "#l-info",
-        start: "top center",
+        start: "top 72%",
         onEnter: () => slotB.classList.add("is-revealed"),
         onLeaveBack: () => slotB.classList.remove("is-revealed"),
       });
@@ -223,37 +225,95 @@ export function initLandingMotion(): void {
       });
     }
 
-    /* ---- Rise reveals ---- */
+    /* ---- Rise reveals ----
 
-    ScrollTrigger.batch(".rise-inner", {
-      start: "top bottom-=60",
-      batchMax: 4,
-      onEnter: (batch) =>
-        gsap.to(batch, {
+       Retuned after scrolling the shipped page: content was appearing after the
+       reader had already gone past it. Three coupled causes, three changes:
+
+       - The trigger watches the outer `.rise` clip, not the inner. ScrollTrigger
+         measures an element where it currently is, and the inner was
+         pre-translated 110% of its own height — so a 900px pictorial image's
+         trigger sat 990px below its visible slot and did not fire until the
+         empty slot was already leaving the top of the viewport.
+       - The start offset is capped at 96px. Text lines are shorter than the cap
+         and keep their full masked slide; media no longer travels its own height
+         and is in place a beat after it enters.
+       - Triggers fire at the viewport edge, and a fast flick gets the short
+         tween, so reveals never trail the scroll. */
+
+    const RISE_MAX = 96;
+    const riseOffset = (_i: number, el: any) =>
+      Math.min((el as HTMLElement).clientHeight * 1.1, RISE_MAX);
+    const innersOf = (batch: Element[]) =>
+      batch
+        .map((el) => el.querySelector<HTMLElement>(":scope > .rise-inner"))
+        .filter((el): el is HTMLElement => Boolean(el));
+
+    gsap.set(".rise-inner", { y: riseOffset, opacity: 0 });
+
+    ScrollTrigger.batch(".rise", {
+      start: "top bottom",
+      interval: 0.05,
+      batchMax: 6,
+      onEnter: (batch, triggers) => {
+        const fast = Math.abs(triggers[0]?.getVelocity() ?? 0) > 1600;
+        gsap.to(innersOf(batch), {
           y: 0,
           opacity: 1,
-          duration: 0.9,
-          stagger: 0.08,
+          duration: fast ? 0.35 : 0.6,
+          stagger: fast ? 0.02 : 0.06,
           ease: "power3.out",
           overwrite: true,
-        }),
+        });
+      },
       onLeaveBack: (batch) =>
-        gsap.to(batch, {
-          y: "110%",
+        gsap.to(innersOf(batch), {
+          y: riseOffset,
           opacity: 0,
-          duration: 0.4,
+          duration: 0.3,
           ease: "power2.in",
           overwrite: true,
         }),
     });
 
-    /* ---- Philosophy: light each line as it arrives ---- */
+    /* Backstop: no slot may still be empty once it reaches 70% of the viewport,
+       regardless of scroll velocity. Time-based reveals can always be outrun by
+       a hard enough flick; this force-completes whatever is still mid-tween the
+       moment the slot crosses the line where the eye lands. Per element and
+       unbatched on purpose — the batching interval that makes the entrance wave
+       pleasant is exactly the latency that cannot be afforded here. For anything
+       already revealed it retargets the finished values, a visual no-op. */
+    document.querySelectorAll<HTMLElement>(".rise").forEach((outer) => {
+      const inner = outer.querySelector<HTMLElement>(":scope > .rise-inner");
+      if (!inner) return;
+      ScrollTrigger.create({
+        trigger: outer,
+        start: "top 70%",
+        onEnter: (self) => {
+          const violent = Math.abs(self.getVelocity()) > 4000;
+          gsap.to(inner, {
+            y: 0,
+            opacity: 1,
+            duration: violent ? 0.12 : 0.22,
+            ease: "power2.out",
+            overwrite: true,
+          });
+        },
+      });
+    });
+
+    /* ---- Philosophy: light each line as it arrives ----
+
+       Triggered off each line's `.rise` clip — the line span itself sits inside
+       a translated inner, which would skew the measurement — and at 80% of the
+       viewport, so a line is already white before the eye reaches it
+       mid-screen rather than lighting at the bottom edge. */
 
     const lines = Array.from(document.querySelectorAll<HTMLElement>(".l-philosophy__line"));
     lines.forEach((line) => {
       ScrollTrigger.create({
-        trigger: line,
-        start: "top bottom-=140",
+        trigger: line.closest(".rise") ?? line,
+        start: "top 80%",
         onEnter: () => line.classList.add("is-lit"),
         onLeaveBack: () => line.classList.remove("is-lit"),
       });

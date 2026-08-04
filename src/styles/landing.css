@@ -249,8 +249,14 @@ button {
 }
 
 /* ---- rise: the reveal primitive.
-   Outer clips, inner moves. Step 2 animates .rise-inner; until then the inner
-   sits at rest so the static page reads normally. ---- */
+   Outer clips, inner moves. The motion layer animates .rise-inner; without it
+   the inner sits at rest so the static page reads normally.
+
+   Only opacity here — the start transform is set per element by the script,
+   capped so large media does not slide its own height. It also must not live in
+   CSS because ScrollTrigger measures elements where they currently are: a
+   pre-translated inner made every trigger fire late by exactly its offset,
+   990px for the pictorial images. ---- */
 
 .rise {
   overflow: hidden;
@@ -263,7 +269,6 @@ button {
 
 html.motion .rise-inner {
   opacity: 0;
-  transform: translateY(110%);
 }
 
 /* ============================================================
@@ -430,6 +435,17 @@ html.motion .l-hero__bg.is-morphed {
 
 html.motion .l-info__slot:not(.is-revealed) {
   visibility: hidden;
+}
+
+/* Slot B fades in on its own. Slot A must NOT get a transition: the fixed hero
+   lands exactly on top of it and the swap has to be same-frame, or both (or
+   neither) are visible for a beat. */
+#l-slot-b {
+  transition: opacity 500ms var(--ease);
+}
+
+html.motion #l-slot-b:not(.is-revealed) {
+  opacity: 0;
 }
 
 /* ============================================================

@@ -120,9 +120,11 @@ async function run() {
   const landed = await page.evaluate(() => ({
     morphed: document.getElementById("l-hero-bg").classList.contains("is-morphed"),
     revealed: document.getElementById("l-slot-a").classList.contains("is-revealed"),
+    slotB: document.getElementById("l-slot-b")?.classList.contains("is-revealed"),
   }));
   check("morph complete — hero hidden", landed.morphed);
   check("morph complete — inline slot revealed", landed.revealed);
+  check("companion slot B revealed before the headline is read", landed.slotB === true);
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/04-headline.png` });
 
   // Reverse: scrolling back up has to restore fullscreen, not snap to the rest card.
@@ -143,26 +145,61 @@ async function run() {
   await page.waitForTimeout(600);
   check("wordmark unlocks back at the top", await page.evaluate(() => !document.getElementById("l-header").classList.contains("is-locked")));
 
-  // Philosophy lines light up.
+  /* Philosophy lines light up — and light BEFORE the eye reaches them. The
+     trigger band is 80% of the viewport, so any line above that band while
+     unlit means the reader saw failing 45%-white text mid-screen. */
   await scrollTo(page, 3000);
-  const lit = await page.evaluate(() => document.querySelectorAll(".l-philosophy__line.is-lit").length);
-  check("philosophy lines light on arrival", lit > 0, `${lit} of 4 lit`);
-
-  /* Rise reveals actually reveal rather than leaving content invisible. Measured
-     against the trigger threshold, not the viewport edge: an element only just
-     poking in from the bottom is correctly still hidden, and asserting on the raw
-     edge would flag that as a failure. */
-  const hidden = await page.evaluate(() => {
-    const THRESHOLD = 120; // comfortably past the trigger's own bottom-=60
-    return Array.from(document.querySelectorAll(".rise-inner"))
-      .filter((el) => {
-        const r = el.getBoundingClientRect();
-        const past = r.top < window.innerHeight - THRESHOLD && r.bottom > 0;
-        return past && parseFloat(getComputedStyle(el).opacity) < 0.5;
-      })
-      .map((el) => (el.textContent || "").trim().slice(0, 40));
+  const phil = await page.evaluate(() => {
+    const vh = window.innerHeight;
+    const lines = Array.from(document.querySelectorAll(".l-philosophy__line"));
+    return {
+      lit: lines.filter((el) => el.classList.contains("is-lit")).length,
+      late: lines
+        .filter((el) => {
+          const r = el.getBoundingClientRect();
+          return r.bottom > 0 && r.top < vh * 0.78 && !el.classList.contains("is-lit");
+        })
+        .map((el) => (el.textContent || "").trim().slice(0, 32)),
+    };
   });
-  check("no revealed-range content left hidden by a rise", hidden.length === 0, hidden.join(" | "));
+  check("philosophy lines light on arrival", phil.lit > 0, `${phil.lit} of 4 lit`);
+  check("no unlit line above the 78% band", phil.late.length === 0, phil.late.join(" | "));
+
+  /* A hard jump must settle fast: land the archive section mid-viewport, allow
+     650ms — less than the old 0.9s tween that trailed the scroll — and require
+     its images to be fully in. This is the regression trap for reveal latency. */
+  const archiveY = await page.evaluate(() => {
+    const el = document.querySelector(".l-archive__imgs");
+    return Math.round(el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.55);
+  });
+  await page.evaluate((y) => window.scrollTo(0, y), archiveY);
+  await page.waitForTimeout(650);
+  const trailing = await page.evaluate(() =>
+    Array.from(document.querySelectorAll(".l-archive__imgs .rise-inner")).filter(
+      (el) => parseFloat(getComputedStyle(el).opacity) < 0.9
+    ).length
+  );
+  check("hard jump — archive images settled within 650ms", trailing === 0, `${trailing} trailing`);
+
+  /* Rise reveals actually reveal rather than leaving content invisible.
+
+     Measured on the OUTER .rise clip. The inner is translated while hidden, so
+     filtering on its rect classified a hidden pictorial image as "990px below
+     the viewport" and skipped it — which is how an earlier version of this suite
+     passed while whole sections were visibly empty mid-screen. The clip's box is
+     where the reader sees the hole. */
+  const hidden = await page.evaluate(() => {
+    const EDGE = 40; // allow the literal bottom edge, where a tween may just be starting
+    return Array.from(document.querySelectorAll(".rise"))
+      .filter((outer) => {
+        const r = outer.getBoundingClientRect();
+        const inView = r.top < window.innerHeight - EDGE && r.bottom > 0;
+        const inner = outer.querySelector(":scope > .rise-inner");
+        return inView && inner && parseFloat(getComputedStyle(inner).opacity) < 0.5;
+      })
+      .map((outer) => (outer.textContent || "").trim().slice(0, 40));
+  });
+  check("no in-view slot left empty by a rise (measured on the clip)", hidden.length === 0, hidden.join(" | "));
 
   // Accordion.
   await page.click("#acc-mechanism > summary");
