@@ -60,6 +60,15 @@ Reference values, and what they resolve to at a 1440px viewport:
 `#FFAE00` amber accent, `#575758` gray body, `#E9E9E9` hairline. Radius is 0
 throughout.
 
+Note that the reference's amber sits at about 1.8:1 on white — its eyebrow labels
+fail contrast badly. Substituting Essenly's clay improved that to 3.15:1 but did
+not fix it, so the implementation carries two clays: `--c-accent` (`#c47662`) for
+marks, hovers and rules, and `--c-accent-ink` (`#a85c46`, 4.9:1 on white and
+4.5:1 on the off-white band) for the small uppercase labels. On the black bands
+the relationship inverts and `--c-accent` is the readable one, so those override
+back. The philosophy section's unlit line was likewise raised from the
+reference's 30% white (2.67:1) to 45% (4.56:1).
+
 **The three hero ScrollTriggers.** This is the signature move and the riskiest
 part of the build.
 
@@ -206,6 +215,30 @@ dependent on cdnjs uptime.
 ```
 npm i gsap lenis
 ```
+
+They are also **dynamically imported**, behind the same media query the motion
+layer gates on. Between them they are ~136KB of the ~138KB this page's JavaScript
+weighs, and a static import meant every phone and every reduced-motion visitor
+downloaded and parsed all of it only for `matchMedia`, inside the module, to
+decide not to use any of it. Mobile now fetches 2KB gzip instead of 52KB.
+
+The `change` listener on that query is load-bearing: without it, someone who
+loads at 1279px and then maximises the window stays on the static page for the
+rest of the session.
+
+### Photo pipeline
+
+`assets/source-photos/` holds the untouched originals and sits outside `public/`,
+so none of it is deployed. Everything in `public/images/essenly/` is generated
+from it by `npm run crops`. Keeping the two apart is what makes the script
+idempotent — a crop always reads a full-resolution original, never a derivative
+it produced on an earlier run. The derivatives are committed, because the deploy
+runs `npm run build`, not `npm run crops`.
+
+Two things the sources make necessary: both model photos carry a decorative
+orange frame baked into the pixels, and the hair micrograph carries "Before" /
+"After 1 use" captions. The crop windows are placed to land inside the frame and
+clear of the captions rather than being centred.
 
 ### Redirects
 

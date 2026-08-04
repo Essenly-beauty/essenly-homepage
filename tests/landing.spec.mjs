@@ -75,11 +75,30 @@ async function run() {
   near(rest.top, 418, 6, "hero at rest — sits on the viewport floor");
   near(rest.left, 248, 6, "hero at rest — centred");
 
+  /* Measured against clientWidth, not innerWidth: they are equal under macOS
+     overlay scrollbars but differ by ~15px wherever the scrollbar takes space,
+     and clientWidth is the box a fixed element is actually laid out in. */
+  const alignment = await page.evaluate(() => {
+    const hero = document.getElementById("l-hero-bg").getBoundingClientRect();
+    const content = document.querySelector(".l-info .container").getBoundingClientRect();
+    return {
+      heroCentre: (hero.left + hero.right) / 2,
+      contentCentre: (content.left + content.right) / 2,
+      clientWidth: document.documentElement.clientWidth,
+      innerWidth: window.innerWidth,
+    };
+  });
+  near(alignment.heroCentre, alignment.contentCentre, 1, "hero at rest — centred on the content column, not the window");
+
   // Expand: 480px of scroll takes it to fullscreen.
   await scrollTo(page, 480);
   const full = await heroRect(page);
-  near(full.width, 1440, 12, "after expand — fills viewport width");
+  near(full.width, alignment.clientWidth, 12, "after expand — fills the layout viewport width");
   near(full.height, 900, 12, "after expand — fills viewport height");
+  const overhang = await page.evaluate(
+    () => document.getElementById("l-hero-bg").getBoundingClientRect().right - document.documentElement.clientWidth
+  );
+  check("after expand — no overhang past the layout viewport", overhang <= 1, `${overhang.toFixed(1)}px`);
   if (SHOTS) await page.screenshot({ path: `${SHOTS}/02-hero-fullscreen.png` });
 
   // Hold: nothing moves between the end of the expand and the start of the morph.

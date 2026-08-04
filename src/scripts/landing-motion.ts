@@ -26,6 +26,16 @@ type Rect = { left: number; top: number; width: number; height: number };
 const px = (n: number) => `${n}px`;
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
+/* The viewport a fixed element is actually laid out in. window.innerWidth counts
+   the scrollbar; documentElement.clientWidth does not. On macOS the scrollbar is
+   an overlay and the two agree, but on Windows and Linux a classic scrollbar is
+   ~15px, and using innerWidth would centre the resting hero ~7px right of the
+   content column and push the fullscreen hero 15px under the scrollbar. */
+const viewport = () => ({
+  width: document.documentElement.clientWidth,
+  height: document.documentElement.clientHeight,
+});
+
 function tween(from: Rect, to: Rect, t: number): Rect {
   return {
     left: lerp(from.left, to.left, t),
@@ -91,20 +101,14 @@ export function initLandingMotion(): void {
     const measureRest = () => {
       const w = readVarPx("--hero-w", 943);
       const h = readVarPx("--hero-h", 481);
-      restRect = {
-        width: w,
-        height: h,
-        left: (window.innerWidth - w) / 2,
-        top: window.innerHeight - h,
-      };
+      const vp = viewport();
+      restRect = { width: w, height: h, left: (vp.width - w) / 2, top: vp.height - h };
     };
 
-    const fullRect = (): Rect => ({
-      left: 0,
-      top: 0,
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
+    const fullRect = (): Rect => {
+      const vp = viewport();
+      return { left: 0, top: 0, width: vp.width, height: vp.height };
+    };
 
     const applyRect = (rect: Rect) => {
       heroBg.style.left = px(rect.left);
