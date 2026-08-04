@@ -57,7 +57,7 @@ async function run() {
   page.on("pageerror", (e) => errors.push(String(e)));
   page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
 
-  await page.goto(`${BASE}/preview`, { waitUntil: "load" });
+  await page.goto(`${BASE}/`, { waitUntil: "load" });
   await page.waitForTimeout(1500);
 
   check("motion layer engaged at 1440px", await page.evaluate(() => document.documentElement.classList.contains("motion")));
@@ -179,7 +179,7 @@ async function run() {
 
   /* ---------------- reduced motion ---------------- */
   const rm = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
-  await rm.goto(`${BASE}/preview`, { waitUntil: "load" });
+  await rm.goto(`${BASE}/`, { waitUntil: "load" });
   await rm.waitForTimeout(1000);
   check("reduced motion — motion layer stays off", await rm.evaluate(() => !document.documentElement.classList.contains("motion")));
   const rmHidden = await rm.evaluate(() =>
@@ -196,7 +196,7 @@ async function run() {
   const mob = await browser.newPage({ viewport: { width: 390, height: 844 } });
   const mobErrors = [];
   mob.on("pageerror", (e) => mobErrors.push(String(e)));
-  await mob.goto(`${BASE}/preview`, { waitUntil: "load" });
+  await mob.goto(`${BASE}/`, { waitUntil: "load" });
   await mob.waitForTimeout(1000);
 
   check("mobile — motion layer stays off", await mob.evaluate(() => !document.documentElement.classList.contains("motion")));
@@ -215,6 +215,26 @@ async function run() {
   check("mobile — nav toggle meets the 44px touch target", tap >= 44, `${Math.round(tap)}px`);
   check("no page errors on mobile", mobErrors.length === 0, mobErrors.slice(0, 3).join(" | "));
   if (SHOTS) await mob.screenshot({ path: `${SHOTS}/06-mobile.png`, fullPage: true });
+
+  /* ---------------- legal pages ----------------
+     These share the landing's header, footer and tokens. The check that matters
+     is that they were actually migrated, not left on the old cream layout. */
+  const legal = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  for (const path of ["/privacy", "/terms", "/thank-you"]) {
+    await legal.goto(`${BASE}${path}`, { waitUntil: "load" });
+    await legal.waitForTimeout(400);
+    const state = await legal.evaluate(() => ({
+      header: !!document.querySelector(".l-header"),
+      footer: !!document.querySelector(".l-footer"),
+      body: getComputedStyle(document.body).backgroundColor,
+      heading: document.querySelector("h1")?.textContent?.trim(),
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+    }));
+    check(`${path} — uses the landing header and footer`, state.header && state.footer);
+    check(`${path} — on the new palette`, state.body === "rgb(255, 255, 255)", state.body);
+    check(`${path} — has a heading`, Boolean(state.heading), state.heading ?? "(none)");
+    check(`${path} — no horizontal overflow`, state.overflow <= 0, `${state.overflow}px`);
+  }
 
   await browser.close();
 

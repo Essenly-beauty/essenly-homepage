@@ -1,345 +1,44 @@
 ---
-import ImageAsset from "../components/ImageAsset.astro";
-import Base from "../layouts/Base.astro";
-import { amazonUrl, siteConfig } from "../data/siteConfig";
-
-const amazon = siteConfig.amazon;
-const product = siteConfig.product;
-const homeReviews = siteConfig.reviews.filter((review) => review.verified && review.purpose === "home");
-const hasAmazonRating = Boolean(amazon.rating && amazon.ratingCount);
+import Landing from "../layouts/Landing.astro";
+import Archive from "../components/landing/Archive.astro";
+import BrandBand from "../components/landing/BrandBand.astro";
+import Contact from "../components/landing/Contact.astro";
+import Footer from "../components/landing/Footer.astro";
+import Header from "../components/landing/Header.astro";
+import Hero from "../components/landing/Hero.astro";
+import InfoHeadline from "../components/landing/InfoHeadline.astro";
+import Philosophy from "../components/landing/Philosophy.astro";
+import Pictorial from "../components/landing/Pictorial.astro";
+import Product from "../components/landing/Product.astro";
+import Science from "../components/landing/Science.astro";
+import Wholesale from "../components/landing/Wholesale.astro";
 ---
 
-<Base
-  title="Essenly | Sensorial Korean Hair Care"
-  description={`Discover ${product.name}, a sensorial Korean rinse-out treatment for softer, smoother and beautifully scented hair.`}
->
-  <section class="home-hero">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Sensorial Korean hair care</p>
-        <h1>Hair care that stays with you</h1>
-        <p class="lead">
-          A sensorial Korean hair mask for softer, smoother, beautifully scented hair.
-        </p>
-        <div class="button-row">
-          <a class="btn btn-primary" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
-          <a class="btn btn-secondary" href="/wholesale">Explore Wholesale</a>
-        </div>
-      </div>
-      <ImageAsset
-        src="/images/essenly/essenly-product-hero.jpg"
-        name="Home hero"
-        ratio="5:3"
-        loading="eager"
-        fetchpriority="high"
-        description="Open jar in shallow water, mid-splash, on a warm cream background."
-        notes="Keep the label unobstructed by the splash."
-        alt={`An open jar of ${product.shortName} with water splashing around it`}
-      />
-    </div>
-  </section>
+<Landing title="Essenly | Sensorial Korean Hair Care">
+  <Header />
+  <main>
+    <Hero />
+    <InfoHeadline />
+    <Pictorial />
+    <Philosophy />
+    <BrandBand />
+    <Product />
+    <Science />
+    <Archive />
+    <Wholesale />
+    <Contact />
+  </main>
+  <Footer />
+</Landing>
 
-  <section class="section product-intro">
-    <div class="container split">
-      <div class="stack">
-        <p class="eyebrow">{product.name}</p>
-        <h2>One treatment. A softer ritual</h2>
-        <p class="lead">
-          {product.shortName} is a rich rinse-out treatment created for dry,
-          frizzy and color-treated hair.
-        </p>
-        <p class="muted">
-          It conditions the hair without leaving it feeling greasy or weighed down,
-          helping it feel softer, look smoother and move more naturally.
-        </p>
-        <div class="product-facts" aria-label="Product facts">
-          <span>{product.countryOfOrigin}</span>
-          <span>{product.useTime} treatment</span>
-          <span>{product.fragrance} scent</span>
-        </div>
-        <a class="btn btn-secondary" href="/product">Discover the Hair Mask</a>
-      </div>
-      <ImageAsset
-        src="/images/essenly/essenly-product-primary.jpg"
-        name="Product primary"
-        ratio="6:5"
-        description="Split frame of the same hair before and after a single use."
-        notes="Keep the Before and After labels legible; no other text."
-        alt={`The same hair before and after one use of ${product.shortName}`}
-      />
-    </div>
-  </section>
+<script>
+  import { initLandingAccordion } from "../scripts/landing-accordion";
+  import { initLandingMotion } from "../scripts/landing-motion";
+  import { initLandingTabs } from "../scripts/landing-tabs";
 
-  <section class="section sage-band">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">The difference</p>
-        <h2>Rich care, without the heavy finish</h2>
-      </div>
-      <div class="benefit-grid">
-        <article class="info-card">
-          <h3>Softness you can feel</h3>
-          <p class="muted">A conditioning treatment that helps dry hair feel softer, smoother and easier to manage.</p>
-        </article>
-        <article class="info-card">
-          <h3>A polished, lightweight finish</h3>
-          <p class="muted">Designed to improve the appearance of frizz and leave hair looking glossy without a greasy feel.</p>
-        </article>
-        <article class="info-card">
-          <h3>A scent worth remembering</h3>
-          <p class="muted">Amber Vanilla brings warmth and softness to the experience, leaving a subtle fragrance after rinsing.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section ritual-section">
-    <div class="container split reverse">
-      <ImageAsset
-        src="/images/essenly/essenly-hair-ritual.jpg"
-        class="hero-portrait"
-        name="Hair ritual"
-        ratio="7:8"
-        description="Model with damp hair holding the jar against her shoulder."
-        notes="Portrait crop — keep the face and the full jar in frame."
-        alt={`A model with damp hair holding a jar of ${product.shortName}`}
-      />
-      <div class="stack">
-        <p class="eyebrow">The ritual</p>
-        <h2>Five minutes can change how your hair feels</h2>
-        <p class="lead">
-          After shampooing, apply the mask to damp hair, focusing on the mid-lengths and ends.
-        </p>
-        <p class="muted">
-          Leave it on for 5-7 minutes, rinse thoroughly and continue with your usual styling routine.
-          No complicated routine. Just a richer conditioning step when your hair needs more.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section rose-band">
-    <div class="container split">
-      <div class="stack">
-        <p class="eyebrow">Texture</p>
-        <h2>Made to feel as good as the result</h2>
-        <p class="lead">
-          The creamy texture coats the hair with conditioning care, while the finish stays soft,
-          touchable and light.
-        </p>
-        <p class="muted">A treatment for the days when regular conditioner does not feel like enough.</p>
-      </div>
-      <ImageAsset
-        src="/images/essenly/essenly-product-texture.jpg"
-        name="Product texture"
-        ratio="2:1"
-        description="Macro of the cream swatch on a warm blush background."
-        notes="Texture color and density should match the actual product."
-        alt={`Creamy texture of ${product.shortName}`}
-      />
-    </div>
-  </section>
-
-  <section class="section review-band">
-    <div class="container review-layout">
-      <div class="review-score">
-        {hasAmazonRating ? (
-          <>
-            <span>{amazon.rating}</span>
-            <p>out of 5 on Amazon</p>
-          </>
-        ) : (
-          <p>Available on Amazon U.S.</p>
-        )}
-      </div>
-      <div class="stack">
-        <p class="eyebrow">Amazon proof</p>
-        <h2>Loved by early U.S. customers</h2>
-        {hasAmazonRating ? (
-          <p class="lead">
-            {amazon.rating} out of 5 on Amazon, based on {amazon.ratingCount} customer ratings.
-          </p>
-        ) : (
-          <p class="lead">Essenly is currently available through Amazon U.S.</p>
-        )}
-        {homeReviews.length > 0 && (
-          <div class="quote-grid">
-            {homeReviews.map((review) => <blockquote>"{review.quote}"</blockquote>)}
-          </div>
-        )}
-        <a class="btn btn-secondary" href={amazonUrl} target="_blank" rel="noopener noreferrer">View on Amazon</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section consumer-cta">
-    <div class="narrow stack">
-      <p class="eyebrow">For your routine</p>
-      <h2>Bring softness back to your routine</h2>
-      <p class="lead">{product.shortName} is available to U.S. customers through Amazon.</p>
-      <a class="btn btn-primary" href={amazonUrl} target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
-    </div>
-  </section>
-
-  <section class="section dark-band wholesale-cta">
-    <div class="narrow stack">
-      <p class="eyebrow">Wholesale</p>
-      <h2>A distinctive Korean hair-care addition for your customers</h2>
-      <p class="lead">
-        Essenly works with selected U.S. beauty retailers, salons, head spas and online stores.
-      </p>
-      <a class="btn btn-light" href="/wholesale">Explore U.S. Wholesale</a>
-    </div>
-  </section>
-
-  <section class="section-tight" id="our-story">
-    <div class="narrow stack">
-      <p class="eyebrow">About Essenly</p>
-      <h2>About Essenly</h2>
-      <p class="lead">
-        {siteConfig.company.legalName} is a Seoul-based beauty company creating Korean beauty
-        products and sensorial experiences for global customers.
-      </p>
-      <p class="muted">
-        Our first release brings together effective conditioning care, a memorable fragrance
-        and the simplicity of an at-home ritual.
-      </p>
-    </div>
-  </section>
-</Base>
-
-<style>
-  .home-hero {
-    position: relative;
-    padding-block: clamp(4.5rem, 10vw, 8rem) clamp(5.5rem, 10vw, 9rem);
-    border-bottom: 1px solid rgba(31, 25, 21, 0.12);
-  }
-
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(2.5rem, 6vw, 5rem);
-    align-items: center;
-    text-align: center;
-  }
-
-  .hero-copy {
-    display: grid;
-    gap: var(--space-4);
-    justify-items: center;
-    max-width: 920px;
-    margin-inline: auto;
-  }
-
-  .hero-copy h1 {
-    max-width: 780px;
-  }
-
-  .hero-copy .lead {
-    max-width: 520px;
-  }
-
-  .home-hero .image-asset,
-  .home-hero .placeholder-asset {
-    width: min(100%, 1060px);
-    min-height: clamp(360px, 50vw, 640px);
-    margin-inline: auto;
-  }
-
-  .section-head,
-  .consumer-cta,
-  .wholesale-cta {
-    text-align: center;
-  }
-
-  .section-head {
-    display: grid;
-    gap: var(--space-4);
-    max-width: 760px;
-    margin: 0 auto var(--space-7);
-  }
-
-  .product-facts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .product-facts span {
-    padding: 0.5rem 0.72rem;
-    border: 1px solid rgba(31, 25, 21, 0.14);
-    border-radius: 999px;
-    background: rgba(255, 250, 244, 0.42);
-    color: var(--color-muted);
-    font-size: 0.7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-  }
-
-  .review-band {
-    background: var(--color-surface);
-    border-block: 1px solid rgba(31, 25, 21, 0.12);
-  }
-
-  .review-layout {
-    display: grid;
-    grid-template-columns: minmax(220px, 0.45fr) minmax(0, 1fr);
-    gap: clamp(2.5rem, 7vw, 6rem);
-    align-items: center;
-  }
-
-  .review-score {
-    display: grid;
-    min-height: 260px;
-    place-items: center;
-    border: 1px solid rgba(31, 25, 21, 0.16);
-    border-radius: 999px;
-    background: linear-gradient(180deg, #f6d6cb, #f1b6a8);
-    text-align: center;
-  }
-
-  .review-score span {
-    display: block;
-    font-size: clamp(4.5rem, 12vw, 9rem);
-    font-weight: 800;
-    line-height: 0.88;
-  }
-
-  .review-score p {
-    max-width: 12ch;
-    color: rgba(31, 25, 21, 0.68);
-    font-size: 0.72rem;
-    font-weight: 800;
-    line-height: 1.25;
-    text-transform: uppercase;
-  }
-
-  .quote-grid {
-    display: grid;
-    gap: var(--space-3);
-  }
-
-  .quote-grid blockquote {
-    margin: 0;
-    padding: var(--space-4);
-    border-left: 1px solid rgba(31, 25, 21, 0.2);
-    color: var(--color-muted);
-  }
-
-  .consumer-cta .btn,
-  .wholesale-cta .btn {
-    justify-self: center;
-  }
-
-  @media (max-width: 900px) {
-    .review-layout {
-      grid-template-columns: 1fr;
-    }
-
-    .review-score {
-      width: min(100%, 340px);
-      min-height: 220px;
-      margin-inline: auto;
-    }
-  }
-</style>
+  /* Tabs and the accordion first: they are the interactive parts, and neither
+     depends on the motion layer coming up. */
+  initLandingTabs();
+  initLandingAccordion();
+  initLandingMotion();
+</script>

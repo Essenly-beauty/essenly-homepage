@@ -141,11 +141,12 @@ where it can be reasoned about and disabled as a unit.
 ```
 src/
   layouts/
-    Landing.astro          new — no top-note, no old header/footer
+    Landing.astro          document shell + head
+    Legal.astro            privacy / terms / thank-you, same tokens
   components/
     landing/
-      Header.astro         nav + shrinking wordmark
-      Hero.astro           .hero_scroll_track + fixed .hero_bg
+      Header.astro         nav + shrinking wordmark + mobile <details> nav
+      Hero.astro           scroll track + fixed hero figure
       InfoHeadline.astro   headline with inline morph slots
       Pictorial.astro      3-up image row
       Philosophy.astro     black band, line-lit paragraph
@@ -156,17 +157,35 @@ src/
       Wholesale.astro      black band, tiers + terms
       Contact.astro        tabbed Web3Forms form
       Footer.astro
-      Rise.astro           the rise_item / rise_inner wrapper
+      Rise.astro           the rise / rise-inner wrapper
+      Wordmark.astro       inlined SVG, colour from CSS
   scripts/
     landing-motion.ts      Lenis + all ScrollTriggers
-    landing-accordion.ts   accordion, no GSAP dependency
-    landing-tabs.ts        form tabs, no GSAP dependency
+    landing-accordion.ts   accordion height animation, no GSAP
+    landing-tabs.ts        form tabs, no GSAP
   styles/
     landing.css            vw rem base + section styles
   pages/
-    preview.astro          steps 1-2 live here
-    index.astro            step 3 promotes preview into this
+    index.astro            the landing
+    privacy.astro terms.astro thank-you.astro
+tests/
+  landing.spec.mjs         playwright-core against the installed Chrome
+scripts/
+  build-landing-crops.mjs  regenerates the derived image crops
 ```
+
+**Deleted with this change**, because nothing referenced them once the pages were
+absorbed: `layouts/Base.astro`, `components/BrandLogo.astro`,
+`components/ImageAsset.astro`, `components/PlaceholderAsset.astro` and
+`styles/global.css` — the entire previous design system.
+
+`Wordmark.astro` inlines the logo so its colour comes from CSS `color`. The asset
+paints everything `#FDB7A5`, which is roughly 1.7:1 on white; the header uses the
+deeper clay and the footer keeps the light peach against black.
+
+The legal pages moved onto `Legal.astro` rather than staying on the old layout.
+Leaving three pages on the previous cream design would have meant a footer link
+dropping the visitor onto what looks like a different site.
 
 `Rise.astro` exists so the clip/translate pair is declared once rather than
 repeated in eleven components. Accordion and tabs are deliberately independent
@@ -205,8 +224,9 @@ redirects: {
 The old `product.astro`, `wholesale.astro` and `contact.astro` must be deleted in
 the same step — a real page at `/product` wins over a redirect for that path.
 
-The sitemap filter must also drop `/preview` once it exists, alongside the
-existing `/thank-you` exclusion.
+The sitemap filter drops all three redirect targets alongside `/thank-you`, so it
+lists only `/`, `/privacy` and `/terms`. `siteConfig.navItems` points at the
+anchors directly; nothing internal should route through a redirect.
 
 ## Type scale
 
@@ -237,31 +257,32 @@ text can resolve below 14px.
 | State | Treatment |
 | --- | --- |
 | Loading | Hero image is `loading="eager"` + `fetchpriority="high"`. Everything below the fold is lazy. No spinner — the hero is the first paint. |
-| Empty | `siteConfig.reviews` is `[]` today, so the review block renders nothing rather than an empty shell. Same guard for `amazon.rating`, which the current `index.astro` already handles. |
+| Empty | Nothing renders an empty shell: the footer drops the address row while `company.businessAddress` is null, and the Amazon rating block was cut rather than shipped guarded against `reviews: []`. |
 | Error | If `PUBLIC_WEB3FORMS_KEY` is absent the form is replaced by the existing mailto panel. Form errors render inline with `aria-invalid`, not `alert()`. |
 | Success | Submit redirects to `/thank-you` (existing `thankYouUrl`). |
-| No JS | Sections render static and readable. The accordion uses `<details>` semantics so it opens without JS. |
-| Reduced motion | `initLandingMotion()` returns early; the hero renders inline at its final size rather than fixed. |
+| No JS | Sections render static and readable. Both the accordion and the mobile nav are `<details>`, so they open without JS, and the form's hidden fields ship pre-set to Product. |
+| Reduced motion | The `gsap.matchMedia()` query never matches, so `html.motion` is never added and the hero renders inline at its resting size. |
 
 ## Testing
 
-The `tests/` directory does not exist in this repo yet, so this starts it.
+`tests/landing.spec.mjs`, run with `npm test [baseUrl]`. It drives the installed
+Chrome through `playwright-core` rather than downloading a browser, and steps the
+scroll position deliberately because the choreography is the thing under test.
+49 assertions, exits non-zero on failure.
 
-- **Build.** `npm run build` must pass, and the redirect config must emit the
-  three redirect pages.
-- **Motion, manual.** Scroll down through the hero and back up. The reverse path
-  is where the reference's `onLeaveBack` logic matters and where a naive
-  implementation breaks. Check at 1280px, 1440px and 2560px.
-- **Motion, automated.** Screenshot the page at fixed scroll offsets via the
-  browse tool and compare against the reference captures already in the
-  scratchpad. Exact pixel equality is not the bar; section order, proportion and
-  colour are.
-- **Accordion and tabs.** Keyboard-operable, one panel open at a time, focus
-  visible.
-- **Reduced motion.** With the preference set, the page must be fully readable
-  and scrollable with no fixed-position artifacts.
-- **Redirects.** `/product`, `/wholesale`, `/contact` all land on the right
-  anchor.
+Covered: the reference's own numbers (root font-size, headline size, the hero's
+resting rect); each phase of the hero — expand, hold, morph, and the reverse path
+where a naive implementation snaps instead of restoring fullscreen; the wordmark
+lock and unlock; philosophy line-lighting; that no revealed-range content is left
+invisible by a rise; the accordion's one-open-at-a-time; the form tabs driving
+`inquiry_type`, the email subject and the conditional Company requirement;
+reduced motion and mobile both leaving the motion layer off; no horizontal
+overflow at 390px; the 44px touch target; and the legal pages sharing the
+landing's chrome. Page errors are asserted to be zero on every viewport.
+
+Not automated, and worth a manual look: how the motion *feels* at 1280px and
+2560px, and whether the morph reads as continuous at full speed rather than
+frame-by-frame.
 
 ## Out of scope
 

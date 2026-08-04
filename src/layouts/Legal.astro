@@ -1,0 +1,92 @@
+---
+/*
+  Layout for the pages the one-page landing does not absorb: privacy, terms and
+  the post-submit thank-you. Same header, footer and tokens as the landing, so
+  following a footer link does not drop the visitor onto a differently-designed
+  site — it just skips the scroll choreography, which has nothing to do here.
+*/
+import Landing from "./Landing.astro";
+import Footer from "../components/landing/Footer.astro";
+import Header from "../components/landing/Header.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  canonicalPath?: string;
+  eyebrow: string;
+  heading: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonicalPath, eyebrow, heading, noindex } = Astro.props;
+---
+
+<Landing title={title} description={description} canonicalPath={canonicalPath} noindex={noindex}>
+  <Header />
+  <main class="l-legal section">
+    <div class="container">
+      <p class="eyebrow"><span>{eyebrow}</span></p>
+      <h1 class="h-section">{heading}</h1>
+      <div class="l-legal__body"><slot /></div>
+    </div>
+  </main>
+  <Footer />
+</Landing>
+
+<style is:global>
+  /* The landing's header is fixed and starts at header height on these pages,
+     so the content needs to clear it. */
+  .l-legal {
+    padding-top: 260rem;
+  }
+
+  .l-legal__body {
+    max-width: 900rem;
+    margin-top: 60rem;
+  }
+
+  .l-legal__body h2 {
+    margin: 60rem 0 16rem;
+    font-size: 26rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .l-legal__body p {
+    margin: 0 0 20rem;
+    color: var(--c-gray);
+    font-size: 18rem;
+    line-height: 170%;
+  }
+
+  .l-legal__body a {
+    color: var(--c-accent);
+    text-decoration: underline;
+  }
+
+  .l-legal__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16rem;
+    margin-top: 60rem;
+  }
+
+  @media (max-width: 1279px) {
+    .l-legal {
+      padding-top: 120rem;
+    }
+
+    .l-legal__body {
+      margin-top: 32rem;
+    }
+
+    .l-legal__body h2 {
+      margin: 40rem 0 12rem;
+      font-size: 19rem;
+    }
+
+    .l-legal__body p {
+      font-size: 15px;
+    }
+  }
+</style>

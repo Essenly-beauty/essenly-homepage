@@ -1,51 +1,41 @@
 ---
-import Base from "../layouts/Base.astro";
+import Legal from "../layouts/Legal.astro";
 import { siteConfig } from "../data/siteConfig";
 ---
 
-<Base
+<Legal
   title="Privacy Policy"
   description={`Privacy policy for ${siteConfig.company.legalName}`}
   canonicalPath="/privacy"
+  eyebrow="Legal"
+  heading="Privacy Policy"
 >
-  <section class="section">
-    <div class="narrow legal stack">
-      <p class="eyebrow">Legal</p>
-      <h1>Privacy Policy</h1>
-      <p class="lead">
-        Essenly collects only the information needed to respond to product, wholesale,
-        press and partnership inquiries.
-      </p>
-      <h2>Information we may collect</h2>
-      <p>
-        Essenly may collect inquiry details such as name, email address, company name, business
-        type and message content when a visitor submits a contact or wholesale form.
-      </p>
-      <h2>How information may be used</h2>
-      <p>
-        Inquiry information may be used to respond to messages, evaluate wholesale requests,
-        provide product information and maintain business communications.
-      </p>
-      <h2>Third-party links</h2>
-      <p>
-        This website links to Amazon U.S. and may link to social media platforms. Those services
-        operate under their own privacy policies.
-      </p>
-      <h2>Contact</h2>
-      <p>For privacy-related questions, contact Essenly through the contact page.</p>
-    </div>
-  </section>
-</Base>
+  <p>
+    Essenly collects only the information needed to respond to product, wholesale, press and
+    partnership inquiries.
+  </p>
 
-<style>
-  .legal h2 {
-    margin-top: var(--space-5);
-    font-family: var(--font-body);
-    font-size: 1rem;
-    line-height: 1.3;
-  }
+  <h2>Information we may collect</h2>
+  <p>
+    Essenly may collect inquiry details such as name, email address, company name, business type
+    and message content when a visitor submits an inquiry form.
+  </p>
 
-  .legal p:not(.eyebrow):not(.lead) {
-    color: var(--color-muted);
-  }
-</style>
+  <h2>How information may be used</h2>
+  <p>
+    Inquiry information may be used to respond to messages, evaluate wholesale requests, provide
+    product information and maintain business communications.
+  </p>
+
+  <h2>Third-party links</h2>
+  <p>
+    This website links to Amazon U.S. and may link to social media platforms. Those services
+    operate under their own privacy policies.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    For privacy-related questions, use the <a href="/#contact">inquiry form</a> or email the
+    Essenly team directly.
+  </p>
+</Legal>
