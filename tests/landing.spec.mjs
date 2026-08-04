@@ -288,6 +288,16 @@ async function run() {
     lowContrast.map((c) => `${c.text} ${c.ratio}`).join(" | ")
   );
 
+  /* Every image reference must resolve. The accordion slots are declared ahead
+     of the photography and gated on a build-time file check, so this is the
+     assertion that catches a path typo the moment a shot lands. */
+  const broken = await page.evaluate(() =>
+    Array.from(document.images)
+      .filter((i) => i.complete && i.naturalWidth === 0)
+      .map((i) => i.currentSrc.split("/").pop())
+  );
+  check("no broken image references", broken.length === 0, broken.join(", "));
+
   check("no page errors on desktop", errors.length === 0, errors.slice(0, 3).join(" | "));
 
   /* ---------------- reduced motion ---------------- */
