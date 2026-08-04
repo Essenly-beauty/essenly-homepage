@@ -207,12 +207,15 @@ pre-translated 110% of its own height, so ScrollTrigger measured a 900px image
 990px below its visible slot and fired only when the empty slot was leaving the
 top of the viewport. The rules now: triggers watch the outer `.rise` clip; the
 start offset is set by the script and capped at 96px (text keeps its full masked
-slide, media stops travelling its own height); triggers fire at the viewport
-edge with a velocity-adaptive duration (0.6s reading pace, 0.35s for a flick);
-and a per-element backstop force-completes anything still mid-tween the moment
-its slot crosses 70% of the viewport, so no speed can leave a hole where the eye
-lands. Philosophy lines light at 80% of the viewport; headline slot B fades in
-at 72%.
+slide, media stops travelling its own height); triggers fire at 92% of the
+viewport (the literal edge finished the motion before the eye caught it) with a
+velocity-adaptive duration (0.6s reading pace, 0.35s for a flick); and a
+per-element backstop force-completes anything still mid-tween the moment its
+slot crosses 70% of the viewport, so no speed can leave a hole where the eye
+lands. Philosophy lines light at 77% of the viewport; headline slot B fades in
+at 68%. The header gains a frosted translucent bar when the wordmark locks —
+near-black nav text over the #101010 bands is otherwise illegible — and the
+frost is simply always on when the motion layer is absent.
 
 `landing-motion.ts` owns every ScrollTrigger and the Lenis instance, and exports
 a single `initLandingMotion()`. It is the only file that needs to know about

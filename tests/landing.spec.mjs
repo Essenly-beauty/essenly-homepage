@@ -138,16 +138,25 @@ async function run() {
   check("reverse — inline slot re-hidden", !reversedState.revealed);
   near(reversed.width, 1440, 20, "reverse — hero back to fullscreen");
 
-  // Wordmark shrink locks after its range.
+  // Wordmark shrink locks after its range, and the lock brings the frosted bar
+  // that keeps near-black nav text legible over the #101010 bands.
   await scrollTo(page, 400);
   check("wordmark locked after shrink range", await page.evaluate(() => document.getElementById("l-header").classList.contains("is-locked")));
+  const frostOn = await page.evaluate(() =>
+    parseFloat(getComputedStyle(document.getElementById("l-header"), "::before").opacity)
+  );
+  check("frosted header bar visible once locked", frostOn > 0.9, `opacity ${frostOn}`);
   await scrollTo(page, 0);
   await page.waitForTimeout(600);
   check("wordmark unlocks back at the top", await page.evaluate(() => !document.getElementById("l-header").classList.contains("is-locked")));
+  const frostOff = await page.evaluate(() =>
+    parseFloat(getComputedStyle(document.getElementById("l-header"), "::before").opacity)
+  );
+  check("frost fades away at the top", frostOff < 0.1, `opacity ${frostOff}`);
 
   /* Philosophy lines light up — and light BEFORE the eye reaches them. The
-     trigger band is 80% of the viewport, so any line above that band while
-     unlit means the reader saw failing 45%-white text mid-screen. */
+     trigger band is 77% of the viewport, so any line above 73% while unlit
+     means the reader saw failing 45%-white text mid-screen. */
   await scrollTo(page, 3000);
   const phil = await page.evaluate(() => {
     const vh = window.innerHeight;
@@ -157,13 +166,13 @@ async function run() {
       late: lines
         .filter((el) => {
           const r = el.getBoundingClientRect();
-          return r.bottom > 0 && r.top < vh * 0.78 && !el.classList.contains("is-lit");
+          return r.bottom > 0 && r.top < vh * 0.73 && !el.classList.contains("is-lit");
         })
         .map((el) => (el.textContent || "").trim().slice(0, 32)),
     };
   });
   check("philosophy lines light on arrival", phil.lit > 0, `${phil.lit} of 4 lit`);
-  check("no unlit line above the 78% band", phil.late.length === 0, phil.late.join(" | "));
+  check("no unlit line above the 73% band", phil.late.length === 0, phil.late.join(" | "));
 
   /* A hard jump must settle fast: land the archive section mid-viewport, allow
      650ms — less than the old 0.9s tween that trailed the scroll — and require
@@ -286,6 +295,12 @@ async function run() {
   await rm.goto(`${BASE}/`, { waitUntil: "load" });
   await rm.waitForTimeout(1000);
   check("reduced motion — motion layer stays off", await rm.evaluate(() => !document.documentElement.classList.contains("motion")));
+  check(
+    "reduced motion — header frost always on (no lock moment exists)",
+    await rm.evaluate(
+      () => parseFloat(getComputedStyle(document.querySelector(".l-header"), "::before").opacity) > 0.9
+    )
+  );
   const rmHidden = await rm.evaluate(() =>
     Array.from(document.querySelectorAll(".rise-inner")).filter((el) => parseFloat(getComputedStyle(el).opacity) < 0.5).length
   );

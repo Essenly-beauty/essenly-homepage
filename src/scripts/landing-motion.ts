@@ -179,7 +179,7 @@ export function initLandingMotion(): void {
     if (slotB) {
       ScrollTrigger.create({
         trigger: "#l-info",
-        start: "top 72%",
+        start: "top 68%",
         onEnter: () => slotB.classList.add("is-revealed"),
         onLeaveBack: () => slotB.classList.remove("is-revealed"),
       });
@@ -251,8 +251,11 @@ export function initLandingMotion(): void {
 
     gsap.set(".rise-inner", { y: riseOffset, opacity: 0 });
 
+    /* 92%, not the literal edge: firing at 100% finished the motion right at the
+       fold, which read as slightly premature — the entrance was over before the
+       eye caught it. 8% of travel first puts the movement where it is seen. */
     ScrollTrigger.batch(".rise", {
-      start: "top bottom",
+      start: "top 92%",
       interval: 0.05,
       batchMax: 6,
       onEnter: (batch, triggers) => {
@@ -313,7 +316,7 @@ export function initLandingMotion(): void {
     lines.forEach((line) => {
       ScrollTrigger.create({
         trigger: line.closest(".rise") ?? line,
-        start: "top 80%",
+        start: "top 77%",
         onEnter: () => line.classList.add("is-lit"),
         onLeaveBack: () => line.classList.remove("is-lit"),
       });
