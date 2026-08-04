@@ -287,6 +287,33 @@ html.motion .rise-inner {
   padding: 0 40rem 0 var(--gutter);
 }
 
+/* Frosted bar behind the header once it locks. The nav is near-black text and
+   two sections are #101010, so a transparent header goes illegible exactly
+   where the page is most dramatic. A pseudo-element carries the frost because
+   opacity transitions smoothly where backdrop-filter itself does not. */
+.l-header::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-bottom: 1px solid rgba(16, 16, 16, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  content: "";
+  opacity: 0;
+  transition: opacity 300ms var(--ease);
+}
+
+html.motion .l-header.is-locked::before {
+  opacity: 1;
+}
+
+/* Without the motion layer there is no lock moment, and the header is fixed
+   over the same dark bands from the start — the frost is simply always on. */
+html:not(.motion) .l-header::before {
+  opacity: 1;
+}
+
 /* The clay accent rather than the asset's own #FDB7A5, which sits at roughly
    1.7:1 on white and reads washed out at this scale. The footer keeps the light
    peach, where it has a black ground to work against.
