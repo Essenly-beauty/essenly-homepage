@@ -54,15 +54,21 @@ const tabs = ["Product", "Wholesale", "Other"];
               aria-hidden="true"
             />
 
-            <div class="l-tabs" role="tablist" aria-label="Inquiry type">
+            {/* A radiogroup, not a tablist. These look like tabs but they do not
+                swap panels — they choose what the one form means. role="tab"
+                would promise a tabpanel that does not exist, and would tell a
+                screen-reader user to expect content to change. Arrow-key
+                navigation in landing-tabs.ts is the radio pattern already. */}
+            <div class="l-tabs" role="radiogroup" aria-label="Inquiry type">
               {tabs.map((tab, i) => (
                 <button
                   class="l-tab"
                   type="button"
-                  role="tab"
+                  role="radio"
                   id={`l-tab-${tab.toLowerCase()}`}
                   data-tab={tab}
-                  aria-selected={i === 0 ? "true" : "false"}
+                  aria-checked={i === 0 ? "true" : "false"}
+                  tabindex={i === 0 ? "0" : "-1"}
                 >
                   {tab} Inquiry
                 </button>

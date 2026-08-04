@@ -175,6 +175,54 @@ async function run() {
     await page.evaluate(() => document.getElementById("l-company")?.required === false)
   );
 
+  /* The inquiry selector is a radiogroup, not a tablist: it swaps no panels, so
+     role="tab" would promise a tabpanel that does not exist. */
+  const groupRoles = await page.evaluate(() => ({
+    group: document.querySelector(".l-tabs")?.getAttribute("role"),
+    item: document.querySelector(".l-tab")?.getAttribute("role"),
+    checked: document.querySelectorAll('.l-tab[aria-checked="true"]').length,
+    focusable: Array.from(document.querySelectorAll(".l-tab")).filter((t) => t.tabIndex === 0).length,
+    orphanTabs: document.querySelectorAll('[role="tab"]').length,
+    panels: document.querySelectorAll('[role="tabpanel"]').length,
+  }));
+  check("inquiry selector is a radiogroup", groupRoles.group === "radiogroup" && groupRoles.item === "radio", `${groupRoles.group}/${groupRoles.item}`);
+  check("exactly one option checked", groupRoles.checked === 1, String(groupRoles.checked));
+  check("roving tabindex — one stop in the tab order", groupRoles.focusable === 1, String(groupRoles.focusable));
+  check("no role=tab without a tabpanel", groupRoles.orphanTabs === 0 || groupRoles.panels > 0);
+
+  /* Contrast of the accent text actually rendered, on the ground it sits on. */
+  const contrast = await page.evaluate(() => {
+    const lum = (rgb) => {
+      const [r, g, b] = rgb.map((v) => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const parse = (s) => s.match(/\d+/g).slice(0, 3).map(Number);
+    const groundOf = (el) => {
+      let n = el;
+      while (n && n !== document.documentElement) {
+        const bg = getComputedStyle(n).backgroundColor;
+        if (bg && !bg.includes("rgba(0, 0, 0, 0)")) return parse(bg);
+        n = n.parentElement;
+      }
+      return [255, 255, 255];
+    };
+    return Array.from(document.querySelectorAll(".eyebrow span")).map((el) => {
+      const fg = parse(getComputedStyle(el).color);
+      const bg = groundOf(el);
+      const [hi, lo] = lum(fg) > lum(bg) ? [lum(fg), lum(bg)] : [lum(bg), lum(fg)];
+      return { text: el.textContent.trim().slice(0, 28), ratio: +(((hi + 0.05) / (lo + 0.05)).toFixed(2)) };
+    });
+  });
+  const lowContrast = contrast.filter((c) => c.ratio < 4.5);
+  check(
+    "every eyebrow label clears 4.5:1 on its own ground",
+    lowContrast.length === 0,
+    lowContrast.map((c) => `${c.text} ${c.ratio}`).join(" | ")
+  );
+
   check("no page errors on desktop", errors.length === 0, errors.slice(0, 3).join(" | "));
 
   /* ---------------- reduced motion ---------------- */
@@ -195,11 +243,23 @@ async function run() {
   /* ---------------- mobile ---------------- */
   const mob = await browser.newPage({ viewport: { width: 390, height: 844 } });
   const mobErrors = [];
+  const mobRequests = [];
   mob.on("pageerror", (e) => mobErrors.push(String(e)));
+  mob.on("request", (r) => mobRequests.push(r.url()));
   await mob.goto(`${BASE}/`, { waitUntil: "load" });
-  await mob.waitForTimeout(1000);
+  await mob.waitForTimeout(1500);
 
   check("mobile — motion layer stays off", await mob.evaluate(() => !document.documentElement.classList.contains("motion")));
+
+  /* The motion layer is ~136KB of vendor code that a phone will never execute,
+     so it must not be fetched either. This is the assertion that would catch a
+     regression back to a static import. */
+  const vendorPulled = mobRequests.filter((u) => /gsap|lenis|landing-motion/i.test(u));
+  check(
+    "mobile — GSAP/Lenis never downloaded",
+    vendorPulled.length === 0,
+    vendorPulled.map((u) => u.split("/").pop()).join(", ")
+  );
   const overflow = await mob.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   check("mobile — no horizontal overflow", overflow <= 0, `${overflow}px`);
   const mobFs = await mob.evaluate(() => getComputedStyle(document.documentElement).fontSize);
@@ -215,6 +275,20 @@ async function run() {
   check("mobile — nav toggle meets the 44px touch target", tap >= 44, `${Math.round(tap)}px`);
   check("no page errors on mobile", mobErrors.length === 0, mobErrors.slice(0, 3).join(" | "));
   if (SHOTS) await mob.screenshot({ path: `${SHOTS}/06-mobile.png`, fullPage: true });
+
+  /* Deferring the motion import behind a media query is only safe if widening the
+     window still brings it in. Without the change listener a visitor who loads
+     narrow and then maximises stays on the static page for the whole session. */
+  await mob.setViewportSize({ width: 1440, height: 900 });
+  await mob.waitForTimeout(2500);
+  check(
+    "resizing up to desktop boots the motion layer",
+    await mob.evaluate(() => document.documentElement.classList.contains("motion"))
+  );
+  check(
+    "resizing up to desktop fetches the motion chunk",
+    mobRequests.some((u) => /gsap|lenis|landing-motion/i.test(u))
+  );
 
   /* ---------------- legal pages ----------------
      These share the landing's header, footer and tokens. The check that matters

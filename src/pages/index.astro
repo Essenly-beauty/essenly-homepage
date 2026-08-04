@@ -33,12 +33,36 @@ import Wholesale from "../components/landing/Wholesale.astro";
 
 <script>
   import { initLandingAccordion } from "../scripts/landing-accordion";
-  import { initLandingMotion } from "../scripts/landing-motion";
   import { initLandingTabs } from "../scripts/landing-tabs";
 
   /* Tabs and the accordion first: they are the interactive parts, and neither
      depends on the motion layer coming up. */
   initLandingTabs();
   initLandingAccordion();
-  initLandingMotion();
+
+  /* The motion layer is imported dynamically behind the very query it gates on.
+     GSAP + ScrollTrigger + Lenis are ~136KB of the ~138KB this page's JS weighs;
+     statically importing them meant every phone and every reduced-motion visitor
+     downloaded and parsed the whole thing only for matchMedia to decide, inside
+     the module, not to use any of it.
+
+     The change listener is not optional: without it a visitor who loads at
+     1279px and widens the window would stay on the static page for the rest of
+     the session. Once the module is in, its own gsap.matchMedia() handles
+     teardown and setup across the breakpoint. */
+  const wantsMotion = window.matchMedia(
+    "(min-width: 1280px) and (prefers-reduced-motion: no-preference)"
+  );
+
+  let motionRequested = false;
+
+  async function loadMotion() {
+    if (motionRequested || !wantsMotion.matches) return;
+    motionRequested = true;
+    const { initLandingMotion } = await import("../scripts/landing-motion");
+    initLandingMotion();
+  }
+
+  loadMotion();
+  wantsMotion.addEventListener("change", loadMotion);
 </script>

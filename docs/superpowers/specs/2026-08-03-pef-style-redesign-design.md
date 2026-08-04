@@ -258,7 +258,7 @@ text can resolve below 14px.
 | --- | --- |
 | Loading | Hero image is `loading="eager"` + `fetchpriority="high"`. Everything below the fold is lazy. No spinner — the hero is the first paint. |
 | Empty | Nothing renders an empty shell: the footer drops the address row while `company.businessAddress` is null, and the Amazon rating block was cut rather than shipped guarded against `reviews: []`. |
-| Error | If `PUBLIC_WEB3FORMS_KEY` is absent the form is replaced by the existing mailto panel. Form errors render inline with `aria-invalid`, not `alert()`. |
+| Error | If `PUBLIC_WEB3FORMS_KEY` is absent the form is replaced by the existing mailto panel. Field validation is the browser's — `required` with no `novalidate`, styled through `:user-invalid` so nothing turns red before it has been filled in and left. No `alert()`, and no hand-rolled validator to keep in sync with the constraints. |
 | Success | Submit redirects to `/thank-you` (existing `thankYouUrl`). |
 | No JS | Sections render static and readable. Both the accordion and the mobile nav are `<details>`, so they open without JS, and the form's hidden fields ship pre-set to Product. |
 | Reduced motion | The `gsap.matchMedia()` query never matches, so `html.motion` is never added and the hero renders inline at its resting size. |

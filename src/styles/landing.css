@@ -11,10 +11,22 @@
   --c-black: #101010;
   --c-white: #ffffff;
   --c-off: #f6f5f3;
-  --c-accent: #c47662;
   --c-gray: #575758;
   --c-line: #e9e9e9;
-  --c-dim: rgba(255, 255, 255, 0.302);
+
+  /* Two clays, because one cannot serve both grounds. The lighter is the brand
+     tone and is used for marks, hovers and rules; against white it lands at
+     3.4:1, which is fine for a shape but not for the 12px uppercase eyebrows.
+     --c-accent-ink is the darker tone those labels use on light backgrounds
+     (4.9:1 on white, 4.5:1 on the off-white band). On the black bands the
+     relationship inverts, so the lighter clay is the readable one there —
+     see the .band-black override below. */
+  --c-accent: #c47662;
+  --c-accent-ink: #a85c46;
+
+  /* 45% rather than the reference's 30%: at 30% an unlit line sits at 2.7:1, so
+     anyone who reaches it before its trigger fires is reading failing text. */
+  --c-dim: rgba(255, 255, 255, 0.45);
 
   --gutter: 80rem;
   --header-h: 70rem;
@@ -106,6 +118,13 @@ button {
   color: var(--c-white);
 }
 
+/* Inverted ground: --c-accent-ink is too dark against #101010 (3.9:1), while the
+   brand clay reaches 5.5:1 there. */
+.band-black .eyebrow span,
+.l-footer .eyebrow span {
+  color: var(--c-accent);
+}
+
 /* ---- eyebrow: accent square + uppercase label ---- */
 
 .eyebrow {
@@ -124,7 +143,7 @@ button {
 }
 
 .eyebrow span {
-  color: var(--c-accent);
+  color: var(--c-accent-ink);
   font-size: 16rem;
   font-weight: 500;
   letter-spacing: 0.02em;
@@ -317,7 +336,7 @@ html.motion .l-header.is-locked .l-header__logo {
 }
 
 .l-nav a:hover {
-  color: var(--c-accent);
+  color: var(--c-accent-ink);
 }
 
 /* Mobile nav. Hidden on desktop, where .l-nav carries the links. */
@@ -673,7 +692,7 @@ html:not(.motion) .l-philosophy__line {
 .l-acc__num {
   display: block;
   margin-bottom: 6rem;
-  color: var(--c-accent);
+  color: var(--c-accent-ink);
   font-size: 15rem;
   font-weight: 600;
 }
@@ -881,7 +900,7 @@ html:not(.motion) .l-philosophy__line {
   transition: border-color 200ms var(--ease), color 200ms var(--ease);
 }
 
-.l-tab[aria-selected="true"] {
+.l-tab[aria-checked="true"] {
   border-color: var(--c-black);
   background: var(--c-off);
   color: var(--c-black);
@@ -940,14 +959,13 @@ html:not(.motion) .l-philosophy__line {
   outline: 0;
 }
 
-.l-field input[aria-invalid="true"],
-.l-field textarea[aria-invalid="true"] {
+/* Validation is the browser's: the fields carry `required` and the form has no
+   novalidate, so Chrome/Safari/Firefox block submission and show their own
+   message on the first invalid field. :user-invalid rather than :invalid so a
+   field is not marked red before it has been filled in and left. */
+.l-field input:user-invalid,
+.l-field textarea:user-invalid {
   border-bottom-color: #c0392b;
-}
-
-.l-field__error {
-  color: #c0392b;
-  font-size: 14rem;
 }
 
 .l-agree {
@@ -968,7 +986,7 @@ html:not(.motion) .l-philosophy__line {
 }
 
 .l-agree a {
-  color: var(--c-accent);
+  color: var(--c-accent-ink);
   text-decoration: underline;
 }
 
@@ -1215,7 +1233,7 @@ html:not(.motion) .l-philosophy__line {
   .l-burger nav a:last-child {
     margin-top: 6rem;
     border-top: 1px solid var(--c-line);
-    color: var(--c-accent);
+    color: var(--c-accent-ink);
   }
 
   .l-info {

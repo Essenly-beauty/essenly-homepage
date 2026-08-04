@@ -24,7 +24,12 @@ export function initLandingTabs(): void {
 
   function select(tab: HTMLButtonElement): void {
     const value = tab.dataset.tab ?? "Product";
-    tabs.forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
+    tabs.forEach((t) => {
+      t.setAttribute("aria-checked", String(t === tab));
+      /* Roving tabindex: a radiogroup is one stop in the tab order, and the
+         arrow keys move within it. */
+      t.tabIndex = t === tab ? 0 : -1;
+    });
     if (typeField) typeField.value = value;
     if (subjectField) subjectField.value = SUBJECTS[value] ?? SUBJECTS.Other;
 
