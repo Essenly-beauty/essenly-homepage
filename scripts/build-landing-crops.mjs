@@ -1,10 +1,21 @@
 // Regenerates the derived crops the landing page needs.
-// The two model photos carry a decorative orange frame baked into the image, so
+//
+// Sources live in assets/source-photos/ rather than public/, because the two
+// full-resolution originals are 684KB combined and nothing on the site links to
+// them — left in public/ they were copied into every deploy for nothing.
+//
+// Both model photos carry a decorative orange frame baked into the image, so
 // every crop taken from them starts inside that frame — hence the explicit
 // left/top insets rather than a centred crop.
 import sharp from "sharp";
 
+const SRC = "assets/source-photos";
 const DIR = "public/images/essenly";
+
+/* Photos that ship as-is also serve as crop sources, so a job's input may live in
+   either directory. */
+const { existsSync } = await import("node:fs");
+const resolveSource = (name) => (existsSync(`${SRC}/${name}`) ? `${SRC}/${name}` : `${DIR}/${name}`);
 const jobs = [
   // Brand band: wide strip from the model close-up, inside the frame, biased to
   // the dark-hair side so the white overlay type has something to sit on.
@@ -43,16 +54,17 @@ const jobs = [
 ];
 
 for (const job of jobs) {
-  const meta = await sharp(`${DIR}/${job.from}`).metadata();
+  const source = resolveSource(job.from);
+  const meta = await sharp(source).metadata();
   const { left, top, width, height } = job.crop;
   if (left + width > meta.width || top + height > meta.height) {
     throw new Error(
       `${job.from} is ${meta.width}x${meta.height}; crop ${left},${top} ${width}x${height} falls outside it`
     );
   }
-  await sharp(`${DIR}/${job.from}`)
+  await sharp(source)
     .extract(job.crop)
     .jpeg({ quality: 86, mozjpeg: true })
     .toFile(`${DIR}/${job.to}`);
-  console.log(`${job.to}  ${width}x${height}  from ${job.from} (${meta.width}x${meta.height})`);
+  console.log(`${job.to}  ${width}x${height}  from ${source} (${meta.width}x${meta.height})`);
 }
