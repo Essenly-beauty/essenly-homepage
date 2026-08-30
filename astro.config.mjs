@@ -5,23 +5,26 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://essenly.beauty',
 
-  // These three pages were absorbed into the one-page landing as anchor sections.
+  // These pages were absorbed into the one-page landing as anchor sections.
   // The routes are kept because they are already indexed and linked from
   // elsewhere; on a static build Astro emits an HTML redirect for each.
+  // /wholesale is deliberately absent: it is a real page again, served
+  // verbatim from public/wholesale/index.html.
   redirects: {
     '/product': '/#product',
-    '/wholesale': '/#wholesale',
     '/contact': '/#contact',
   },
 
   integrations: [
     sitemap({
-      // /thank-you is a post-submit page, and the three redirects above are not
-      // destinations in their own right.
+      // /thank-you is a post-submit page, and the two redirects above are not
+      // destinations in their own right. /wholesale is a static file, so the
+      // sitemap integration cannot see it — it is added by customPages.
       filter: (page) =>
-        !['/thank-you', '/product', '/wholesale', '/contact'].some((path) =>
+        !['/thank-you', '/product', '/contact'].some((path) =>
           page.includes(path)
         ),
+      customPages: ['https://essenly.beauty/wholesale/'],
     }),
   ],
 });
