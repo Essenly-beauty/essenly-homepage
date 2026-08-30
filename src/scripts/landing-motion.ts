@@ -18,8 +18,8 @@ import Lenis from "lenis";
 
 const DESKTOP = "(min-width: 1280px) and (prefers-reduced-motion: no-preference)";
 
-/** Scroll distance, in px, over which the opening wordmark shrinks to header size. */
-const LOGO_SHRINK_RANGE = 260;
+/** Scroll position, in px, at which the header leaves the open hero and locks. */
+const HEADER_LOCK_SCROLL = 260;
 
 type Rect = { left: number; top: number; width: number; height: number };
 
@@ -185,45 +185,22 @@ export function initLandingMotion(): void {
       });
     }
 
-    /* ---- Wordmark shrink, then lock ----
+    /* ---- Header lock ----
 
-       start/end are plain numbers, which ScrollTrigger reads as absolute scroll
-       positions. A `trigger: "body"` element never fired here: body's measured
+       The lockup no longer opens oversized and shrinks — it is type now, at one
+       size — so this only marks the moment the header stops sitting over the
+       open hero and earns its frosted bar.
+
+       start is a plain number, which ScrollTrigger reads as an absolute scroll
+       position. A `trigger: "body"` element never fired here: body's measured
        box under a fixed-position hero does not line up with scroll 0 the way the
        start/end keywords assume. */
 
-    const logo = header.querySelector<HTMLElement>(".l-header__logo");
-
-    if (logo) {
-      const logoOpen = readVarPx("--logo-h-open", 225);
-      const logoLock = readVarPx("--logo-h-lock", 52);
-      const padOpen = readVarPx("--logo-pt-open", 34);
-      const padLock = readVarPx("--logo-pt-lock", 13);
-
-      ScrollTrigger.create({
-        start: 0,
-        end: LOGO_SHRINK_RANGE,
-        scrub: true,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const t = self.progress;
-          logo.style.height = px(lerp(logoOpen, logoLock, t));
-          logo.style.paddingTop = px(lerp(padOpen, padLock, t));
-        },
-      });
-
-      /* Locking is a separate trigger so it survives being scrolled past: a
-         scrubbed trigger stops updating once you are beyond its end. */
-      ScrollTrigger.create({
-        start: LOGO_SHRINK_RANGE,
-        onEnter: () => {
-          header.classList.add("is-locked");
-          logo.style.removeProperty("height");
-          logo.style.removeProperty("padding-top");
-        },
-        onLeaveBack: () => header.classList.remove("is-locked"),
-      });
-    }
+    ScrollTrigger.create({
+      start: HEADER_LOCK_SCROLL,
+      onEnter: () => header.classList.add("is-locked"),
+      onLeaveBack: () => header.classList.remove("is-locked"),
+    });
 
     /* ---- Rise reveals ----
 
@@ -335,7 +312,6 @@ export function initLandingMotion(): void {
       lenis.destroy();
 
       heroBg.removeAttribute("style");
-      header.querySelector<HTMLElement>(".l-header__logo")?.removeAttribute("style");
       delete heroBg.dataset.phase;
       heroBg.classList.remove("is-morphed");
       slotA.classList.remove("is-revealed");

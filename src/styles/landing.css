@@ -31,12 +31,9 @@
   --gutter: 80rem;
   --header-h: 70rem;
 
-  /* The two ends of the wordmark shrink. landing-motion.ts reads both and scrubs
-     between them, so they are declared here rather than duplicated in the script. */
-  --logo-h-open: 300rem;
-  --logo-h-lock: 70rem;
-  --logo-pt-open: 46rem;
-  --logo-pt-lock: 18rem;
+  /* The serif the brand lockup is set in, shared with the trade page so both
+     carry the same wordmark. Body copy stays on Inter. */
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
 
   --hero-w: 1258rem;
   --hero-h: 642rem;
@@ -314,39 +311,18 @@ html:not(.motion) .l-header::before {
   opacity: 1;
 }
 
-/* The clay accent rather than the asset's own #FDB7A5, which sits at roughly
-   1.7:1 on white and reads washed out at this scale. The footer keeps the light
-   peach, where it has a black ground to work against.
+/* Ink rather than the clay accent: the lockup is type, not a mark, and the clay
+   sits at 3.4:1 — fine for a shape, thin for a wordmark at header scale.
 
-   The small size is the default so the page is correct with no motion layer: a
-   fixed 300rem wordmark would otherwise sit on top of the content all the way
-   down the page. The oversized opening state belongs to the motion layer, which
-   scrubs it back down to this size and then locks it. */
+   The lockup is sized by font-size alone; the mark and the gap are in `em` and
+   follow. It no longer opens oversized and shrinks: that sequence belonged to
+   the flat peach asset, which scaled by height and had no baseline to hold. */
 .l-header__logo {
-  display: block;
+  display: inline-flex;
+  align-items: center;
   height: var(--header-h);
-  padding-top: 18rem;
-  color: var(--c-accent);
-  transition: height 200ms var(--ease), padding-top 200ms var(--ease);
-}
-
-.l-header__logo svg {
-  display: block;
-  width: auto;
-  height: 100%;
-}
-
-/* The opening size. From here landing-motion.ts scrubs the height and padding
-   inline, down to --logo-h-lock, then adds .is-locked to hand control back. */
-html.motion .l-header__logo {
-  height: var(--logo-h-open);
-  padding-top: var(--logo-pt-open);
-  transition: none;
-}
-
-html.motion .l-header.is-locked .l-header__logo {
-  height: var(--logo-h-lock);
-  padding-top: var(--logo-pt-lock);
+  font-size: 30rem;
+  color: var(--c-black);
 }
 
 .l-header__right {
@@ -1138,11 +1114,10 @@ html:not(.motion) .l-philosophy__line {
   padding-bottom: 100rem;
 }
 
+/* The light peach reads on the black ground where the header's ink would not. */
 .l-footer__logo {
-  display: block;
-  width: 200rem;
-  height: auto;
   margin-bottom: 40rem;
+  font-size: 34rem;
   color: #fdb7a5;
 }
 
@@ -1265,10 +1240,8 @@ html:not(.motion) .l-philosophy__line {
     height: var(--header-h);
   }
 
-  .l-header__logo,
-  .l-header.is-locked .l-header__logo {
-    height: 34rem;
-    padding-top: 0;
+  .l-header__logo {
+    font-size: 26rem;
   }
 
   .l-hero__spacer {
