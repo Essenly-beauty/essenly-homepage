@@ -48,6 +48,24 @@ const fallbackMarkup = `<div class="form reveal"><h3>Wholesale inquiry</h3><p cl
       .hero h1{font-size:clamp(68px,5.2vw,76px);letter-spacing:-.032em}.hero-copy{max-width:42ch;font-size:16px;line-height:1.6}.product-panel h2,.journey-head h2,.terms-top h2,.inquiry h2{letter-spacing:-.028em}.journey-head p,.inquiry-copy{font-size:16px}.journey-step h3{font-size:clamp(30px,3vw,42px)}.journey-step p{font-size:16px}.term strong{font-family:var(--display)}.form h3,.choice,.input{font-family:var(--sans)}
       @media(max-width:800px){.shell{width:min(100% - 44px,1200px)}.nav{height:64px}.formula{padding:76px 0}.formula-layout{display:block}.formula-intro{position:relative;top:auto;margin-bottom:32px}.formula-intro h2{font-size:40px;line-height:1.06}.formula-status{margin-top:32px}.formula-beat{min-height:44svh;grid-template-columns:42px minmax(0,1fr);gap:16px;padding:26px 0}.formula-number{align-self:start;padding-top:4px}.ingredient-art{width:152px;height:128px;grid-column:2}.ingredient-copy{grid-column:2}.ingredient-copy h3{font-size:38px;line-height:1.04}.ingredient-copy p{font-size:16px}.nav-right{gap:16px}.field{min-height:78px}.input{height:46px}}
     .b2b-botcheck{position:absolute!important;left:-9999px!important;opacity:0!important;pointer-events:none}.form-fallback{margin:0;color:#c8bdb1;font-size:15px;line-height:1.6}.form-fallback a{color:var(--paper)}
+      /* A <button> takes cursor:default, which is the single cue most people
+         read as "not clickable". */
+      .button,.choice{cursor:pointer}
+      /* .button's own hover inverts to --paper, but the inquiry panel's button
+         already starts at --paper, so that rule resolved to no visible change.
+         It gets its own hover here. */
+      .form-foot button:hover{background:var(--peach);border-color:var(--peach);color:var(--ink)}
+      .form-foot button:active{transform:translateY(0)}
+      .button:focus-visible,.choice:focus-visible{outline:2px solid var(--peach);outline-offset:3px}
+      /* Which fields are required, before anyone finds out by pressing send. */
+      .field:has(.input:required) label::after{content:" *";color:var(--peach)}
+      /* Only once a send has been attempted — arriving to a wall of red is worse
+         than no marking at all. */
+      .form.is-checked .field.is-invalid .input{border-color:#d98b6a;box-shadow:0 0 0 2px rgba(217,139,106,.4)}
+      .field__error{display:none;margin-top:6px;color:#f0b9a0;font-size:11px;line-height:1.4}
+      .form.is-checked .field.is-invalid .field__error{display:block}
+      .form-status{margin:0 0 18px;padding:11px 14px;background:rgba(217,139,106,.14);border-left:2px solid #d98b6a;color:#f2d9cd;font-size:13px;line-height:1.5}
+      .form-status[hidden]{display:none}
     </style>
   </head>
   <body>
@@ -66,7 +84,54 @@ const fallbackMarkup = `<div class="form reveal"><h3>Wholesale inquiry</h3><p cl
     </main>
     <footer><div class="shell"><div class="footer-top"><a class="footer-brand" href="#top" aria-label="Essenly home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16.5C7.3 8.8 12.2 17.2 21 5.5"/><path d="M3 20C8.1 11.6 13.6 18.8 21 9"/><path d="M3.5 12.5C7.8 6.2 12 13.2 20.5 3.5"/><circle cx="15.4" cy="8.6" r="1.55"/></svg><span>essenly</span></a><p class="footer-statement">Premium Korean hair care for considered rituals.</p></div><div class="footer-bottom"><span>© Essenly Inc.</span><div><a href="mailto:wholesale@essenly.beauty">Wholesale inquiry</a><a href="#">Amazon U.S.</a><a href="#">Privacy</a></div></div></div></footer>
     <script is:inline>
-      addEventListener('DOMContentLoaded',()=>{document.body.classList.add('ready');const header=document.querySelector('.top-bar');addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>20),{passive:true});const reveal=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.16});document.querySelectorAll('.reveal,.product-stage').forEach(e=>reveal.observe(e));const status=document.querySelector('.formula-status');const formulaObserver=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;document.querySelectorAll('.formula-beat').forEach(beat=>beat.classList.remove('is-active'));e.target.classList.add('is-active');status.textContent=e.target.dataset.formula}),{threshold:.58});document.querySelectorAll('.formula-beat').forEach(beat=>formulaObserver.observe(beat));document.querySelectorAll('.choice').forEach(c=>c.onclick=()=>{document.querySelectorAll('.choice').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-checked','false')});c.classList.add('selected');c.setAttribute('aria-checked','true');var t=document.getElementById('b2b-inquiry-type');if(t)t.value=c.textContent.trim()})});
+      addEventListener('DOMContentLoaded',()=>{document.body.classList.add('ready');const header=document.querySelector('.top-bar');addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>20),{passive:true});const reveal=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.16});document.querySelectorAll('.reveal,.product-stage').forEach(e=>reveal.observe(e));const status=document.querySelector('.formula-status');const formulaObserver=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;document.querySelectorAll('.formula-beat').forEach(beat=>beat.classList.remove('is-active'));e.target.classList.add('is-active');status.textContent=e.target.dataset.formula}),{threshold:.58});document.querySelectorAll('.formula-beat').forEach(beat=>formulaObserver.observe(beat));document.querySelectorAll('.choice').forEach(c=>c.onclick=()=>{document.querySelectorAll('.choice').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-checked','false')});c.classList.add('selected');c.setAttribute('aria-checked','true');var t=document.getElementById('b2b-inquiry-type');if(t)t.value=c.textContent.trim()});
+/* Pressing send with an empty field used to look like a dead button: the browser
+   blocks the submit, jumps to the first offender and shows a bubble that is easy
+   to miss on a dark panel. Native validation still does the blocking — this only
+   makes the refusal legible. */
+var form=document.querySelector('form.form');
+if(form){
+  var msgFor=function(el){
+    if(el.validity.valueMissing)return 'Please fill this in so we can reply.';
+    if(el.validity.typeMismatch&&el.type==='email')return 'Please check this email address.';
+    return 'Please check this field.';
+  };
+  var formStatus=document.createElement('p');
+  formStatus.className='form-status';formStatus.id='form-status';
+  formStatus.setAttribute('role','status');formStatus.hidden=true;
+  form.insertBefore(formStatus,form.querySelector('.fields'));
+  var errorFor=function(el){
+    var field=el.closest('.field');if(!field)return null;
+    var err=field.querySelector('.field__error');
+    if(!err){err=document.createElement('p');err.className='field__error';
+      err.id=el.id+'-error';field.appendChild(err);
+      el.setAttribute('aria-describedby',err.id);}
+    return err;
+  };
+  var mark=function(el){
+    var field=el.closest('.field');if(!field)return;
+    var ok=el.checkValidity();
+    field.classList.toggle('is-invalid',!ok);
+    var err=errorFor(el);
+    if(err)err.textContent=ok?'':msgFor(el);
+  };
+  var retally=function(){
+    var bad=form.querySelectorAll('.field.is-invalid').length;
+    formStatus.hidden=bad===0;
+    if(bad)formStatus.textContent=bad===1
+      ? 'One field still needs your attention before this can be sent.'
+      : bad+' fields still need your attention before this can be sent.';
+  };
+  form.addEventListener('invalid',function(e){
+    form.classList.add('is-checked');mark(e.target);retally();
+  },true);
+  /* Re-check as it is corrected, so the warning clears itself rather than
+     sitting there after the problem is gone. */
+  form.addEventListener('input',function(e){
+    if(!form.classList.contains('is-checked'))return;
+    if(e.target.name){mark(e.target);retally();}
+  });
+}});
     </script>
   </body>
 </html>
