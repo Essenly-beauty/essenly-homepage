@@ -25,11 +25,16 @@ const specs = [
       </p>
     </div>
     <div class="l-product__body">
-      <Rise class="l-product__shot">
+      <Rise class="l-product__stage">
         <img
-          src="/images/essenly/essenly-product-detail.jpg"
-          alt={`An open jar of ${product.shortName} beside vanilla flowers`}
-          loading="lazy"
+          src="/images/essenly/essenly-product-official.jpg"
+          alt={`The official Essenly ${product.shortName} package on a light studio background`}
+          class="l-product__bg"
+          width="1600"
+          height="1200"
+          decoding="async"
+          fetchpriority="high"
+          loading="eager"
         />
       </Rise>
       <div class="l-product__specs">

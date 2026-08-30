@@ -1,6 +1,5 @@
 ---
 import { amazonUrl } from "../../data/siteConfig";
-import Wordmark from "./Wordmark.astro";
 
 const nav = [
   { label: "Product", href: "#product" },
@@ -11,9 +10,6 @@ const nav = [
 ---
 
 <header class="l-header" id="l-header">
-  <a class="l-header__logo" href="#top" aria-label="Essenly home">
-    <Wordmark />
-  </a>
   <div class="l-header__right">
     <nav class="l-nav" aria-label="Primary">
       {nav.map((item) => <a href={item.href}>{item.label}</a>)}
