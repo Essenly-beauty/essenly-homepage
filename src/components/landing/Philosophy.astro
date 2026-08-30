@@ -1,0 +1,47 @@
+---
+import { amazonUrl } from "../../data/siteConfig";
+import Rise from "./Rise.astro";
+
+/*
+  Each line lights from 30% white to full white as it scrolls into place. With the
+  motion layer off the CSS renders every line at full strength — a page of 30%
+  white text is unreadable, not atmospheric.
+*/
+const lines = [
+  "Softness should not cost you weight.",
+  "Essenly does not coat the hair to fake a smoother finish.",
+  "It conditions where dry hair actually needs it, then rinses clean away.",
+  "What stays behind is the feel, and the scent.",
+];
+---
+
+<section class="l-philosophy band-black section--tall" id="philosophy">
+  <div class="container">
+    <p class="eyebrow"><span>Essenly philosophy</span></p>
+    <div class="l-philosophy__lines">
+      {
+        lines.map((line) => (
+          <Rise>
+            <span class="h-section l-philosophy__line">{line}</span>
+          </Rise>
+        ))
+      }
+    </div>
+    <div class="l-philosophy__foot">
+      <div></div>
+      <div>
+        <Rise>
+          <span class="body-copy">
+            A rich rinse-out treatment for dry, frizzy and color-treated hair, finished with a warm
+            Amber Vanilla scent.
+          </span>
+        </Rise>
+        <Rise>
+          <a class="btn-solid btn-light" href={amazonUrl} target="_blank" rel="noopener noreferrer">
+            Shop on Amazon
+          </a>
+        </Rise>
+      </div>
+    </div>
+  </div>
+</section>

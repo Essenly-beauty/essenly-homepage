@@ -1,47 +1,34 @@
 ---
-import Base from "../layouts/Base.astro";
-import { siteConfig } from "../data/siteConfig";
+import Legal from "../layouts/Legal.astro";
+import { amazonUrl, getContactEmail } from "../data/siteConfig";
 
-const wholesaleEmail = siteConfig.contact.wholesaleEmail;
+const contactEmail = getContactEmail();
 ---
 
-<Base
+<Legal
   title="Thank you"
   description="Your inquiry has reached the Essenly team."
   canonicalPath="/thank-you"
+  eyebrow="Inquiry received"
+  heading="Thank you."
   noindex
 >
-  <section class="section">
-    <div class="narrow stack thanks">
-      <p class="eyebrow">Inquiry received</p>
-      <h1>Thank you</h1>
-      <p class="lead">
-        Your inquiry has reached the Essenly team. We reply to wholesale and sample requests
-        within two business days.
-      </p>
-      <p class="muted">
-        If your message is urgent, email <a href={`mailto:${wholesaleEmail}`}>{wholesaleEmail}</a>
+  <p>
+    Your inquiry has reached the Essenly team. We reply to wholesale and sample requests within two
+    business days.
+  </p>
+  {
+    contactEmail && (
+      <p>
+        If your message is urgent, email <a href={`mailto:${contactEmail}`}>{contactEmail}</a>{" "}
         directly.
       </p>
-      <div class="button-row">
-        <a class="btn btn-primary" href="/wholesale">Back to Wholesale</a>
-        <a class="btn btn-secondary" href="/">Return Home</a>
-      </div>
-    </div>
-  </section>
-</Base>
-
-<style>
-  .thanks {
-    text-align: center;
+    )
   }
-
-  .thanks .button-row {
-    justify-content: center;
-  }
-
-  .thanks a:not(.btn) {
-    color: var(--color-accent-dark);
-    font-weight: 800;
-  }
-</style>
+  <div class="l-legal__actions">
+    <a class="btn-solid" href={amazonUrl} target="_blank" rel="noopener noreferrer">
+      Shop on Amazon
+    </a>
+    <a class="link-arrow" href="/">Back to Essenly</a>
+  </div>
+</Legal>

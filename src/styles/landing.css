@@ -1,0 +1,1545 @@
+/* Essenly landing — pef-style one-page.
+   See docs/superpowers/specs/2026-08-03-pef-style-redesign-design.md
+
+   Every length below is authored in `rem`, where 1rem = 1/1920th of the viewport
+   width on desktop. That is what keeps the layout at identical proportions on any
+   desktop display, and it is why the reference's own numbers transfer directly.
+   Below 1280px the root switches to 1px, so rem reads as px and the mobile block
+   at the bottom restates the sizes that would otherwise be enormous. */
+
+:root {
+  --c-black: #101010;
+  --c-white: #ffffff;
+  --c-off: #f6f5f3;
+  --c-gray: #575758;
+  --c-line: #e9e9e9;
+
+  /* Two clays, because one cannot serve both grounds. The lighter is the brand
+     tone and is used for marks, hovers and rules; against white it lands at
+     3.4:1, which is fine for a shape but not for the 12px uppercase eyebrows.
+     --c-accent-ink is the darker tone those labels use on light backgrounds
+     (4.9:1 on white, 4.5:1 on the off-white band). On the black bands the
+     relationship inverts, so the lighter clay is the readable one there —
+     see the .band-black override below. */
+  --c-accent: #c47662;
+  --c-accent-ink: #a85c46;
+
+  /* 45% rather than the reference's 30%: at 30% an unlit line sits at 2.7:1, so
+     anyone who reaches it before its trigger fires is reading failing text. */
+  --c-dim: rgba(255, 255, 255, 0.45);
+
+  --gutter: 80rem;
+  --header-h: 70rem;
+
+  /* The two ends of the wordmark shrink. landing-motion.ts reads both and scrubs
+     between them, so they are declared here rather than duplicated in the script. */
+  --logo-h-open: 300rem;
+  --logo-h-lock: 70rem;
+  --logo-pt-open: 46rem;
+  --logo-pt-lock: 18rem;
+
+  --hero-w: 1258rem;
+  --hero-h: 642rem;
+  --hero-expand-scroll: 480px;
+  --hero-hold-scroll: 65vh;
+
+  --slot-w: 215rem;
+  --slot-h: 100rem;
+
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The clamp is a deliberate softening of the reference, which uses a bare
+   0.05208333vw. Between 1280px and 2560px the two are identical; outside that
+   range this holds instead of scaling without limit. */
+html {
+  font-size: clamp(0.66px, 0.05208333vw, 1.33px);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background: var(--c-white);
+  color: var(--c-black);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 3px;
+}
+
+.container {
+  width: 100%;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: 160rem;
+}
+
+.section--tall {
+  padding-block: 200rem;
+}
+
+.band-off {
+  background: var(--c-off);
+}
+
+.band-black {
+  background: var(--c-black);
+  color: var(--c-white);
+}
+
+/* Inverted ground: --c-accent-ink is too dark against #101010 (3.9:1), while the
+   brand clay reaches 5.5:1 there. */
+.band-black .eyebrow span,
+.l-footer .eyebrow span {
+  color: var(--c-accent);
+}
+
+/* ---- eyebrow: accent square + uppercase label ---- */
+
+.eyebrow {
+  display: flex;
+  gap: 10rem;
+  align-items: center;
+  margin: 0 0 15rem;
+}
+
+.eyebrow::before {
+  flex-shrink: 0;
+  width: 6rem;
+  height: 6rem;
+  background: var(--c-accent);
+  content: "";
+}
+
+.eyebrow span {
+  color: var(--c-accent-ink);
+  font-size: 16rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 135%;
+  text-transform: uppercase;
+}
+
+.eyebrow--center {
+  justify-content: center;
+}
+
+/* ---- type ---- */
+
+.h-display {
+  margin: 0;
+  font-size: 110rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 115%;
+}
+
+.h-section {
+  margin: 0;
+  font-size: 60rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 115%;
+}
+
+.h-sub {
+  margin: 0;
+  font-size: 32rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 130%;
+}
+
+.body-copy {
+  margin: 0;
+  color: var(--c-gray);
+  font-size: 18rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 160%;
+}
+
+.band-black .body-copy {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* ---- link-arrow + button ---- */
+
+.link-arrow {
+  display: inline-flex;
+  gap: 12rem;
+  align-items: center;
+  font-size: 17rem;
+  font-weight: 500;
+}
+
+.link-arrow::after {
+  width: 26rem;
+  height: 1px;
+  background: currentcolor;
+  content: "";
+  transition: width 260ms var(--ease);
+}
+
+.link-arrow:hover::after {
+  width: 40rem;
+}
+
+.btn-solid {
+  display: inline-flex;
+  gap: 40rem;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 260rem;
+  padding: 26rem 32rem;
+  background: var(--c-black);
+  color: var(--c-white);
+  font-size: 17rem;
+  font-weight: 600;
+  transition: background 260ms var(--ease);
+}
+
+.btn-solid::after {
+  content: "\2192";
+}
+
+.btn-solid:hover {
+  background: var(--c-accent);
+}
+
+.btn-light {
+  background: var(--c-white);
+  color: var(--c-black);
+}
+
+.btn-light:hover {
+  background: var(--c-accent);
+  color: var(--c-white);
+}
+
+/* ---- rise: the reveal primitive.
+   Outer clips, inner moves. The motion layer animates .rise-inner; without it
+   the inner sits at rest so the static page reads normally.
+
+   Only opacity here — the start transform is set per element by the script,
+   capped so large media does not slide its own height. It also must not live in
+   CSS because ScrollTrigger measures elements where they currently are: a
+   pre-translated inner made every trigger fire late by exactly its offset,
+   990px for the pictorial images. ---- */
+
+.rise {
+  overflow: hidden;
+}
+
+.rise-inner {
+  display: block;
+  will-change: transform, opacity;
+}
+
+html.motion .rise-inner {
+  opacity: 0;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+
+.l-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 0 40rem 0 var(--gutter);
+}
+
+/* Frosted bar behind the header once it locks. The nav is near-black text and
+   two sections are #101010, so a transparent header goes illegible exactly
+   where the page is most dramatic. A pseudo-element carries the frost because
+   opacity transitions smoothly where backdrop-filter itself does not. */
+.l-header::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-bottom: 1px solid rgba(16, 16, 16, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px) saturate(1.5);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  content: "";
+  opacity: 0;
+  transition: opacity 300ms var(--ease);
+}
+
+html.motion .l-header.is-locked::before {
+  opacity: 1;
+}
+
+/* Without the motion layer there is no lock moment, and the header is fixed
+   over the same dark bands from the start — the frost is simply always on. */
+html:not(.motion) .l-header::before {
+  opacity: 1;
+}
+
+/* The clay accent rather than the asset's own #FDB7A5, which sits at roughly
+   1.7:1 on white and reads washed out at this scale. The footer keeps the light
+   peach, where it has a black ground to work against.
+
+   The small size is the default so the page is correct with no motion layer: a
+   fixed 300rem wordmark would otherwise sit on top of the content all the way
+   down the page. The oversized opening state belongs to the motion layer, which
+   scrubs it back down to this size and then locks it. */
+.l-header__logo {
+  display: block;
+  height: var(--header-h);
+  padding-top: 18rem;
+  color: var(--c-accent);
+  transition: height 200ms var(--ease), padding-top 200ms var(--ease);
+}
+
+.l-header__logo svg {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+
+/* The opening size. From here landing-motion.ts scrubs the height and padding
+   inline, down to --logo-h-lock, then adds .is-locked to hand control back. */
+html.motion .l-header__logo {
+  height: var(--logo-h-open);
+  padding-top: var(--logo-pt-open);
+  transition: none;
+}
+
+html.motion .l-header.is-locked .l-header__logo {
+  height: var(--logo-h-lock);
+  padding-top: var(--logo-pt-lock);
+}
+
+.l-header__right {
+  display: flex;
+  gap: 60rem;
+  align-items: center;
+  height: var(--header-h);
+}
+
+.l-nav {
+  display: flex;
+  gap: 48rem;
+}
+
+.l-nav a {
+  font-size: 17rem;
+  font-weight: 500;
+  transition: color 200ms var(--ease);
+}
+
+.l-nav a:hover {
+  color: var(--c-accent-ink);
+}
+
+/* Mobile nav. Hidden on desktop, where .l-nav carries the links. */
+.l-burger {
+  display: none;
+}
+
+/* ============================================================
+   Hero — the fixed, expanding, morphing image
+   ============================================================ */
+
+.l-hero {
+  position: relative;
+}
+
+/* margin-block matters: this is a <figure>, and its default 1em block margin is
+   added to `top` once the motion layer positions it fixed — the hero would sit
+   16px below where the script placed it. */
+.l-hero__bg {
+  width: var(--hero-w);
+  height: var(--hero-h);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.l-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 52%;
+}
+
+.l-hero__spacer {
+  height: 200rem;
+}
+
+/* Motion layer only. The static page keeps the hero in normal flow.
+
+   Under motion the hero is driven entirely by explicit left/top/width/height in
+   px from landing-motion.ts. Mixing a percentage `left` with a translate offset
+   would mean interpolating across two coordinate systems during the morph, so
+   the transform is dropped and the script owns all four values. */
+html.motion .l-hero__bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin-inline: 0;
+  transform: none;
+  will-change: left, top, width, height;
+}
+
+html.motion .l-hero__track {
+  display: block;
+  height: calc(var(--hero-expand-scroll) + var(--hero-hold-scroll));
+  margin-top: 100vh;
+}
+
+html.motion .l-hero__spacer {
+  display: none;
+}
+
+html.motion .l-hero__bg.is-morphed {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ============================================================
+   Info headline — inline image slots inside the type
+   ============================================================ */
+
+.l-info {
+  display: grid;
+  place-items: center;
+  padding-block: 240rem;
+  background: var(--c-off);
+  text-align: center;
+}
+
+.l-info__headline {
+  margin: 0 0 40rem;
+}
+
+.l-info__slot {
+  position: relative;
+  top: -10rem;
+  display: inline-block;
+  width: var(--slot-w);
+  height: var(--slot-h);
+  vertical-align: middle;
+  object-fit: cover;
+}
+
+html.motion .l-info__slot:not(.is-revealed) {
+  visibility: hidden;
+}
+
+/* Slot B fades in on its own. Slot A must NOT get a transition: the fixed hero
+   lands exactly on top of it and the swap has to be same-frame, or both (or
+   neither) are visible for a beat. */
+#l-slot-b {
+  transition: opacity 500ms var(--ease);
+}
+
+html.motion #l-slot-b:not(.is-revealed) {
+  opacity: 0;
+}
+
+/* ============================================================
+   Pictorial — 3-up full-bleed row
+   ============================================================ */
+
+.l-pictorial {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.l-pictorial img {
+  width: 100%;
+  height: 1200rem;
+  object-fit: cover;
+}
+
+/* ============================================================
+   Philosophy — black band, line-by-line lighting
+   ============================================================ */
+
+.l-philosophy__lines {
+  margin: 0 0 140rem;
+}
+
+.l-philosophy__line {
+  display: block;
+  color: var(--c-dim);
+  transition: color 350ms ease;
+}
+
+.l-philosophy__line.is-lit {
+  color: var(--c-white);
+}
+
+/* Without the motion layer every line reads at full strength — a page of 30%
+   white text is unreadable, not atmospheric. */
+html:not(.motion) .l-philosophy__line {
+  color: var(--c-white);
+}
+
+.l-philosophy__foot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60rem;
+  align-items: end;
+}
+
+.l-philosophy__foot > div:last-child {
+  display: grid;
+  gap: 40rem;
+  justify-items: start;
+}
+
+/* ============================================================
+   Brand band — full-bleed portrait with overlay type
+   ============================================================ */
+
+.l-brand {
+  position: relative;
+  height: 900rem;
+  overflow: hidden;
+}
+
+.l-brand img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+/* The photo is a bright close-up, so the white overlay type needs a scrim to sit
+   on. Without it the wordmark disappears into the model's cheek. */
+.l-brand::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(16, 16, 16, 0.55) 0%, transparent 34%),
+    linear-gradient(0deg, rgba(16, 16, 16, 0.62) 0%, transparent 40%);
+  content: "";
+  pointer-events: none;
+}
+
+.l-brand__top,
+.l-brand__bottom {
+  position: absolute;
+  z-index: 1;
+  left: var(--gutter);
+  color: var(--c-white);
+}
+
+.l-brand__top {
+  top: 120rem;
+}
+
+.l-brand__bottom {
+  bottom: 120rem;
+}
+
+.l-brand__word {
+  margin: 0;
+  font-size: 40rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.l-brand__tag {
+  margin: 4rem 0 0;
+  font-size: 15rem;
+  font-weight: 400;
+  opacity: 0.82;
+}
+
+.l-brand__big {
+  margin: 0;
+  font-size: 110rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 100%;
+}
+
+.l-brand__caption {
+  margin: 16rem 0 0;
+  font-size: 17rem;
+  font-weight: 400;
+  opacity: 0.86;
+}
+
+/* ============================================================
+   Product — centred head, shot + spec rows
+   ============================================================ */
+
+.l-product__head {
+  margin-bottom: 120rem;
+  text-align: center;
+}
+
+.l-product__head .h-section {
+  margin-bottom: 24rem;
+}
+
+.l-product__head .body-copy {
+  margin-inline: auto;
+  max-width: 700rem;
+}
+
+.l-product__body {
+  position: relative;
+  min-height: 780rem;
+}
+
+.l-product__stage {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+}
+
+.l-product__stage .rise-inner {
+  position: relative;
+}
+
+.l-product__stage img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.l-product__specs {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: 8%;
+  width: 29%;
+  transform: translateY(-42%);
+  display: grid;
+  gap: 0;
+}
+
+.l-spec {
+  display: grid;
+  gap: 8rem;
+  padding-block: 28rem;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.l-spec dt {
+  color: var(--c-gray);
+  font-size: 16rem;
+  font-weight: 400;
+}
+
+.l-spec dd {
+  margin: 0;
+  font-size: 22rem;
+  font-weight: 600;
+}
+
+.l-product__specs .btn-solid {
+  width: 100%;
+  margin-top: 48rem;
+}
+
+/* ============================================================
+   Science — 4-row accordion
+   ============================================================ */
+
+.l-science__head {
+  margin-bottom: 140rem;
+}
+
+.l-science__head .h-section {
+  margin-bottom: 32rem;
+}
+
+.l-science__head .body-copy {
+  max-width: 760rem;
+}
+
+.l-acc {
+  border-top: 1px solid var(--c-line);
+}
+
+.l-acc__row {
+  border-bottom: 1px solid var(--c-line);
+}
+
+.l-acc__row > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 34rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.l-acc__row > summary::-webkit-details-marker {
+  display: none;
+}
+
+.l-acc__label {
+  font-size: 26rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.l-acc__mark {
+  width: 20rem;
+  height: 20rem;
+  color: var(--c-gray);
+  transition: transform 400ms var(--ease);
+}
+
+.l-acc__row[open] .l-acc__mark {
+  transform: rotate(180deg);
+}
+
+/* overflow clips the panel while landing-accordion.ts animates its height. */
+.l-acc__panel {
+  display: grid;
+  grid-template-columns: 200rem 1fr 1fr;
+  gap: 0 120rem;
+  padding-bottom: 60rem;
+  overflow: hidden;
+}
+
+.l-acc__kicker {
+  color: var(--c-gray);
+  font-size: 15rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.l-acc__num {
+  display: block;
+  margin-bottom: 6rem;
+  color: var(--c-accent-ink);
+  font-size: 15rem;
+  font-weight: 600;
+}
+
+/* Panel illustration. 1118x690 sources, the reference's own accordion ratio. */
+.l-acc__img {
+  width: 100%;
+  height: 300rem;
+  margin-bottom: 28rem;
+  object-fit: cover;
+}
+
+.l-acc__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rem;
+  margin-top: 24rem;
+}
+
+.l-acc__tags span {
+  padding: 10rem 18rem;
+  border: 1px solid var(--c-line);
+  font-size: 15rem;
+  font-weight: 500;
+}
+
+.l-acc__steps {
+  margin: 0;
+  padding-left: 24rem;
+  color: var(--c-gray);
+  font-size: 17rem;
+  line-height: 190%;
+}
+
+/* ============================================================
+   Archive — two-image proof band
+   ============================================================ */
+
+.l-archive__head {
+  margin-bottom: 100rem;
+}
+
+.l-archive__imgs {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 40rem;
+  align-items: end;
+}
+
+.l-archive__imgs img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.l-archive__imgs > div:first-child img {
+  height: 860rem;
+}
+
+.l-archive__imgs > div:last-child img {
+  height: 660rem;
+}
+
+.l-archive__cap {
+  margin: 20rem 0 0;
+  color: var(--c-gray);
+  font-size: 15rem;
+}
+
+/* ============================================================
+   Wholesale — light band, tiers + terms
+   ============================================================ */
+
+.l-wholesale__head {
+  margin-bottom: 100rem;
+}
+
+.l-wholesale__head .h-section {
+  max-width: 1100rem;
+  margin-bottom: 28rem;
+}
+
+.l-wholesale__msrp {
+  display: flex;
+  gap: 16rem;
+  align-items: baseline;
+  margin-bottom: 80rem;
+}
+
+.l-wholesale__msrp strong {
+  font-size: 60rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.l-wholesale__msrp span {
+  color: var(--c-gray);
+  font-size: 17rem;
+}
+
+.l-tiers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
+}
+
+.l-tier {
+  padding: 44rem 0 44rem 36rem;
+  border-left: 1px solid var(--c-line);
+}
+
+.l-tier:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.l-tier__label {
+  margin: 0 0 14rem;
+  color: var(--c-accent);
+  font-size: 15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.l-tier__units {
+  margin: 0;
+  font-size: 44rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.l-tier__cases {
+  margin: 8rem 0 0;
+  color: var(--c-gray);
+  font-size: 16rem;
+}
+
+.l-terms {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60rem;
+  margin-top: 80rem;
+}
+
+.l-term dt {
+  margin-bottom: 12rem;
+  color: var(--c-accent);
+  font-size: 15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.l-term dd {
+  margin: 0;
+  color: var(--c-gray);
+  font-size: 17rem;
+  line-height: 165%;
+}
+
+.l-wholesale .btn-solid {
+  margin-top: 80rem;
+}
+
+/* ============================================================
+   Contact — tabbed form
+   ============================================================ */
+
+.l-contact {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 120rem;
+  align-items: start;
+}
+
+.l-contact__left .h-section {
+  margin-bottom: 32rem;
+}
+
+.l-contact__buy {
+  margin-top: 140rem;
+}
+
+.l-contact__buy p {
+  margin: 0 0 28rem;
+}
+
+.l-buylist {
+  display: grid;
+  gap: 20rem;
+  justify-items: start;
+}
+
+.l-buylist a {
+  font-size: 18rem;
+  font-weight: 500;
+}
+
+.l-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rem;
+  margin-bottom: 56rem;
+}
+
+.l-tab {
+  padding: 22rem 0;
+  border: 1px solid var(--c-line);
+  color: var(--c-gray);
+  font-size: 16rem;
+  font-weight: 500;
+  transition: border-color 200ms var(--ease), color 200ms var(--ease);
+}
+
+.l-tab[aria-checked="true"] {
+  border-color: var(--c-black);
+  background: var(--c-off);
+  color: var(--c-black);
+  font-weight: 600;
+}
+
+.l-form {
+  display: grid;
+  gap: 0;
+}
+
+.l-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 60rem;
+}
+
+.l-field {
+  display: grid;
+  gap: 10rem;
+  padding-block: 24rem;
+}
+
+.l-field--full {
+  grid-column: 1 / -1;
+}
+
+.l-field label {
+  color: var(--c-gray);
+  font-size: 15rem;
+  font-weight: 500;
+}
+
+.l-field input,
+.l-field textarea {
+  width: 100%;
+  padding: 12rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--c-line);
+  border-radius: 0;
+  background: none;
+  color: var(--c-black);
+  font: inherit;
+  font-size: 17rem;
+  transition: border-color 200ms var(--ease);
+}
+
+.l-field textarea {
+  min-height: 120rem;
+  resize: vertical;
+}
+
+.l-field input:focus,
+.l-field textarea:focus {
+  border-bottom-color: var(--c-black);
+  outline: 0;
+}
+
+/* Validation is the browser's: the fields carry `required` and the form has no
+   novalidate, so Chrome/Safari/Firefox block submission and show their own
+   message on the first invalid field. :user-invalid rather than :invalid so a
+   field is not marked red before it has been filled in and left. */
+.l-field input:user-invalid,
+.l-field textarea:user-invalid {
+  border-bottom-color: #c0392b;
+}
+
+.l-agree {
+  display: flex;
+  gap: 14rem;
+  align-items: flex-start;
+  margin-block: 40rem;
+  color: var(--c-gray);
+  font-size: 15rem;
+  line-height: 155%;
+}
+
+.l-agree input {
+  flex-shrink: 0;
+  width: 20rem;
+  height: 20rem;
+  margin-top: 3rem;
+}
+
+.l-agree a {
+  color: var(--c-accent-ink);
+  text-decoration: underline;
+}
+
+.l-form .btn-solid {
+  width: 100%;
+}
+
+.honeypot {
+  position: absolute;
+  left: -100vw;
+}
+
+.l-mailto {
+  display: grid;
+  gap: 32rem;
+  justify-items: start;
+  padding: 60rem;
+  border: 1px solid var(--c-line);
+}
+
+/* Contact keeps its own form contrast after the section switches to black. */
+.l-contact-section.band-black .l-tab {
+  border-color: rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.l-contact-section.band-black .l-tab[aria-checked="true"] {
+  border-color: var(--c-white);
+  background: var(--c-white);
+  color: var(--c-black);
+}
+
+.l-contact-section.band-black .l-field label,
+.l-contact-section.band-black .l-agree {
+  color: rgba(255, 255, 255, 0.64);
+}
+
+.l-contact-section.band-black .l-field input,
+.l-contact-section.band-black .l-field textarea {
+  border-bottom-color: rgba(255, 255, 255, 0.3);
+  color: var(--c-white);
+  caret-color: var(--c-white);
+}
+
+.l-contact-section.band-black .l-field input:focus,
+.l-contact-section.band-black .l-field textarea:focus {
+  border-bottom-color: var(--c-white);
+}
+
+.l-contact-section.band-black .l-agree a {
+  color: var(--c-accent);
+}
+
+.l-contact-section.band-black .l-mailto {
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.l-contact-section.band-black .btn-solid {
+  background: var(--c-white);
+  color: var(--c-black);
+}
+
+.l-contact-section.band-black .btn-solid:hover {
+  background: var(--c-accent);
+  color: var(--c-white);
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.l-footer {
+  padding-block: 120rem 60rem;
+  background: var(--c-black);
+  color: var(--c-white);
+}
+
+.l-footer__top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 0.6fr;
+  gap: 80rem;
+  padding-bottom: 100rem;
+}
+
+.l-footer__logo {
+  display: block;
+  width: 200rem;
+  height: auto;
+  margin-bottom: 40rem;
+  color: #fdb7a5;
+}
+
+.l-footer__info {
+  display: grid;
+  gap: 18rem;
+}
+
+.l-footer__info dl {
+  display: grid;
+  grid-template-columns: 110rem 1fr;
+  gap: 20rem;
+  margin: 0;
+  font-size: 16rem;
+}
+
+.l-footer__info dt {
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.l-footer__info dd {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.l-footer__nav {
+  display: grid;
+  gap: 16rem;
+  align-content: start;
+  justify-items: end;
+}
+
+.l-footer__nav a {
+  font-size: 16rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.l-footer__nav a:hover {
+  color: var(--c-white);
+}
+
+.l-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 40rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15rem;
+}
+
+.l-footer__legal {
+  display: flex;
+  gap: 32rem;
+}
+
+.l-top-btn {
+  font-size: 15rem;
+  font-weight: 500;
+}
+
+/* ============================================================
+   Below 1280px — rem reads as px, so restate the display sizes.
+   The reference switches to a separate mobile implementation here; this is the
+   equivalent boundary.
+   ============================================================ */
+
+@media (max-width: 1279px) {
+  html {
+    font-size: 1px;
+  }
+
+  :root {
+    --gutter: 24rem;
+    --header-h: 56rem;
+    --hero-w: 100%;
+    --hero-h: 420rem;
+    --slot-w: 92rem;
+    --slot-h: 44rem;
+  }
+
+  .section {
+    padding-block: 80rem;
+  }
+
+  .section--tall {
+    padding-block: 90rem;
+  }
+
+  .h-display {
+    font-size: 40rem;
+  }
+
+  .h-section {
+    font-size: 30rem;
+  }
+
+  .h-sub {
+    font-size: 22rem;
+  }
+
+  .body-copy {
+    font-size: 16rem;
+  }
+
+  .eyebrow span,
+  .l-acc__kicker,
+  .l-acc__num,
+  .l-term dt,
+  .l-tier__label {
+    font-size: 13rem;
+  }
+
+  .l-header {
+    padding-inline: var(--gutter);
+    align-items: center;
+    height: var(--header-h);
+  }
+
+  .l-header__logo,
+  .l-header.is-locked .l-header__logo {
+    height: 34rem;
+    padding-top: 0;
+  }
+
+  .l-hero__spacer {
+    height: 80rem;
+  }
+
+  .l-nav {
+    display: none;
+  }
+
+  .l-header {
+    background: var(--c-white);
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .l-header__right {
+    gap: 16rem;
+    height: var(--header-h);
+  }
+
+  .l-header__buy {
+    display: none;
+  }
+
+  .l-burger {
+    display: block;
+    position: relative;
+  }
+
+  .l-burger > summary {
+    display: grid;
+    gap: 6rem;
+    width: 44rem;
+    height: 44rem;
+    place-content: center;
+    list-style: none;
+  }
+
+  .l-burger > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .l-burger > summary span {
+    display: block;
+    width: 22rem;
+    height: 1.5px;
+    background: var(--c-black);
+  }
+
+  .l-burger[open] > summary span:first-child {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+
+  .l-burger[open] > summary span:last-child {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+
+  .l-burger nav {
+    position: absolute;
+    top: calc(var(--header-h) - 6rem);
+    right: 0;
+    display: grid;
+    width: 62vw;
+    min-width: 200rem;
+    padding: 8rem 0;
+    border: 1px solid var(--c-line);
+    background: var(--c-white);
+  }
+
+  .l-burger nav a {
+    padding: 14rem 20rem;
+    font-size: 16rem;
+    font-weight: 500;
+  }
+
+  .l-burger nav a:last-child {
+    margin-top: 6rem;
+    border-top: 1px solid var(--c-line);
+    color: var(--c-accent-ink);
+  }
+
+  .l-info {
+    padding-block: 100rem;
+  }
+
+  .l-info__slot {
+    top: -4rem;
+  }
+
+  .l-pictorial {
+    grid-template-columns: 1fr;
+  }
+
+  .l-pictorial img {
+    height: 420rem;
+  }
+
+  .l-brand {
+    height: 560rem;
+  }
+
+  .l-brand__top {
+    top: 40rem;
+  }
+
+  .l-brand__bottom {
+    bottom: 40rem;
+  }
+
+  .l-brand__big {
+    font-size: 56rem;
+  }
+
+  .l-brand__word {
+    font-size: 26rem;
+  }
+
+  .l-philosophy__lines {
+    margin-bottom: 56rem;
+  }
+
+  .l-philosophy__foot,
+  .l-product__body,
+  .l-contact,
+  .l-form__grid,
+  .l-archive__imgs {
+    grid-template-columns: 1fr;
+    gap: 40rem;
+  }
+
+  .l-product__head {
+    margin-bottom: 56rem;
+  }
+
+  .l-product__body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40rem;
+    min-height: 0;
+  }
+
+  .l-product__stage img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .l-product__specs {
+    position: static;
+    width: auto;
+    transform: none;
+  }
+
+  .l-science__head,
+  .l-archive__head,
+  .l-wholesale__head {
+    margin-bottom: 56rem;
+  }
+
+  .l-acc__label {
+    font-size: 19rem;
+  }
+
+  .l-acc__panel {
+    grid-template-columns: 1fr;
+    gap: 24rem;
+  }
+
+  .l-acc__img {
+    height: 200rem;
+    margin-bottom: 20rem;
+  }
+
+  .l-archive__imgs > div:first-child img,
+  .l-archive__imgs > div:last-child img {
+    height: 460rem;
+  }
+
+  .l-tiers,
+  .l-terms {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .l-terms {
+    gap: 32rem;
+    margin-top: 48rem;
+  }
+
+  .l-tier {
+    padding: 28rem 0 28rem 20rem;
+  }
+
+  .l-tier:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .l-tier__units {
+    font-size: 30rem;
+  }
+
+  .l-wholesale__msrp {
+    margin-bottom: 48rem;
+  }
+
+  .l-wholesale__msrp strong {
+    font-size: 40rem;
+  }
+
+  .l-wholesale .btn-solid,
+  .l-contact__buy {
+    margin-top: 48rem;
+  }
+
+  .l-tabs {
+    gap: 8rem;
+    margin-bottom: 32rem;
+  }
+
+  .l-tab {
+    padding: 16rem 4rem;
+    font-size: 13rem;
+  }
+
+  .l-spec dd {
+    font-size: 19rem;
+  }
+
+  .btn-solid {
+    min-width: 0;
+    padding: 20rem 24rem;
+    font-size: 15rem;
+  }
+
+  .l-footer__top {
+    grid-template-columns: 1fr;
+    gap: 48rem;
+    padding-bottom: 56rem;
+  }
+
+  .l-footer__nav {
+    justify-items: start;
+  }
+
+  .l-footer__bottom {
+    flex-direction: column;
+    gap: 20rem;
+    align-items: flex-start;
+  }
+
+  .l-mailto {
+    padding: 28rem;
+  }
+}
+
+/* Sizes below are absolute on purpose: they are the floor that keeps body copy
+   legible once the vw-derived rem has scaled everything down. */
+@media (max-width: 1279px) {
+  .body-copy,
+  .l-field input,
+  .l-field textarea,
+  .l-acc__steps,
+  .l-term dd {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

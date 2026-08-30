@@ -1,0 +1,147 @@
+---
+import { existsSync } from "node:fs";
+import { siteConfig } from "../../data/siteConfig";
+
+const { product } = siteConfig;
+
+/* The panel images are still being shot. Checking the file at build time rather
+   than trusting the path means a missing shot renders a text-only panel instead
+   of a broken image — so the slots can be declared before the photography lands
+   and light up on their own once the files appear. */
+const shot = (src: string) => (existsSync(`public${src}`) ? src : null);
+
+/*
+  Built on <details>/<summary> so the accordion opens without JavaScript. The
+  motion layer only adds the height transition and the one-open-at-a-time rule.
+  Copy is drawn from the existing product page.
+*/
+/* `image` is optional on purpose: the panel renders text-only until a shot
+   exists, so this ships before the photography does. See
+   docs/superpowers/specs/2026-08-04-image-shot-list.md (S8-S11). */
+const rows = [
+  {
+    id: "mechanism",
+    num: "01",
+    label: "RenewShell™ Technology",
+    kicker: "How it works",
+    image: {
+      src: "/images/essenly/essenly-generated-science-macro.png",
+      alt: "A macro view of conditioner coating a hair-like fiber",
+    },
+    body: `${product.shortName} is a rinse-out treatment, not a leave-in coating. Applied to damp hair it conditions the mid-lengths and ends where dryness actually sits, then rinses away completely. Nothing is left on the surface to weigh the hair down or dull it.`,
+    aside:
+      "The result is a smoother-looking finish that still moves naturally — rich when applied, light after rinsing.",
+  },
+  {
+    id: "ingredients",
+    num: "02",
+    label: "Key Ingredients",
+    kicker: "What is inside",
+    image: {
+      src: shot("/images/essenly/essenly-science-ingredients.jpg"),
+      alt: "Keratin powder, a collagen gel sphere and raw shea butter grouped on warm stone",
+    },
+    body: "Conditioning ingredients selected for softness and manageability rather than for an ingredient list that reads well. Each one earns its place by what it does to the feel of dry hair.",
+    tags: ["Keratin", "Collagen", "Shea Butter"],
+  },
+  {
+    id: "origin",
+    num: "03",
+    label: "Made in Korea",
+    kicker: "Where it comes from",
+    image: {
+      src: shot("/images/essenly/essenly-science-origin.jpg"),
+      alt: "Glass beakers of cream and amber liquid on a clean lab bench in soft daylight",
+    },
+    body: `${siteConfig.company.legalName} is a ${siteConfig.company.city}-based beauty company. The mask is formulated and manufactured in ${product.madeIn}, in the market where the at-home hair ritual was refined, and ships to U.S. customers through Amazon.`,
+    aside: `${product.countryOfOrigin} · ${product.netWeight} · ${product.type}`,
+  },
+  {
+    id: "ritual",
+    num: "04",
+    label: "How to Use",
+    kicker: "The five-minute ritual",
+    image: {
+      src: "/images/essenly/essenly-product-official-top.jpg",
+      alt: "The official top view of the Essenly Hair Mask package",
+    },
+    body: `Use whenever the hair needs richer conditioning than a daily conditioner provides. Suitable for ${product.hairTypes.toLowerCase()}.`,
+    steps: [
+      "Shampoo and rinse the hair.",
+      "Apply to damp hair, focusing on the mid-lengths and ends.",
+      `Leave on for ${product.useTime}.`,
+      "Rinse thoroughly.",
+      "Style as usual.",
+    ],
+  },
+];
+---
+
+<section class="l-science section" id="science">
+  <div class="container">
+    <div class="l-science__head">
+      <p class="eyebrow"><span>The quiet science</span></p>
+      <h2 class="h-section">
+        Five minutes,<br />No More. No Less. Exactly What Dry Hair Asks For.
+      </h2>
+      <p class="body-copy">
+        A rinse-out treatment built around one idea: condition where the hair is actually dry, then
+        leave nothing behind. Four things make that work.
+      </p>
+    </div>
+
+    <div class="l-acc" id="l-acc">
+      {
+        rows.map((row) => (
+          <details class="l-acc__row" name="science" id={`acc-${row.id}`}>
+            <summary>
+              <span class="l-acc__label">{row.label}</span>
+              <svg
+                class="l-acc__mark"
+                viewBox="0 0 20 20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                aria-hidden="true"
+              >
+                <path d="M10 3v14M4 11l6 6 6-6" />
+              </svg>
+            </summary>
+            <div class="l-acc__panel">
+              <p class="l-acc__kicker">
+                <span class="l-acc__num">{row.num}</span>
+                {row.kicker}
+              </p>
+              <p class="body-copy">{row.body}</p>
+              <div>
+                {row.image.src && (
+                  <img
+                    class="l-acc__img"
+                    src={row.image.src}
+                    alt={row.image.alt}
+                    loading="lazy"
+                  />
+                )}
+                {row.aside && <p class="body-copy">{row.aside}</p>}
+                {row.tags && (
+                  <div class="l-acc__tags">
+                    {row.tags.map((tag) => (
+                      <span>{tag}</span>
+                    ))}
+                  </div>
+                )}
+                {row.steps && (
+                  <ol class="l-acc__steps">
+                    {row.steps.map((step) => (
+                      <li>{step}</li>
+                    ))}
+                  </ol>
+                )}
+              </div>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -80,11 +80,14 @@ export const siteConfig = {
   ] as WholesaleSupportAsset[],
 } as const;
 
+/* Anchors on the one-page landing. /product, /wholesale and /contact still
+   resolve — astro.config.mjs redirects them here — but nothing should link
+   through a redirect when the destination is known. */
 export const navItems = [
-  { label: "Product", href: "/product" },
-  { label: "About", href: "/#our-story" },
-  { label: "Wholesale", href: "/wholesale" },
-  { label: "Contact", href: "/contact" },
+  { label: "Product", href: "/#product" },
+  { label: "Science", href: "/#science" },
+  { label: "Wholesale", href: "/#wholesale" },
+  { label: "Contact", href: "/#contact" },
 ] as const;
 
 export const getContactEmail = () =>

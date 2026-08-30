@@ -1,0 +1,29 @@
+---
+import Rise from "./Rise.astro";
+
+/* Official package photography and a material macro carry the ritual without extra models. */
+const shots = [
+  {
+    src: "/images/essenly/essenly-generated-science-macro.png",
+    alt: "A macro view of the conditioning texture",
+  },
+  {
+    src: "/images/essenly/essenly-product-official.jpg",
+    alt: "The official Essenly Hair Mask packaging in the studio",
+  },
+  {
+    src: "/images/essenly/essenly-product-official-top.jpg",
+    alt: "The official top view of the Essenly Hair Mask package",
+  },
+];
+---
+
+<div class="l-pictorial">
+  {
+    shots.map((shot) => (
+      <Rise>
+        <img src={shot.src} alt={shot.alt} loading="lazy" />
+      </Rise>
+    ))
+  }
+</div>

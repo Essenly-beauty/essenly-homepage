@@ -1,0 +1,47 @@
+---
+/*
+  The wordmark inlined so its colour comes from CSS `color` rather than a baked-in
+  fill. The source file paints everything #FDB7A5, which sits at roughly 1.7:1 on
+  white — legible enough as a logo but washed out at header scale. Inlining lets
+  the header use the deeper clay while the footer keeps the light peach on black.
+
+  Kept in sync with public/images/essenly/essenly-logo-wordmark.svg by hand; that
+  file is still the canonical asset and is what the og:image and any external
+  reference should use.
+*/
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 864 464"
+  fill="currentColor"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Essenly"
+>
+  <path
+    d="M430.1 48.6c30.4 0 54.7 18.3 54.7 41.1 0 17.2-14.4 32.9-37.2 39.5-8.2 2.4-16.7 3.3-25.4 3.6-18.6 16.2-27.7 33.3-27.7 50.2 0 21.6 15.8 37.9 39.8 37.9 19.9 0 35.7-9.7 45.6-26.7l11.7 6.8c-12.2 22.8-32.9 35.9-58.7 35.9-34.7 0-57.3-22.7-57.3-53.2 0-44 47.2-74.1 74.9-92.4 10.5-6.9 16.1-13.1 16.1-18.8 0-8.8-14.4-15.7-34.1-15.7-50.5 0-91.7 42.3-91.7 94.6 0 35.2 18.8 66.1 46.9 82.4l-7.9 11.2c-32.7-18.9-54.7-54.2-54.7-94.2 0-56.1 45.5-102.2 105-102.2Z"
+  />
+  <path
+    d="M443.3 70.3c-30 13.1-67.5 37.4-77.9 79.7-6.6 26.6-1.7 50.9 13.6 70.1l-10 8.4c-18.2-22-24-51.5-16.1-81.6 11.5-44.3 49.5-73.2 85.2-87.2l5.2 10.6Z"
+  />
+  <path
+    d="M462.6 79.5c-38.4 18.8-80.8 54-85 103.8-1.3 16.2 1.4 31.3 8.5 45.1l-11.7 6.1c-8-15.1-11.8-33.2-10.3-52.7 4.3-53 48.5-91.8 92.5-112.5l6 10.2Z"
+  />
+  <path d="M394.9 226.8c-18.4-42.4-3.6-93.4 54.2-144.6l8.7 9.4c-52.3 47.6-66.5 91.5-51 130.6l-11.9 4.6Z" />
+  <path
+    d="M510.8 144.7c19.5 0 35.3 15.5 35.3 34.7 0 19.2-15.8 34.8-35.3 34.8s-35.2-15.6-35.2-34.8 15.7-34.7 35.2-34.7Zm0 14.3c-11.6 0-20.9 9.1-20.9 20.4 0 11.4 9.3 20.5 20.9 20.5s20.9-9.1 20.9-20.5c0-11.3-9.3-20.4-20.9-20.4Z"
+  />
+  <text
+    x="142"
+    y="355"
+    font-family="Inter, Helvetica, Arial, sans-serif"
+    font-size="132"
+    font-weight="400">essenly.</text
+  >
+</svg>

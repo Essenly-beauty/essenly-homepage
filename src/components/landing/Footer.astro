@@ -1,0 +1,68 @@
+---
+import { amazonUrl, getContactEmail, siteConfig } from "../../data/siteConfig";
+import Wordmark from "./Wordmark.astro";
+
+const contactEmail = getContactEmail();
+const { company } = siteConfig;
+
+/* The reference footer lists TEL / E-MAIL / ADDRESS. Essenly has no published
+   phone number and `businessAddress` is null, so those rows are filtered rather
+   than rendered empty. */
+const info = [
+  ["E-mail", contactEmail],
+  ["Location", `${company.city}, ${company.country}`],
+  ["Address", company.businessAddress],
+].filter((row): row is [string, string] => Boolean(row[1]));
+
+const nav = [
+  { label: "Product", href: "#product" },
+  { label: "Science", href: "#science" },
+  { label: "Wholesale", href: "#wholesale" },
+  { label: "Contact", href: "#contact" },
+  { label: "Amazon U.S.", href: amazonUrl, external: true },
+];
+---
+
+<footer class="l-footer">
+  <div class="container">
+    <div class="l-footer__top">
+      <div>
+        <Wordmark class="l-footer__logo" />
+        <p class="body-copy">{company.description}</p>
+      </div>
+      <div class="l-footer__info">
+        {
+          info.map(([label, value]) => (
+            <dl>
+              <dt>{label}</dt>
+              <dd>
+                {label === "E-mail" ? <a href={`mailto:${value}`}>{value}</a> : value}
+              </dd>
+            </dl>
+          ))
+        }
+      </div>
+      <nav class="l-footer__nav" aria-label="Footer">
+        {
+          nav.map((item) =>
+            item.external ? (
+              <a href={item.href} target="_blank" rel="noopener noreferrer">
+                {item.label}
+              </a>
+            ) : (
+              <a href={item.href}>{item.label}</a>
+            )
+          )
+        }
+      </nav>
+    </div>
+    <div class="l-footer__bottom">
+      <p>Copyright &copy; {new Date().getFullYear()} {company.legalName} All Rights Reserved</p>
+      <div class="l-footer__legal">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms</a>
+        <a class="l-top-btn" href="#top">Top</a>
+      </div>
+    </div>
+  </div>
+</footer>

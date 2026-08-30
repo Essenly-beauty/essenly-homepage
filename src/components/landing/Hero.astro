@@ -1,0 +1,18 @@
+---
+import { siteConfig } from "../../data/siteConfig";
+
+const { product } = siteConfig;
+---
+
+<section class="l-hero" id="top">
+  <div class="l-hero__spacer"></div>
+  <figure class="l-hero__bg" id="l-hero-bg">
+    <img
+      src="/images/essenly/essenly-model-main.png"
+      alt={`A model with wet hair holding a jar of ${product.shortName}`}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </figure>
+  <div class="l-hero__track" id="l-hero-track"></div>
+</section>
